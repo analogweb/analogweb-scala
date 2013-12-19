@@ -13,4 +13,4 @@ class Hello extends Analogweb {
         "Hello, Analogweb Scala!"
     }
 }
-
+'''
