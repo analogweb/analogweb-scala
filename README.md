@@ -5,7 +5,7 @@ AnalogWeb is a tiny HTTP orientied framework and it operated on Java 6+ and Scal
 
 ## Example
 
-'''scala
+```scala
 import org.analogweb.scala.Analogweb
 
 class Hello extends Analogweb {
@@ -13,4 +13,4 @@ class Hello extends Analogweb {
         "Hello, Analogweb Scala!"
     }
 }
-'''
+```
