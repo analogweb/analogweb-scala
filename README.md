@@ -1,7 +1,8 @@
-Analog Web Framework Scala DSL
+Analogweb Framework Scala DSL
 ===============================================
 
-AnalogWeb is a tiny HTTP orientied framework and it operated on Java 6+ and Scala 2+.
+Analogweb is a tiny HTTP orientied framework.
+This DSL operated on Scala 2+.
 
 ## Example
 
@@ -9,7 +10,7 @@ AnalogWeb is a tiny HTTP orientied framework and it operated on Java 6+ and Scal
 import org.analogweb.scala.Analogweb
 
 class Hello extends Analogweb {
-    get("/") {
+    get("/hello") {
         "Hello, Analogweb Scala!"
     }
 }
