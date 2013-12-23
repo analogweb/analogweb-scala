@@ -22,8 +22,4 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
       metadatas
     }
 
-    def createInvocationMetadata(clazz:Class[_],m:java.lang.reflect.Method):InvocationMetadata = {
-      //nop.
-      new DefaultInvocationMetadata(null,null,null,null)
-    }
 }
