@@ -14,6 +14,8 @@ object BuildSettings {
 }
 object Dependencies {
   val core = "org.analogweb" % "analogweb-core" % "0.8.2-SNAPSHOT"
+  val scalatest = "org.scalatest" % "scalatest_2.10" % "2.0" % "test"
+  val junit = "com.novocode" % "junit-interface" % "0.9" % "test"
 }
 
 object Resolvers {
@@ -33,7 +35,9 @@ object AnalogwebScala extends Build {
     settings = buildSettings ++ Seq (
       resolvers ++= Resolvers.all,
       libraryDependencies ++= Seq (
-        core
+        core,
+        scalatest,
+        junit
       ),
       artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
             artifact.name + "-" + module.revision + "." + artifact.extension
