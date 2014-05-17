@@ -14,9 +14,11 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
 
     def createInvocationMetadatas(clazz:Class[_]):util.Collection[InvocationMetadata] = {
       val instance = clazz.newInstance()
+      // TODO pick up all Route within instance.
+      val hello = new Hello
       val metadatas = ArrayBuffer[InvocationMetadata]()
       instance match {
-        case an: Analogweb => an.actionsMap.foreach(x => metadatas.append(new ScalaInvocationMetadata(clazz,"noop",null,x._1,x._2)))
+        case an: Analogweb => metadatas.append(new ScalaInvocationMetadata(clazz,"hello",null,hello.hello))
         case _ => throw new ClassCastException
       }
       metadatas

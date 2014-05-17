@@ -5,15 +5,15 @@ import collection.JavaConversions._
 import org.analogweb._
 import collection.mutable.ArrayBuffer
 
-class ScalaInvocation(path:RequestPathMetadata,action:Some[_]) extends Invocation with InvocationArguments {
+class ScalaInvocation(path:RequestPathMetadata,val route:Route,val rc:RequestContext,val rsc:ResponseContext,val tc:TypeMapperContext,val rvr:RequestValueResolvers) extends Invocation with InvocationArguments {
 
   def invoke:Object = {
-    println("lift action")
-    action.getOrElse("some").asInstanceOf[Object]
+    // TODO implement Request
+    route.invoke(new Request).asInstanceOf[Object]
   }
 
   def getInvocationInstance:Object = {
-    action 
+    route 
   }
 
   def getInvocationArguments:InvocationArguments = {
@@ -25,7 +25,7 @@ class ScalaInvocation(path:RequestPathMetadata,action:Some[_]) extends Invocatio
   }
 
   def putInvocationArgument(i:Int , o:Object) = {
-         // nop
+    // nop
   }
 
   def asList:util.List[Object] = {

@@ -2,7 +2,7 @@ package org.analogweb.scala
 
 import org.analogweb.core.httpserver.{AnalogHandler, HttpServers}
 import java.net.URI
-import org.analogweb.core.{DefaultApplicationProperties, DefaultApplicationContextResolver, WebApplication}
+import org.analogweb.core._
 
 object Run  {
   def main(args:Array[String]):Unit = {

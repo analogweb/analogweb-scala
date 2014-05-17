@@ -9,7 +9,7 @@ class ScalaInvocationFactory extends DefaultInvocationFactory {
     createInvocation(ca:ContainerAdaptor,im:InvocationMetadata,rc:RequestContext,rsc:ResponseContext,tc:TypeMapperContext,rvr:RequestValueResolvers):Invocation
     = {
       im match {
-        case sim:ScalaInvocationMetadata => new ScalaInvocation(sim.getDefinedPath,Some(sim.action))
+        case sim:ScalaInvocationMetadata => new ScalaInvocation(sim.getDefinedPath,sim.route,rc,rsc,tc,rvr)
         case _ => super.createInvocation(ca,im,rc,rsc,tc,rvr) 
       }
    }

@@ -3,8 +3,9 @@ package org.analogweb.scala
 import org.analogweb.scala._
 
 class Hello extends Analogweb {
-  get("/hello") {
-    "Hello Scala!"
-  }
+    def hello = get("/hello") { r =>
+        println(r)
+      "Hello Scala!"
+    }
 }
 
