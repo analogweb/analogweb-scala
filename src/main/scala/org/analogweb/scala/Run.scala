@@ -1,6 +1,6 @@
 package org.analogweb.scala
 
-import org.analogweb.core.httpserver.{AnalogHandler, HttpServers}
+import org.analogweb.core.httpserver._
 import java.net.URI
 import org.analogweb.core._
 
