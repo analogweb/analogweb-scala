@@ -17,8 +17,9 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
       val classOfAnalogweb = classOf[Analogweb]
       clazz match {
         case classOfAnalogweb => {
-            val methods = clazz.getMethods.filter(m => classOf[Route].isAssignableFrom(m.getReturnType))
-            methods.foreach(m => m.invoke(clazz.newInstance) match { case r:Route => metadatas.append(new ScalaInvocationMetadata(clazz,m.getName,null,r))})
+            val methods = clazz.getDeclaredMethods.filter(m => classOf[Route].isAssignableFrom(m.getReturnType) && m.getName != "get" && m.getName != "post")
+            var instance = clazz.newInstance
+            methods.foreach(m => m.invoke(instance) match { case r:Route => metadatas.append(new ScalaInvocationMetadata(clazz,m.getName,null,r))})
         }
       }
       metadatas
