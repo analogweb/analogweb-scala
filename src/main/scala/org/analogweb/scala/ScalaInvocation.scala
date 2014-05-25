@@ -8,8 +8,7 @@ import collection.mutable.ArrayBuffer
 class ScalaInvocation(path:RequestPathMetadata,val route:Route,val rc:RequestContext,val rsc:ResponseContext,val tc:TypeMapperContext,val rvr:RequestValueResolvers) extends Invocation with InvocationArguments {
 
   def invoke:Object = {
-    // TODO implement Request
-    route.invoke(new Request).asInstanceOf[Object]
+    route.invoke(new Request(rc)).asInstanceOf[Object]
   }
 
   def getInvocationInstance:Object = {
