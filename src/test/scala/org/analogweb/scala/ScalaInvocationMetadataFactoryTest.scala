@@ -1,19 +1,22 @@
 package org.analogweb.scala
 
-import org.scalatest.Assertions
-import org.scalatest.matchers.MustMatchers
-import org.junit.Test
+import org.specs2.mutable._
 
-class ScalaInvocationMetadataFactoryTest extends Assertions with MustMatchers {
+class ScalaInvocationMetadataFactoryTest extends Specification {
+
   val factory = new ScalaInvocationMetadataFactory
-  @Test def testContainsCreateInvocationClass(){
-    val actual = factory.containsInvocationClass(classOf[Foo])
-    actual must be(true)
+  
+  "ContainsCreateInvocationClass" should {
+    "be successfull" in {
+      val actual = factory.containsInvocationClass(classOf[Foo])
+      actual must beTrue
+    }
   }
+
 }
 
 class Foo extends Analogweb {
-  get("/foo") {
+  def foo = get("/foo") { r =>
     "Foo"
   }
 }
