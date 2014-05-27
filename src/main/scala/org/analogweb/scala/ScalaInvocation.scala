@@ -5,10 +5,11 @@ import collection.JavaConversions._
 import org.analogweb._
 import collection.mutable.ArrayBuffer
 
-class ScalaInvocation(path:RequestPathMetadata,val route:Route,val rc:RequestContext,val rsc:ResponseContext,val tc:TypeMapperContext,val rvr:RequestValueResolvers) extends Invocation with InvocationArguments {
+class ScalaInvocation(path:RequestPathMetadata,val route:Route,val rc:RequestContext,val rsc:ResponseContext,val tc:TypeMapperContext,val
+  rvr:RequestValueResolvers, im:InvocationMetadata) extends Invocation with InvocationArguments {
 
   def invoke:Object = {
-    route.invoke(new Request(rc)).asInstanceOf[Object]
+    route.invoke(new Request(rc,rvr,im)).asInstanceOf[Object]
   }
 
   def getInvocationInstance:Object = {

@@ -4,7 +4,8 @@ import org.analogweb.RequestContext
 import org.analogweb.RequestValueResolvers
 import org.analogweb.InvocationMetadata
 import org.analogweb.core.ParameterValueResolver
-import collection.JavaConversions._
+import scala.collection.mutable.Buffer
+import collection.JavaConverters._
 
 class Request(rc : RequestContext,rvr : RequestValueResolvers,im : InvocationMetadata) {
 
@@ -12,16 +13,16 @@ class Request(rc : RequestContext,rvr : RequestValueResolvers,im : InvocationMet
     parameters(name).headOption
   }
 
-  def parameters(name: String) = {
-    rc.getQueryParameters.getValues(name)
+  def parameters(name: String):Buffer[String] = {
+    rc.getQueryParameters.getValues(name).asScala
   }
 
-  def header(name:String) = {
+  def header(name:String):Option[String] = {
     headers(name).headOption
   }
 
-  def headers(name:String) = {
-    rc.getRequestHeaders.getValues(name)
+  def headers(name:String):Buffer[String] = {
+    rc.getRequestHeaders.getValues(name).asScala
   }
 
   def attribute(name:String) = {
@@ -29,6 +30,6 @@ class Request(rc : RequestContext,rvr : RequestValueResolvers,im : InvocationMet
   }
   
   def attributes(name:String) = {
-    rvr.findRequestValueResolver(classOf[ParameterValueResolver]).resolveValue(rc,im,name,classOf[List[String]])
+    rvr.findRequestValueResolver(classOf[ParameterValueResolver]).resolveValue(rc,im,name,classOf[List[String]]).asInstanceOf[java.util.List[String]].asScala
   }
 }
