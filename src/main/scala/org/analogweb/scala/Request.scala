@@ -4,6 +4,7 @@ import org.analogweb.RequestContext
 import org.analogweb.RequestValueResolvers
 import org.analogweb.InvocationMetadata
 import org.analogweb.core.ParameterValueResolver
+import org.analogweb.core.PathVariableValueResolver
 import scala.collection.mutable.Buffer
 import collection.JavaConverters._
 
@@ -15,6 +16,10 @@ class Request(rc : RequestContext,rvr : RequestValueResolvers,im : InvocationMet
 
   def parameters(name: String):Buffer[String] = {
     rc.getQueryParameters.getValues(name).asScala
+  }
+
+  def path(name: String):String = {
+    rvr.findRequestValueResolver(classOf[PathVariableValueResolver]).resolveValue(rc,im,name,classOf[String]).asInstanceOf[String]
   }
 
   def header(name:String):Option[String] = {
@@ -32,4 +37,5 @@ class Request(rc : RequestContext,rvr : RequestValueResolvers,im : InvocationMet
   def attributes(name:String) = {
     rvr.findRequestValueResolver(classOf[ParameterValueResolver]).resolveValue(rc,im,name,classOf[List[String]]).asInstanceOf[java.util.List[String]].asScala
   }
+  
 }
