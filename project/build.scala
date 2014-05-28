@@ -28,7 +28,7 @@ object Resolvers {
 object AnalogwebScala extends Build {
   import BuildSettings._
   import Dependencies._
-
+ 
   lazy val root = Project (
     id = "analogweb-scala",
     base = file("."),
