@@ -1,6 +1,6 @@
 package org.analogweb.scala
 
-import org.analogweb.{PluginModulesConfig, InvocationMetadataFactory, ModulesBuilder, ModulesConfig}
+import org.analogweb.{ PluginModulesConfig, InvocationMetadataFactory, ModulesBuilder, ModulesConfig }
 import org.analogweb.util.logging.Logs
 
 class ScalaModuleConfig extends PluginModulesConfig {
