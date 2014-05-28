@@ -11,7 +11,7 @@ import org.analogweb.scala.Analogweb
 
 class Hello extends Analogweb {
     def hello = get("/hello") { request => 
-        s"Hello, ${request parameter "name"} !"
+        s"Hello, ${request.parameter("name")} !"
     }
 }
 ```
