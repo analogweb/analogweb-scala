@@ -10,8 +10,8 @@ This DSL operated on Scala 2+.
 import org.analogweb.scala.Analogweb
 
 class Hello extends Analogweb {
-    get("/hello") {
-        "Hello, Analogweb Scala!"
+    def hello = get("/hello") { request => 
+        s"Hello, ${request parameter "name"} !"
     }
 }
 ```
