@@ -15,11 +15,13 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
   def createInvocationMetadatas(clazz: Class[_]): util.Collection[InvocationMetadata] = {
     val metadatas = ArrayBuffer[InvocationMetadata]()
     val classOfAnalogweb = classOf[Analogweb]
+    val instance = clazz.newInstance
     clazz match {
       case classOfAnalogweb => {
-        val methods = clazz.getDeclaredMethods.filter(m => classOf[Route].isAssignableFrom(m.getReturnType) && m.getName != "get" && m.getName != "post")
-        var instance = clazz.newInstance
-        methods.foreach(m => m.invoke(instance) match { case r: Route => metadatas.append(new ScalaInvocationMetadata(clazz, m.getName, null, r)) })
+        clazz.getDeclaredMethods.filter(m =>
+          classOf[Route].isAssignableFrom(m.getReturnType)).filter(m =>
+          Seq("get", "post", "put", "delete").contains(m.getName) == false).map(f =>
+          metadatas.append(new ScalaInvocationMetadata(clazz, f.getName, null, f.invoke(instance).asInstanceOf[Route])))
       }
     }
     metadatas
