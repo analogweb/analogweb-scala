@@ -10,13 +10,9 @@ import collection.JavaConverters._
 
 class Request(rc: RequestContext, rvr: RequestValueResolvers, im: InvocationMetadata) {
 
-  def parameter(name: String): Option[String] = {
-    parameters(name).headOption
-  }
+  def parameter(name: String): Option[String] = parameters(name).headOption
 
-  def parameters(name: String): Buffer[String] = {
-    rc.getQueryParameters.getValues(name).asScala
-  }
+  def parameters(name: String): Buffer[String] = rc.getQueryParameters.getValues(name).asScala
 
   def path(name: String): String = {
     Some(rvr.findRequestValueResolver(classOf[PathVariableValueResolver])).map { resolver =>
@@ -24,17 +20,11 @@ class Request(rc: RequestContext, rvr: RequestValueResolvers, im: InvocationMeta
     }.getOrElse(throw new IllegalArgumentException)
   }
 
-  def header(name: String): Option[String] = {
-    headers(name).headOption
-  }
+  def header(name: String): Option[String] = headers(name).headOption
 
-  def headers(name: String): Buffer[String] = {
-    rc.getRequestHeaders.getValues(name).asScala
-  }
+  def headers(name: String): Buffer[String] = rc.getRequestHeaders.getValues(name).asScala
 
-  def attribute(name: String) = {
-    attributes(name).headOption
-  }
+  def attribute(name: String) = attributes(name).headOption
 
   def attributes(name: String) = {
     Some(rvr.findRequestValueResolver(classOf[ParameterValueResolver])).map { resolver =>
