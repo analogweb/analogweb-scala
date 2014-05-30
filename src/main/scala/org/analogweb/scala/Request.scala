@@ -19,7 +19,9 @@ class Request(rc: RequestContext, rvr: RequestValueResolvers, im: InvocationMeta
   }
 
   def path(name: String): String = {
-    rvr.findRequestValueResolver(classOf[PathVariableValueResolver]).resolveValue(rc, im, name, classOf[String]).asInstanceOf[String]
+    Some(rvr.findRequestValueResolver(classOf[PathVariableValueResolver])).map { resolver =>
+      resolver.resolveValue(rc, im, name, classOf[String]).asInstanceOf[String]
+    }.getOrElse(throw new IllegalArgumentException)
   }
 
   def header(name: String): Option[String] = {
@@ -35,7 +37,9 @@ class Request(rc: RequestContext, rvr: RequestValueResolvers, im: InvocationMeta
   }
 
   def attributes(name: String) = {
-    rvr.findRequestValueResolver(classOf[ParameterValueResolver]).resolveValue(rc, im, name, classOf[List[String]]).asInstanceOf[java.util.List[String]].asScala
+    Some(rvr.findRequestValueResolver(classOf[ParameterValueResolver])).map { resolver =>
+      resolver.resolveValue(rc, im, name, classOf[List[String]]).asInstanceOf[java.util.List[String]].asScala
+    }.getOrElse(throw new IllegalStateException)
   }
 
 }
