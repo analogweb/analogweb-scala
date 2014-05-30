@@ -4,10 +4,13 @@ import org.analogweb.{ PluginModulesConfig, InvocationMetadataFactory, ModulesBu
 import org.analogweb.util.logging.Logs
 
 class ScalaModuleConfig extends PluginModulesConfig {
+
   val log = Logs.getLog(classOf[ScalaModuleConfig])
-  def prepare(p1: ModulesBuilder): ModulesBuilder = {
+
+  def prepare(builder: ModulesBuilder): ModulesBuilder = {
     log.info("Scala Plugin!")
-    p1.addInvocationMetadataFactoriesClass(classOf[ScalaInvocationMetadataFactory])
-    p1.setInvocationFactoryClass(classOf[ScalaInvocationFactory])
+    builder.addInvocationMetadataFactoriesClass(classOf[ScalaInvocationMetadataFactory])
+      .setInvocationFactoryClass(classOf[ScalaInvocationFactory])
   }
+
 }
