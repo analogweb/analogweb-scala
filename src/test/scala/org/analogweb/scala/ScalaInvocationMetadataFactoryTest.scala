@@ -5,7 +5,7 @@ import org.specs2.mutable._
 class ScalaInvocationMetadataFactoryTest extends Specification {
 
   val factory = new ScalaInvocationMetadataFactory
-  
+
   "ContainsCreateInvocationClass" should {
     "be successfull" in {
       val actual = factory.containsInvocationClass(classOf[Foo])

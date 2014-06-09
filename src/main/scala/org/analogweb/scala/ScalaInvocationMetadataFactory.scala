@@ -17,9 +17,8 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
   }
 
   def createInvocationMetadatas(clazz: Class[_]): Collection[InvocationMetadata] = {
-    val classOfAnalogweb = classOf[Analogweb]
     clazz match {
-      case classOfAnalogweb => {
+      case _: Class[Analogweb] => {
         val ms = clazz.getDeclaredMethods.filter(m =>
           classOf[Route].isAssignableFrom(m.getReturnType)).filter(m =>
           ignoreMethods.contains(m.getName) == false
