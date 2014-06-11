@@ -1,13 +1,15 @@
 package org.analogweb.scala
 
+import scala.reflect.ClassTag
 import org.analogweb.RequestValueResolver
 
 case class Scope[T <: RequestValueResolver](val resolverType: Class[T], val r: Request) {
 
-  def value(name: String) = valueAs(name, classOf[String])
-  def valueAs(name: String, pe: Class[_]) = {
+  def valueOf(name: String) = valueAs[String](name)
+
+  def valueAs[T](name: String)(implicit ctag: ClassTag[T]) = {
     Some(r.resolvers.findRequestValueResolver(resolverType)).map { resolver =>
-      resolver.resolveValue(r.context, r.metadata, name, pe, Array())
+      Option(resolver.resolveValue(r.context, r.metadata, name, ctag.runtimeClass, Array()))
     }.getOrElse(throw new IllegalArgumentException)
   }
 
