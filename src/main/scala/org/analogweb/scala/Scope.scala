@@ -5,11 +5,11 @@ import org.analogweb.RequestValueResolver
 
 case class Scope[T <: RequestValueResolver](val resolverType: Class[T], val r: Request) {
 
-  def valueOf(name: String) = valueAs[String](name)
+  def valueOf(name: String): Option[String] = valueAs[String](name)
 
-  def valueAs[T](name: String)(implicit ctag: ClassTag[T]) = {
+  def valueAs[T](name: String)(implicit ctag: ClassTag[T]): Option[T] = {
     Some(r.resolvers.findRequestValueResolver(resolverType)).map { resolver =>
-      Option(resolver.resolveValue(r.context, r.metadata, name, ctag.runtimeClass, Array()))
+      Option(resolver.resolveValue(r.context, r.metadata, name, ctag.runtimeClass, Array()).asInstanceOf[T])
     }.getOrElse(throw new IllegalArgumentException)
   }
 
