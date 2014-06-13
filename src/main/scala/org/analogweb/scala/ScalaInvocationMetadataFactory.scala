@@ -16,12 +16,10 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
     classOf[Analogweb].isAssignableFrom(clazz) && classOf[Analogweb].getCanonicalName != clazz.getCanonicalName
   }
 
-  private[this] val ClassOfAnalogweb = classOf[Analogweb]
-
   def createInvocationMetadatas(clazz: Class[_]): Collection[InvocationMetadata] = {
     clazz match {
-      case ClassOfAnalogweb => {
-        val ms = clazz.getDeclaredMethods.filter(m =>
+      case c if classOf[Analogweb] isAssignableFrom c => {
+        val ms = c.getDeclaredMethods.filter(m =>
           classOf[Route].isAssignableFrom(m.getReturnType)).filter(m =>
           ignoreMethods.contains(m.getName) == false
         )
