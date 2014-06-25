@@ -9,13 +9,15 @@ object BuildSettings {
     val buildSettings = Defaults.defaultSettings ++ Seq (
       organization := buildOrganization,
       version      := buildVersion,
-      scalaVersion := buildScalaVersion
+      scalaVersion := buildScalaVersion,
+      crossScalaVersions := Seq("2.10.2", "2.11.0")
     )
 }
 object Dependencies {
   val core = "org.analogweb" % "analogweb-core" % "0.8.2-SNAPSHOT"
+  val jackson = "com.fasterxml.jackson.module" % "jackson-module-scala" % "2.1.2"
   val junit = "com.novocode" % "junit-interface" % "0.9" % "test"
-  val specs2 =  "org.specs2" % "specs2_2.10" % "2.3.12" % "test"
+  val specs2 =  "org.specs2" % "specs2_2.11" % "2.3.12" % "test"
 }
 
 object Resolvers {
@@ -36,6 +38,7 @@ object AnalogwebScala extends Build {
       resolvers ++= Resolvers.all,
       libraryDependencies ++= Seq (
         core,
+        jackson,
         junit,
         specs2
       ),
