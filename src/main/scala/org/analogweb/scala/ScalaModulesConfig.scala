@@ -11,6 +11,7 @@ class ScalaModuleConfig extends PluginModulesConfig {
     log.info("Scala Plugin!")
     builder.addInvocationMetadataFactoriesClass(classOf[ScalaInvocationMetadataFactory])
       .setInvocationFactoryClass(classOf[ScalaInvocationFactory])
+      .addResponseFormatterClass(classOf[ScalaJson], classOf[ScalaJsonFormatter])
   }
 
 }

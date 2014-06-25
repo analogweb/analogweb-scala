@@ -16,6 +16,7 @@ object BuildSettings {
 object Dependencies {
   val core = "org.analogweb" % "analogweb-core" % "0.8.2-SNAPSHOT"
   val jackson = "com.fasterxml.jackson.module" % "jackson-module-scala" % "2.1.2"
+//  val jackson = "com.fasterxml.jackson.module" % "jackson-module-scala_2.11" % "2.4.0-rc2"
   val junit = "com.novocode" % "junit-interface" % "0.9" % "test"
   val specs2 =  "org.specs2" % "specs2_2.11" % "2.3.12" % "test"
 }

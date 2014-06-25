@@ -2,11 +2,32 @@ package org.analogweb.scala
 
 import scala.collection.mutable.Map
 import scala.collection.JavaConversions._
-
 import org.analogweb.Renderable
 import org.analogweb.core.response._
+import org.analogweb.ResponseFormatter
+import org.analogweb.RequestContext
+import org.analogweb.ResponseContext
+import org.analogweb.ResponseContext.ResponseEntity
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import java.io.OutputStream
 
 class ScalaJson(obj: AnyRef) extends Json(obj) {
+}
+
+class ScalaJsonFormatter extends ResponseFormatter {
+
+  protected val mapper: ObjectMapper = new ObjectMapper
+
+  override def formatAndWriteInto(request: RequestContext, response: ResponseContext, charset: String,
+    source: Any): ResponseEntity = {
+    new ResponseEntity() {
+      override def writeInto(responseBody: OutputStream) = {
+        mapper.registerModule(DefaultScalaModule).writeValue(responseBody, source)
+      }
+      override def getContentLength = -1
+    }
+  }
 }
 
 object Responses {
