@@ -4,21 +4,19 @@ import Keys._
 object BuildSettings {
     val buildOrganization = "org.analogweb"
     val buildVersion      = "0.1.0-SNAPSHOT"
-    val buildScalaVersion = "2.10.2"
+    val buildScalaVersion = "2.10.4"
 
     val buildSettings = Defaults.defaultSettings ++ Seq (
       organization := buildOrganization,
       version      := buildVersion,
-      scalaVersion := buildScalaVersion,
-      crossScalaVersions := Seq("2.10.2", "2.11.0")
+      scalaVersion := buildScalaVersion
     )
 }
 object Dependencies {
   val core = "org.analogweb" % "analogweb-core" % "0.8.2-SNAPSHOT"
-  val jackson = "com.fasterxml.jackson.module" % "jackson-module-scala" % "2.1.2"
-//  val jackson = "com.fasterxml.jackson.module" % "jackson-module-scala_2.11" % "2.4.0-rc2"
+  val jackson = "com.fasterxml.jackson.module" % "jackson-module-scala_2.10" % "2.3.3"
   val junit = "com.novocode" % "junit-interface" % "0.9" % "test"
-  val specs2 =  "org.specs2" % "specs2_2.11" % "2.3.12" % "test"
+  val specs2 =  "org.specs2" % "specs2_2.10" % "2.3.12" % "test"
 }
 
 object Resolvers {

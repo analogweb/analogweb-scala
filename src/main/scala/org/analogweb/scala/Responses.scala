@@ -10,25 +10,8 @@ import org.analogweb.ResponseContext
 import org.analogweb.ResponseContext.ResponseEntity
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.fasterxml.jackson.core.JsonGenerator
 import java.io.OutputStream
-
-class ScalaJson(obj: AnyRef) extends Json(obj) {
-}
-
-class ScalaJsonFormatter extends ResponseFormatter {
-
-  protected val mapper: ObjectMapper = new ObjectMapper
-
-  override def formatAndWriteInto(request: RequestContext, response: ResponseContext, charset: String,
-    source: Any): ResponseEntity = {
-    new ResponseEntity() {
-      override def writeInto(responseBody: OutputStream) = {
-        mapper.registerModule(DefaultScalaModule).writeValue(responseBody, source)
-      }
-      override def getContentLength = -1
-    }
-  }
-}
 
 object Responses {
   def asText(obj: String) = Text.`with`(obj)
@@ -43,4 +26,28 @@ object Responses {
   def NotFound(obj: Renderable) = HttpStatus.NOT_FOUND.`with`(obj)
   def Forbidden(obj: Renderable) = HttpStatus.FORBIDDEN.`with`(obj)
   def InternalServerError(obj: Renderable) = HttpStatus.INTERNAL_SERVER_ERROR.`with`(obj)
+}
+
+class ScalaJson(obj: AnyRef) extends Json(obj) {
+}
+
+class ScalaJsonFormatter extends ResponseFormatter {
+
+  protected val mapper: ObjectMapper = {
+    val m = new ObjectMapper
+    m.registerModule(DefaultScalaModule)
+    m.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET,false)
+    m
+  }
+
+  override def formatAndWriteInto(request: RequestContext, response: ResponseContext, charset: String,
+    source: Any): ResponseEntity = {
+    new ResponseEntity() {
+      override def writeInto(responseBody: OutputStream) = {
+        mapper.writeValue(responseBody, source)
+      }
+      override def getContentLength = -1
+    }
+  }
+
 }
