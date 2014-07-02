@@ -36,7 +36,7 @@ class ScalaJsonFormatter extends ResponseFormatter {
   protected val mapper: ObjectMapper = {
     val m = new ObjectMapper
     m.registerModule(DefaultScalaModule)
-    m.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET,false)
+    m.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false)
     m
   }
 
