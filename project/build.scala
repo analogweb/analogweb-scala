@@ -3,7 +3,7 @@ import Keys._
 
 object BuildSettings {
     val buildOrganization = "org.analogweb"
-    val buildVersion      = "0.1.0-SNAPSHOT"
+    val buildVersion      = "0.9.0-SNAPSHOT"
     val buildScalaVersion = "2.10.4"
     val clossBuildScalaVersion = Seq("2.10.4","2.11.0")
 
