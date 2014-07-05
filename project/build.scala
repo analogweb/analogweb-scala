@@ -48,10 +48,7 @@ object AnalogwebScala extends Build {
           jackson,
           junit,
           specs
-      ),
-      artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
-            artifact.name + "-" + module.revision + "." + artifact.extension
-      }
+      )
     )
   )
 }
