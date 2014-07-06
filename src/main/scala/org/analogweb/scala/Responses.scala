@@ -33,7 +33,7 @@ class ScalaJson(obj: AnyRef) extends Json(obj) {
 
 class ScalaJsonFormatter extends ResponseFormatter {
 
-  protected val mapper: ObjectMapper = {
+  protected val objectMapper: ObjectMapper = {
     val m = new ObjectMapper
     m.registerModule(DefaultScalaModule)
     m.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false)
@@ -44,7 +44,7 @@ class ScalaJsonFormatter extends ResponseFormatter {
     source: Any): ResponseEntity = {
     new ResponseEntity() {
       override def writeInto(responseBody: OutputStream) = {
-        mapper.writeValue(responseBody, source)
+        objectMapper.writeValue(responseBody, source)
       }
       override def getContentLength = -1
     }
