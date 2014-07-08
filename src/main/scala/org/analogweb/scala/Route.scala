@@ -1,9 +1,10 @@
 package org.analogweb.scala
 
-import org.analogweb._
-import org.analogweb.core._
+import org.analogweb.core.RequestPathDefinition
 
-class Route(val method: String, val path: RequestPathMetadata)(invocation: Request => Any) {
+class Route(val method: String, val rawPath: String)(invocation: Request => Any) {
+
+  val path = RequestPathDefinition.define("/", rawPath, Array[String](method))
 
   def invoke(request: Request): Any = invocation(request)
 
@@ -11,7 +12,7 @@ class Route(val method: String, val path: RequestPathMetadata)(invocation: Reque
 
 object Route {
 
-  def apply(method: String, path: RequestPathMetadata)(invocation: Request => Any) = new Route(method, path)(invocation)
+  def apply(method: String, path: String)(invocation: Request => Any) = new Route(method, path)(invocation)
 
 }
 
