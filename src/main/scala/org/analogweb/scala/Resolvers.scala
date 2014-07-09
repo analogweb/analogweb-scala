@@ -14,6 +14,7 @@ import org.analogweb.core.RequestBodyValueResolver
 import org.analogweb.core.XmlValueResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.fasterxml.jackson.databind.JsonMappingException
 
 trait Resolvers {
 
@@ -39,7 +40,13 @@ class ScalaJacksonJsonValueResolver extends SpecificMediaTypeRequestValueResolve
     m
   }
 
-  override def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = objectMapper.readValue(request.getRequestBody, requiredType).asInstanceOf[AnyRef]
+  override def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = {
+    try {
+      objectMapper.readValue(request.getRequestBody, requiredType).asInstanceOf[AnyRef]
+    } catch {
+      case e: JsonMappingException => null
+    }
+  }
 
   override def supports(contentType: MediaType) = MediaTypes.APPLICATION_JSON_TYPE.isCompatible(contentType);
 
