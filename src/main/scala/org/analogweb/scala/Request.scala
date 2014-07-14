@@ -1,8 +1,10 @@
 package org.analogweb.scala
 
 import org.analogweb.RequestContext
+import org.analogweb.RequestPathMetadata
 import org.analogweb.RequestValueResolvers
 import org.analogweb.InvocationMetadata
+import org.analogweb.MediaType
 import org.analogweb.core.ParameterValueResolver
 import org.analogweb.core.PathVariableValueResolver
 import scala.collection.mutable.Buffer
@@ -18,4 +20,7 @@ class Request(val context: RequestContext, val resolvers: RequestValueResolvers,
 
   def headers(name: String): Buffer[String] = context.getRequestHeaders.getValues(name).asScala
 
+  def contentType: Option[MediaType] = Option(context.getContentType())
+
+  def requestPath: RequestPathMetadata = context.getRequestPath()
 }

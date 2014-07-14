@@ -15,6 +15,7 @@ import org.analogweb.core.XmlValueResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.databind.JsonMappingException
+import com.fasterxml.jackson.core.JsonParseException
 
 trait Resolvers {
 
@@ -45,6 +46,7 @@ class ScalaJacksonJsonValueResolver extends SpecificMediaTypeRequestValueResolve
       objectMapper.readValue(request.getRequestBody, requiredType).asInstanceOf[AnyRef]
     } catch {
       case e: JsonMappingException => null
+      case e: JsonParseException   => null
     }
   }
 
