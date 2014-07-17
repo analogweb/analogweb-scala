@@ -15,7 +15,7 @@ case class Scope[T <: RequestValueResolver](val resolverType: Class[T], val r: R
   }
 
   def as[T](name: String)(implicit ctag: ClassTag[T]): Option[T] = {
-    Some(r.resolvers.findRequestValueResolver(resolverType)).map { implicit resolver =>
+    Option(r.resolvers.findRequestValueResolver(resolverType)).map { implicit resolver =>
       verifyMediaType
       Option(resolver.resolveValue(r.context, r.metadata, name, ctag.runtimeClass, Array()).asInstanceOf[T])
     }.getOrElse(throw new IllegalArgumentException)
