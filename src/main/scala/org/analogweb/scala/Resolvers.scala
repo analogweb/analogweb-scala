@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation
 import org.analogweb.InvocationMetadata
 import org.analogweb.MediaType
 import org.analogweb.RequestContext
+import org.analogweb.RequestValueResolver
 import org.analogweb.TypeMapper
 import org.analogweb.core.MediaTypes
 import org.analogweb.core.SpecificMediaTypeRequestValueResolver
@@ -30,6 +31,16 @@ trait Resolvers {
   protected def xml = classOf[XmlValueResolver]
 
   protected def json = classOf[ScalaJacksonJsonValueResolver]
+
+}
+
+trait ScalaValueResolver extends RequestValueResolver {
+  override final def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = {
+    // nop.
+    null
+  }
+
+  def resolveValue(request: Request, key: String, requiredType: Class[_])
 
 }
 
