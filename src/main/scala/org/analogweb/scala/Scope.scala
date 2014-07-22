@@ -6,8 +6,10 @@ import org.analogweb.MediaType
 import org.analogweb.core.SpecificMediaTypeRequestValueResolver
 import org.analogweb.core.UnsupportedMediaTypeException
 
-case class Scope[T <: RequestValueResolver](val resolverType: Class[T], val r: Request) {
+trait Scope[T <: RequestValueResolver] {
 
+  def resolverType: Class[T]
+  def request: Request
   def of(name: String): Option[String] = as[String](name)
 
   def as[T](implicit ctag: ClassTag[T]): Option[T] = {
@@ -15,16 +17,16 @@ case class Scope[T <: RequestValueResolver](val resolverType: Class[T], val r: R
   }
 
   def as[T](name: String)(implicit ctag: ClassTag[T]): Option[T] = {
-    Option(r.resolvers.findRequestValueResolver(resolverType)).map { implicit resolver =>
+    Option(request.resolvers.findRequestValueResolver(resolverType)).map { implicit resolver =>
       verifyMediaType
-      Option(resolver.resolveValue(r.context, r.metadata, name, ctag.runtimeClass, Array()).asInstanceOf[T])
+      Option(resolver.resolveValue(request.context, request.metadata, name, ctag.runtimeClass, Array()).asInstanceOf[T])
     }.getOrElse(throw new IllegalArgumentException)
   }
 
   private def verifyMediaType(implicit resolver: RequestValueResolver) = {
     resolver match {
-      case x: SpecificMediaTypeRequestValueResolver => r.contentType.map { c =>
-        if (x.supports(c) == false) throw new UnsupportedMediaTypeException(r.requestPath)
+      case x: SpecificMediaTypeRequestValueResolver => request.contentType.map { c =>
+        if (x.supports(c) == false) throw new UnsupportedMediaTypeException(request.requestPath)
       }
       case _ => // nop.
     }
@@ -32,3 +34,10 @@ case class Scope[T <: RequestValueResolver](val resolverType: Class[T], val r: R
 
 }
 
+case class DefaultScope[T <: RequestValueResolver](override val resolverType: Class[T], override val request: Request) extends Scope[T]
+
+case class FormScope[T <: FormValueResolver](override val resolverType: Class[T], override val request: Request) extends Scope[T] {
+
+  def to(f: Request => AnyRef) = { f(request) }
+
+}

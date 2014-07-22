@@ -12,5 +12,8 @@ trait Analogweb {
 
   def delete(path: String)(action: Request => Any) = Route("DELETE", path)(action)
 
-  implicit def asScope[T <: RequestValueResolver](typeOfResolver: Class[T])(implicit request: Request) = Scope(typeOfResolver, request)
+  implicit def asScope[T <: RequestValueResolver](typeOfResolver: Class[T])(implicit request: Request) = DefaultScope(typeOfResolver, request)
+
+  implicit def asFormScope[T <: FormValueResolver](typeOfResolver: Class[T])(implicit request: Request) = FormScope(typeOfResolver, request)
+
 }
