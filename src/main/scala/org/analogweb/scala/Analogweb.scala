@@ -14,6 +14,6 @@ trait Analogweb {
 
   implicit def asScope[T <: RequestValueResolver](typeOfResolver: Class[T])(implicit request: Request) = DefaultScope(typeOfResolver, request)
 
-  implicit def asFormScope[T <: FormValueResolver](typeOfResolver: Class[T])(implicit request: Request) = FormScope(typeOfResolver, request)
+  implicit def asMappingScope[T <: MappingRequestValueResolver](typeOfResolver: Class[T])(implicit request: Request) = MappingScope(typeOfResolver, request)
 
 }

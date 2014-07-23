@@ -32,7 +32,7 @@ trait Resolvers {
 
   protected def json = classOf[ScalaJacksonJsonValueResolver]
 
-  protected def form = classOf[FormValueResolver]
+  protected def mapping = classOf[MappingRequestValueResolver]
 
 }
 
@@ -46,7 +46,7 @@ trait ScalaValueResolver extends RequestValueResolver {
 
 }
 
-class FormValueResolver extends ScalaValueResolver {
+class MappingRequestValueResolver extends ScalaValueResolver {
 
   def resolveValue(request: Request, key: String, requiredType: Class[_]) = {
     // TODO implement auto mapping.
