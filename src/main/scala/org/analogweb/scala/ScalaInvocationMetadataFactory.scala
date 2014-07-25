@@ -25,7 +25,7 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
         )
         val instance = clazz.newInstance
         ms.map(f =>
-          new ScalaInvocationMetadata(clazz, f.getName, null, f.invoke(instance).asInstanceOf[Route])).toSeq
+          new DefaultScalaInvocationMetadata(clazz, f.getName, Array(), f.invoke(instance).asInstanceOf[Route])).toSeq
       }
       case _ => new java.util.ArrayList[InvocationMetadata]
     }
