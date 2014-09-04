@@ -43,7 +43,7 @@ object BuildSettings {
     )
 }
 object Dependencies {
-  val core = "org.analogweb" % "analogweb-core" % "0.9.0-SNAPSHOT"
+  val core = "org.analogweb" % "analogweb-core" % "0.9.0"
   val jackson = "com.fasterxml.jackson.module" % "jackson-module-scala" % "2.4.1" cross CrossVersion.fullMapped {
       case "2.10.4" => "2.10"
       case "2.11.0" => "2.11"
