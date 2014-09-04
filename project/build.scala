@@ -11,7 +11,32 @@ object BuildSettings {
       organization := buildOrganization,
       version      := buildVersion,
       scalaVersion := buildScalaVersion,
-      crossScalaVersions := clossBuildScalaVersion
+      crossScalaVersions := clossBuildScalaVersion,
+      licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
+      description := "Analogweb Framework is tiny, simple, and pluggable web framework.",
+      publishMavenStyle := true,
+      publishTo <<= version { (v: String) =>
+          val nexus = "https://oss.sonatype.org/"
+          if (v.trim.endsWith("SNAPSHOT")) 
+              Some("snapshots" at nexus + "content/repositories/snapshots") 
+          else
+              Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+      },
+      publishArtifact in Test := false,
+      scmInfo := Some(ScmInfo(
+              url("https://github.com/analogweb/scala-plugin"),
+                  "scm:git:git@github.com:analogweb/scala-plugin.git"
+      )),
+      pomExtra := (
+            <url>http://analogweb.org</url>
+            <developers>
+                <developer>
+                    <id>snowgooseky</id>
+                    <name>snowgooseyk</name>
+                    <url>https://github.com/snowgooseyk</url>
+                </developer>
+            </developers>
+      )
     )
 }
 object Dependencies {
