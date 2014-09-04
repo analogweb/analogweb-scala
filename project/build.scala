@@ -1,5 +1,8 @@
 import sbt._
 import Keys._
+import sbtrelease._
+import ReleaseStateTransformations._
+import xerial.sbt.Sonatype._
 
 object BuildSettings {
     val buildOrganization = "org.analogweb"
@@ -7,7 +10,7 @@ object BuildSettings {
     val buildScalaVersion = "2.10.4"
     val clossBuildScalaVersion = Seq("2.10.4","2.11.0")
 
-    val buildSettings = Defaults.defaultSettings ++ Seq (
+    val buildSettings = Defaults.defaultSettings ++ ReleasePlugin.releaseSettings ++ sonatypeSettings ++ Seq (
       organization := buildOrganization,
       version      := buildVersion,
       scalaVersion := buildScalaVersion,
