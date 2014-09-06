@@ -39,7 +39,8 @@ object BuildSettings {
                     <url>https://github.com/snowgooseyk</url>
                 </developer>
             </developers>
-      )
+      ),
+      isSnapshot := true
     )
 }
 object Dependencies {
