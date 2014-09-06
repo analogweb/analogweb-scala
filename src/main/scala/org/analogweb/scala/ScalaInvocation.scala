@@ -10,7 +10,7 @@ class ScalaInvocation(path: RequestPathMetadata, val route: Route,
     val tc: TypeMapperContext, val rvr: RequestValueResolvers,
     im: InvocationMetadata) extends Invocation with InvocationArguments {
 
-  def invoke: Object = route.invoke(new Request(rc, rvr, im)).asInstanceOf[Object]
+  def invoke: Object = route.invoke(new Request(rc, rvr, im, tc)).asInstanceOf[Object]
 
   def getInvocationInstance: Object = route
 
