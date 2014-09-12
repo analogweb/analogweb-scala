@@ -25,7 +25,7 @@ trait Scope[T <: RequestValueResolver] {
 
   private def verifyMediaType(implicit resolver: RequestValueResolver) = {
     resolver match {
-      case x: SpecificMediaTypeRequestValueResolver => request.contentType.map { c =>
+      case x: SpecificMediaTypeRequestValueResolver => request.contentTypeOption.map { c =>
         if (x.supports(c) == false) throw new UnsupportedMediaTypeException(request.requestPath)
       }
       case _ => // nop.

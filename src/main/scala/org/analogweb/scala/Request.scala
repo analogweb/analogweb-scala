@@ -21,7 +21,11 @@ class Request(val context: RequestContext, val resolvers: RequestValueResolvers,
 
   def headers(name: String): Buffer[String] = context.getRequestHeaders.getValues(name).asScala
 
-  def contentType: Option[MediaType] = Option(context.getContentType())
+  def contentType: MediaType = context.getContentType()
+
+  def contentTypeOption: Option[MediaType] = Option(context.getContentType())
+
+  def content: Option[String] = contentTypeOption.map(_.toString)
 
   def requestPath: RequestPathMetadata = context.getRequestPath()
 }
