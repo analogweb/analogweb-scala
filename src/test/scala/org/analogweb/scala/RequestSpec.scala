@@ -19,7 +19,7 @@ class RequestSpec extends Specification with Mockito with BeforeExample {
   var qp = mock[Parameters]
   var rh = mock[Headers]
   var request = new Request(rc, rvr, im, tc)
-  
+
   def before = {
 
     rc = mock[RequestContext]
