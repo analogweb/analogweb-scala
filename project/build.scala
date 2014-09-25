@@ -61,8 +61,10 @@ object Dependencies {
 
 object Resolvers {
   val m2local = Resolver.mavenLocal 
+  val sonatype = Resolver.sonatypeRepo("snapshots")
   val all = Seq (
-    m2local
+    m2local,
+    sonatype
   )
 }
 
