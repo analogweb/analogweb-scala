@@ -41,7 +41,8 @@ object BuildSettings {
                 </developer>
             </developers>
       ),
-      isSnapshot := true
+      isSnapshot := true,
+      scalacOptions ++= Seq("-feature")
     )
 }
 object Dependencies {
