@@ -1,5 +1,6 @@
 package org.analogweb.scala
 
+import scala.language.implicitConversions
 import org.analogweb.RequestValueResolver
 
 trait Analogweb {
