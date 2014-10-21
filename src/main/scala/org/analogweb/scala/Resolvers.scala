@@ -14,6 +14,7 @@ import org.analogweb.core.CookieValueResolver
 import org.analogweb.core.RequestBodyValueResolver
 import org.analogweb.core.XmlValueResolver
 import org.analogweb.acf.MultipartParameterResolver
+import org.analogweb.acf.MultipartParameterStreamResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.databind.JsonMappingException
@@ -34,6 +35,8 @@ trait Resolvers {
   protected def json = classOf[ScalaJacksonJsonValueResolver]
 
   protected def multipart = classOf[MultipartParameterResolver]
+
+  protected def smultipart = classOf[MultipartParameterStreamResolver]
 
   protected def mapping = classOf[MappingRequestValueResolver]
 
