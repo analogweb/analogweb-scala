@@ -21,8 +21,8 @@ object BuildSettings {
       publishMavenStyle := true,
       publishTo <<= version { (v: String) =>
           val nexus = "https://oss.sonatype.org/"
-          if (v.trim.endsWith("SNAPSHOT")) 
-              Some("snapshots" at nexus + "content/repositories/snapshots") 
+          if (v.trim.endsWith("SNAPSHOT"))
+              Some("snapshots" at nexus + "content/repositories/snapshots")
           else
               Some("releases"  at nexus + "service/local/staging/deploy/maven2")
       },
@@ -60,7 +60,7 @@ object Dependencies {
 }
 
 object Resolvers {
-  val m2local = Resolver.mavenLocal 
+  val m2local = "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"
   val sonatype = Resolver.sonatypeRepo("snapshots")
   val all = Seq (
     m2local,
