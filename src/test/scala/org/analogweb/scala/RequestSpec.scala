@@ -27,36 +27,36 @@ class RequestSpec extends Specification with Mockito {
       qp.getValues("foo") returns java.util.Collections.emptyList()
       qp.getValues("baa") returns java.util.Arrays.asList("baz")
       val none = request.query("foo")
-      none === None
+      none must beNone
       val actual = request.query("baa")
-      actual.get === "baz"
+      actual.get must beEqualTo("baz")
     }
     "Returns avairable request header" in new mocks {
       rc.getRequestHeaders returns rh
       rh.getValues("x-foo") returns java.util.Collections.emptyList()
       rh.getValues("x-baa") returns java.util.Arrays.asList("baz")
       val none = request.header("x-foo")
-      none === None
+      none must beNone
       val actual = request.header("x-baa")
-      actual.get === "baz"
+      actual.get must beEqualTo("baz")
     }
     "Returns content type" in new mocks {
       val mt = mock[MediaType]
       mt.toString returns "application/json"
       rc.getContentType returns mt
       val actual = request.content
-      actual.get === "application/json"
+      actual.get must beEqualTo("application/json")
     }
     "Content type not avairable" in new mocks {
       rc.getContentType returns null
       val actual = request.content
-      actual === None
+      actual must beNone
     }
     "Returns path" in new mocks {
       val rpm = mock[RequestPath]
       rc.getRequestPath returns rpm
       val actual = request.requestPath
-      actual === rpm
+      actual must beEqualTo(rpm)
     }
   }
 }
