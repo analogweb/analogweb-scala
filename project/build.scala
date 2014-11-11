@@ -9,7 +9,7 @@ object BuildSettings {
     val buildOrganization = "org.analogweb"
     val buildVersion      = "0.9.1-SNAPSHOT"
     val buildScalaVersion = "2.10.4"
-    val clossBuildScalaVersion = Seq("2.10.4","2.11.0")
+    val clossBuildScalaVersion = Seq("2.10.4","2.11.4")
 
     val buildSettings = Defaults.defaultSettings ++ instrumentSettings ++ ReleasePlugin.releaseSettings ++ sonatypeSettings ++ Seq (
       organization := buildOrganization,
@@ -50,12 +50,12 @@ object Dependencies {
   val fileupload = "org.analogweb" % "analogweb-commons-fileupload" % "0.9.1-SNAPSHOT"
   val jackson = "com.fasterxml.jackson.module" % "jackson-module-scala" % "2.4.1" cross CrossVersion.fullMapped {
       case "2.10.4" => "2.10"
-      case "2.11.0" => "2.11"
+      case "2.11.4" => "2.11"
   }
   val junit = "com.novocode" % "junit-interface" % "0.9" % "test"
   val specs =  "org.specs2" % "specs2" % "2.3.12" % "test" cross CrossVersion.fullMapped {
       case "2.10.4" => "2.10"
-      case "2.11.0" => "2.11"
+      case "2.11.4" => "2.11"
   }
 }
 
