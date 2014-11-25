@@ -1,7 +1,7 @@
 package org.analogweb.scala
 
 import java.util
-import collection.JavaConversions._
+import scala.collection.convert.decorateAsJava._
 import org.analogweb._
 import collection.mutable.ArrayBuffer
 
@@ -20,6 +20,6 @@ class ScalaInvocation(path: RequestPathMetadata, val route: Route,
 
   def putInvocationArgument(i: Int, o: Object) = { /* nop */ }
 
-  def asList: util.List[Object] = ArrayBuffer.empty[Object]
+  def asList: util.List[Object] = ArrayBuffer.empty[Object].asJava
 
 }

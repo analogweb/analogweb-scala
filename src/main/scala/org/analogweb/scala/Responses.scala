@@ -1,7 +1,7 @@
 package org.analogweb.scala
 
 import scala.collection.mutable.Map
-import scala.collection.JavaConversions._
+import scala.collection.convert.decorateAsJava._
 import org.analogweb.Renderable
 import org.analogweb.core.response._
 import org.analogweb.ResponseFormatter
@@ -18,7 +18,7 @@ object Responses {
   def asText(obj: String) = Text.`with`(obj)
   def asHtmlEntity(obj: String) = Html.`with`(obj)
   def asHtml(templatePath: String) = Html.as(templatePath)
-  def asHtml(templatePath: String, context: Map[String, AnyRef]) = Html.as(templatePath, context)
+  def asHtml(templatePath: String, context: Map[String, AnyRef]) = Html.as(templatePath, context.asJava)
   def asJson(obj: AnyRef) = new ScalaJson(obj)
   def asXml(obj: AnyRef) = Xml.as(obj)
   def redirectTo(url: String) = Redirect.to(url)

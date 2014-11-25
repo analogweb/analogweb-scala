@@ -1,12 +1,12 @@
 package org.analogweb.scala
 
-import collection.JavaConversions._
 import org.analogweb.InvocationMetadata
 import org.analogweb.InvocationMetadataFactory
 import org.analogweb.core.DefaultInvocationMetadata
 import java.util.Collection
 import java.util.Collections
 import scala.collection.mutable.ArrayBuffer
+import scala.collection.convert.decorateAsJava._
 
 class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
 
@@ -24,8 +24,9 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
           ignoreMethods.contains(m.getName) == false
         )
         val instance = clazz.newInstance
-        ms.map(f =>
+        val s = ms.map(f =>
           new DefaultScalaInvocationMetadata(clazz, f.getName, Array(), f.invoke(instance).asInstanceOf[Route])).toSeq
+        asJavaCollectionConverter[InvocationMetadata](s).asJavaCollection
       }
       case _ => new java.util.ArrayList[InvocationMetadata]
     }
