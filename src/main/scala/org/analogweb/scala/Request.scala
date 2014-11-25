@@ -1,13 +1,7 @@
 package org.analogweb.scala
 
-import org.analogweb.RequestContext
-import org.analogweb.RequestPathMetadata
-import org.analogweb.RequestValueResolvers
-import org.analogweb.InvocationMetadata
-import org.analogweb.TypeMapperContext
-import org.analogweb.MediaType
-import org.analogweb.core.ParameterValueResolver
-import org.analogweb.core.PathVariableValueResolver
+import org.analogweb.{ RequestContext, RequestPathMetadata, RequestValueResolvers, InvocationMetadata, TypeMapperContext, MediaType }
+import org.analogweb.core.{ ParameterValueResolver, PathVariableValueResolver }
 import scala.collection.mutable.Buffer
 import scala.collection.convert.decorateAsScala._
 

@@ -1,12 +1,11 @@
 package org.analogweb.scala
 
-import org.analogweb.InvocationMetadata
-import org.analogweb.InvocationMetadataFactory
-import org.analogweb.core.DefaultInvocationMetadata
 import java.util.Collection
 import java.util.Collections
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.convert.decorateAsJava._
+import org.analogweb.{ InvocationMetadata, InvocationMetadataFactory }
+import org.analogweb.core.DefaultInvocationMetadata
 
 class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
 

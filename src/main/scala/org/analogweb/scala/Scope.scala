@@ -1,10 +1,8 @@
 package org.analogweb.scala
 
 import scala.reflect.ClassTag
-import org.analogweb.RequestValueResolver
-import org.analogweb.MediaType
-import org.analogweb.core.SpecificMediaTypeRequestValueResolver
-import org.analogweb.core.UnsupportedMediaTypeException
+import org.analogweb.{ RequestValueResolver, MediaType }
+import org.analogweb.core.{ SpecificMediaTypeRequestValueResolver, UnsupportedMediaTypeException }
 
 trait Scope[T <: RequestValueResolver] {
 

@@ -1,18 +1,15 @@
 package org.analogweb.scala
 
+import java.io.OutputStream
 import scala.collection.mutable.Map
 import scala.collection.convert.decorateAsJava._
-import org.analogweb.Renderable
-import org.analogweb.core.response._
-import org.analogweb.ResponseFormatter
-import org.analogweb.RequestContext
-import org.analogweb.ResponseContext
+import org.analogweb.{ Renderable, ResponseFormatter, RequestContext, ResponseContext }
 import org.analogweb.ResponseContext.ResponseEntity
+import org.analogweb.core.response._
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonMappingException
-import java.io.OutputStream
 
 object Responses {
   def asText(obj: String) = Text.`with`(obj)

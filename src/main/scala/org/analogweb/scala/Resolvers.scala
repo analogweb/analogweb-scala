@@ -1,20 +1,9 @@
 package org.analogweb.scala
 
 import java.lang.annotation.Annotation
-import org.analogweb.InvocationMetadata
-import org.analogweb.MediaType
-import org.analogweb.RequestContext
-import org.analogweb.RequestValueResolver
-import org.analogweb.TypeMapper
-import org.analogweb.core.MediaTypes
-import org.analogweb.core.SpecificMediaTypeRequestValueResolver
-import org.analogweb.core.ParameterValueResolver
-import org.analogweb.core.PathVariableValueResolver
-import org.analogweb.core.CookieValueResolver
-import org.analogweb.core.RequestBodyValueResolver
-import org.analogweb.core.XmlValueResolver
-import org.analogweb.acf.MultipartParameterResolver
-import org.analogweb.acf.MultipartParameterStreamResolver
+import org.analogweb.{ InvocationMetadata, MediaType, RequestContext, RequestValueResolver, TypeMapper }
+import org.analogweb.core.{ MediaTypes, SpecificMediaTypeRequestValueResolver, ParameterValueResolver, PathVariableValueResolver, CookieValueResolver, RequestBodyValueResolver, XmlValueResolver }
+import org.analogweb.acf.{ MultipartParameterResolver, MultipartParameterStreamResolver }
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.databind.JsonMappingException
