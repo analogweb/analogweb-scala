@@ -60,7 +60,7 @@ object Dependencies {
 }
 
 object Resolvers {
-  val m2local = "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"
+  val m2local = Resolver.mavenLocal 
   val sonatype = Resolver.sonatypeRepo("snapshots")
   val all = Seq (
     m2local,
