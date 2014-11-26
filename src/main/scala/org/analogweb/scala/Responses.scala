@@ -16,8 +16,11 @@ object Responses {
   def asHtmlEntity(obj: String) = Html.`with`(obj)
   def asHtml(templatePath: String) = Html.as(templatePath)
   def asHtml(templatePath: String, context: Map[String, AnyRef]) = Html.as(templatePath, context.asJava)
-  def asJson(obj: AnyRef) = new ScalaJson(obj)
+  def asJson(obj: AnyRef) = ScalaJson(obj)
+  def asJson(jsonText: String) = ScalaJson(jsonText)
   def asXml(obj: AnyRef) = Xml.as(obj)
+  def asStatus(statusCode: Int) = HttpStatus.valueOf(statusCode)
+  def asStatus(status: HttpStatus): HttpStatus = asStatus(status.getStatusCode())
   def redirectTo(url: String) = Redirect.to(url)
   def Ok(obj: Renderable) = HttpStatus.OK.`with`(obj)
   def Ok = HttpStatus.OK
@@ -31,7 +34,11 @@ object Responses {
   def InternalServerError = HttpStatus.INTERNAL_SERVER_ERROR
 }
 
-class ScalaJson(obj: AnyRef) extends Json(obj) {
+trait ScalaJson extends Json
+
+object ScalaJson {
+  def apply(obj: AnyRef) = new Json(obj) with ScalaJson
+  def apply(jsonString: String) = new Json(jsonString) with ScalaJson
 }
 
 class ScalaJsonFormatter extends ResponseFormatter {
