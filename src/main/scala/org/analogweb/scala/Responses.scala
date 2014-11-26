@@ -36,7 +36,9 @@ class ScalaJson(obj: AnyRef) extends Json(obj) {
 
 class ScalaJsonFormatter extends ResponseFormatter {
 
-  protected val objectMapper: ObjectMapper = {
+  protected val objectMapper = initObjectMapper
+
+  private[this] def initObjectMapper = {
     val m = new ObjectMapper
     m.registerModule(DefaultScalaModule)
     m.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false)
