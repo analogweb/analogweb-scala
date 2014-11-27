@@ -1,6 +1,7 @@
 package org.analogweb.scala
 
 import org.analogweb.{ PluginModulesConfig, InvocationMetadataFactory, ModulesBuilder, ModulesConfig }
+import org.analogweb.core.response.Json
 import org.analogweb.util.logging.Logs
 import org.analogweb.util.PropertyResourceBundleMessageResource
 
@@ -13,7 +14,8 @@ class ScalaModuleConfig extends PluginModulesConfig {
     Log.log(MessageLog, "ISB000001")
     builder.addInvocationMetadataFactoriesClass(classOf[ScalaInvocationMetadataFactory])
       .setInvocationFactoryClass(classOf[ScalaInvocationFactory])
-      .addResponseFormatterClass(classOf[ScalaJson], classOf[ScalaJsonFormatter])
+      .addResponseFormatterClass(classOf[ScalaJsonObject], classOf[ScalaJsonFormatter])
+      .addResponseFormatterClass(classOf[ScalaJsonText], classOf[ScalaJsonFormatter])
   }
 
 }
