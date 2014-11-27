@@ -51,7 +51,8 @@ class MappingRequestValueResolver extends ScalaValueResolver {
 
 class ScalaJacksonJsonValueResolver extends SpecificMediaTypeRequestValueResolver {
 
-  protected val objectMapper: ObjectMapper = {
+  protected val objectMapper: ObjectMapper = initObjectMapper
+  private[this] def initObjectMapper = {
     val m = new ObjectMapper
     m.registerModule(DefaultScalaModule)
     m
