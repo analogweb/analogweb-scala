@@ -35,7 +35,7 @@ object BuildSettings {
             <url>http://analogweb.org</url>
             <developers>
                 <developer>
-                    <id>snowgooseky</id>
+                    <id>snowgooseyk</id>
                     <name>snowgooseyk</name>
                     <url>https://github.com/snowgooseyk</url>
                 </developer>
