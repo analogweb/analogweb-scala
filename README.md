@@ -1,10 +1,15 @@
-Analogweb Framework Scala DSL
+Analogweb Framework Scala
 ===============================================
 
 [![Build Status](https://travis-ci.org/analogweb/scala-plugin.svg?branch=master)](https://travis-ci.org/analogweb/scala-plugin)
 
-Analogweb is a tiny HTTP orientied framework.
+This plugin enables to execute Analogweb's route written in Scala.
 
+Add to SBT dependency.
+
+```scala
+val scalaplugin = "org.analogweb" %% "analogweb-scala" % "0.9.2-SNAPSHOT"
+```
 ## Example
 
 ```scala
