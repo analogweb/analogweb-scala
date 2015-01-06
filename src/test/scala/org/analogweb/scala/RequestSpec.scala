@@ -26,19 +26,23 @@ class RequestSpec extends Specification with Mockito {
       rc.getQueryParameters returns qp
       qp.getValues("foo") returns java.util.Collections.emptyList()
       qp.getValues("baa") returns java.util.Arrays.asList("baz")
-      val none = request.query("foo")
+      val none = request.queryOption("foo")
       none must beNone
-      val actual = request.query("baa")
+      val actual = request.queryOption("baa")
       actual.get must beEqualTo("baz")
+      val noOption = request.query("baa")
+      noOption must beEqualTo("baz")
     }
     "Returns avairable request header" in new mocks {
       rc.getRequestHeaders returns rh
       rh.getValues("x-foo") returns java.util.Collections.emptyList()
       rh.getValues("x-baa") returns java.util.Arrays.asList("baz")
-      val none = request.header("x-foo")
+      val none = request.headerOption("x-foo")
       none must beNone
-      val actual = request.header("x-baa")
+      val actual = request.headerOption("x-baa")
       actual.get must beEqualTo("baz")
+      val noOption = request.header("x-baa")
+      noOption must beEqualTo("baz")
     }
     "Returns content type" in new mocks {
       val mt = mock[MediaType]
