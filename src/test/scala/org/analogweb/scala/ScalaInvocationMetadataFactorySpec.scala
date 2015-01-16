@@ -20,7 +20,7 @@ class ScalaInvocationMetadataFactorySpec extends Specification {
     }
     "Create InvocationMetadata successful" in {
       val actual = factory.createInvocationMetadatas(classOf[Foo]).iterator().next()
-      actual.getMethodName() === "foo"
+      actual.getMethodName() === "GET(/foo)"
       actual.getArgumentTypes().isEmpty must beTrue
       actual.getInvocationClass() === classOf[Foo]
       actual.getDefinedPath().getActualPath() === "/foo"
@@ -35,13 +35,13 @@ class ScalaInvocationMetadataFactorySpec extends Specification {
 }
 
 class Foo extends Analogweb {
-  def foo = get("/foo") { r =>
+  get("/foo") { r =>
     "Foo"
   }
 }
 
 class Baa {
-  def foo = { r: Request =>
+  def baa = { r: Request =>
     "Foo"
   }
 }

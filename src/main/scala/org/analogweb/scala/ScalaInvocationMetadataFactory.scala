@@ -9,8 +9,6 @@ import org.analogweb.core.DefaultInvocationMetadata
 
 class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
 
-  val ignoreMethods = Seq("get", "post", "put", "delete")
-
   def containsInvocationClass(clazz: Class[_]): Boolean = {
     classOf[Analogweb].isAssignableFrom(clazz) && classOf[Analogweb].getCanonicalName != clazz.getCanonicalName
   }
@@ -18,14 +16,10 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
   def createInvocationMetadatas(clazz: Class[_]): Collection[InvocationMetadata] = {
     clazz match {
       case c if classOf[Analogweb] isAssignableFrom c => {
-        val ms = c.getDeclaredMethods.filter(m =>
-          classOf[Route].isAssignableFrom(m.getReturnType)).filter(m =>
-          ignoreMethods.contains(m.getName) == false
-        )
-        val instance = clazz.newInstance
-        val s = ms.map(f =>
-          new DefaultScalaInvocationMetadata(clazz, f.getName, Array(), f.invoke(instance).asInstanceOf[Route])).toSeq
-        asJavaCollectionConverter[InvocationMetadata](s).asJavaCollection
+        val routes = c.newInstance.asInstanceOf[Analogweb].routes
+        val metadatas = routes.map(route =>
+          new DefaultScalaInvocationMetadata(clazz, s"${route.method}(${route.rawPath})", Array(), route)).toSeq
+        asJavaCollectionConverter[InvocationMetadata](metadatas).asJavaCollection
       }
       case _ => new java.util.ArrayList[InvocationMetadata]
     }
