@@ -11,7 +11,7 @@ object BuildSettings {
     val buildScalaVersion = "2.10.4"
     val clossBuildScalaVersion = Seq("2.10.4","2.11.4")
 
-    val buildSettings = Defaults.defaultSettings ++ instrumentSettings ++ ReleasePlugin.releaseSettings ++ sonatypeSettings ++ Seq (
+    val buildSettings = Defaults.defaultSettings ++ ReleasePlugin.releaseSettings ++ sonatypeSettings ++ Seq (
       organization := buildOrganization,
       version      := buildVersion,
       scalaVersion := buildScalaVersion,
@@ -52,7 +52,6 @@ object Dependencies {
       case "2.10.4" => "2.10"
       case "2.11.4" => "2.11"
   }
-  val junit = "com.novocode" % "junit-interface" % "0.9" % "test"
   val specs =  "org.specs2" % "specs2" % "2.3.12" % "test" cross CrossVersion.fullMapped {
       case "2.10.4" => "2.10"
       case "2.11.4" => "2.11"
@@ -81,7 +80,6 @@ object AnalogwebScala extends Build {
           core,
           fileupload,
           jackson,
-          junit,
           specs
       )
     )
