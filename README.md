@@ -8,7 +8,7 @@ This plugin enables to execute Analogweb's route written in Scala.
 Add to SBT dependency.
 
 ```scala
-val scalaplugin = "org.analogweb" %% "analogweb-scala" % "0.9.2-SNAPSHOT"
+val scalaplugin = "org.analogweb" %% "analogweb-scala" % "0.9.3-SNAPSHOT"
 ```
 ## Example
 
@@ -24,7 +24,7 @@ object Run {
 }
 
 class Hello extends Analogweb {
-  def hello = get("/hello") { request => 
+  get("/hello") { request => 
     s"Hello, ${request.query("name")} !"
   }
 }
