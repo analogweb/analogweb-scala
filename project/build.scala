@@ -3,7 +3,6 @@ import Keys._
 import sbtrelease._
 import ReleaseStateTransformations._
 import xerial.sbt.Sonatype._
-import scoverage.ScoverageSbtPlugin._
 
 object BuildSettings {
     val buildOrganization = "org.analogweb"
