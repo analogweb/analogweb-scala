@@ -2,7 +2,7 @@ package org.analogweb.scala
 
 import java.lang.annotation.Annotation
 import org.analogweb.{ InvocationMetadata, MediaType, RequestContext, RequestValueResolver, TypeMapper }
-import org.analogweb.core.{ MediaTypes, SpecificMediaTypeRequestValueResolver, ParameterValueResolver, PathVariableValueResolver, CookieValueResolver, RequestBodyValueResolver, XmlValueResolver }
+import org.analogweb.core.{ MediaTypes, SpecificMediaTypeRequestValueResolver, ParameterValueResolver, PathVariableValueResolver, CookieValueResolver, RequestBodyValueResolver, XmlValueResolver, RequestContextValueResolver }
 import org.analogweb.acf.{ MultipartParameterResolver, MultipartParameterStreamResolver }
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
@@ -28,6 +28,8 @@ trait Resolvers {
   protected def smultipart = classOf[MultipartParameterStreamResolver]
 
   protected def mapping = classOf[MappingRequestValueResolver]
+
+  protected def context = classOf[RequestContextValueResolver]
 
 }
 
