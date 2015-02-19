@@ -1,7 +1,9 @@
 Analogweb Framework Scala
 ===============================================
 
-[![Build Status](https://travis-ci.org/analogweb/scala-plugin.svg?branch=master)](https://travis-ci.org/analogweb/scala-plugin)
+[![Build Status](https://travis-ci.org/analogweb/scala-plugin.svg?branch=0.9.3)](https://travis-ci.org/analogweb/scala-plugin)
+[![Coverage Status](https://coveralls.io/repos/analogweb/scala-plugin/badge.svg?branch=0.9.3)](https://coveralls.io/r/analogweb/scala-plugin?branch=0.9.3)
+
 
 This plugin enables to execute Analogweb's route written in Scala.
 
@@ -24,8 +26,8 @@ object Run {
 }
 
 class Hello extends Analogweb {
-  get("/hello") { request => 
-    s"Hello, ${request.query("name")} !"
+  get("/hello") { r => 
+    s"Hello, ${r.query("name")} !"
   }
 }
 ```
