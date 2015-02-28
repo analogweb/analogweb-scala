@@ -27,7 +27,7 @@ class ScalaInvocationFactorySpec extends Specification with Mockito {
       val route = mock[Route]
       im.route returns route
       val invocationResult = None
-      route.invoke(any[Request]) returns invocationResult 
+      route.invoke(any[Request]) returns invocationResult
       val rc = mock[RequestContext]
       val rsc = mock[ResponseContext]
       val tc = mock[TypeMapperContext]
@@ -38,10 +38,10 @@ class ScalaInvocationFactorySpec extends Specification with Mockito {
       actual.getInvocationArguments() === actual
       actual.getInvocationArguments().asList().isEmpty() must beTrue
       // nop
-      actual.asInstanceOf[ScalaInvocation].replace(None) 
+      actual.asInstanceOf[ScalaInvocation].replace(None)
       // nop
-      actual.asInstanceOf[ScalaInvocation].putInvocationArgument(1,None) 
-      actual.invoke() === invocationResult 
+      actual.asInstanceOf[ScalaInvocation].putInvocationArgument(1, None)
+      actual.invoke() === invocationResult
     }
     "Foo not contains java invocation" in {
       val ca = mock[ContainerAdaptor]
