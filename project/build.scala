@@ -46,7 +46,7 @@ object BuildSettings {
     )
 }
 object Dependencies {
-  val core = "org.analogweb" % "analogweb-core" % "0.9.3"
+  val core = "org.analogweb" % "analogweb-core" % "0.9.4-SNAPSHOT"
   val fileupload = "org.analogweb" % "analogweb-commons-fileupload" % "0.9.3"
   val jackson = "com.fasterxml.jackson.module" % "jackson-module-scala" % "2.4.3" cross CrossVersion.fullMapped {
       case "2.10.4" => "2.10"
