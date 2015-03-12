@@ -1,5 +1,6 @@
 package org.analogweb.scala
 
+import scala.xml.NodeSeq
 import org.junit.runner.RunWith
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
@@ -23,7 +24,7 @@ class ResponsesSpec extends Specification with Mockito {
       val okAsText = Ok(asText("foo"))
       okAsText.getStatusCode === 200
       okAsText.getRenderable.isInstanceOf[Text] === true
-      val statusAsHtml = Status(asHtmlEntity("foo"), 200)
+      val statusAsHtml = Status(asHtmlEntity(<h1>Hello</h1>), 200)
       statusAsHtml.getStatusCode === 200
       statusAsHtml.getRenderable.isInstanceOf[Html] === true
       val statusObjAsHtml = Status(asHtml("foo"), HttpStatus.OK)
@@ -49,6 +50,8 @@ class ResponsesSpec extends Specification with Mockito {
       internalServerErrorAsXml.getRenderable.isInstanceOf[Xml] === true
       val internalServerError = InternalServerError
       internalServerError.getStatusCode === 500
+      val notImplemented = Status(501)
+      notImplemented.getStatusCode === 501
     }
   }
 

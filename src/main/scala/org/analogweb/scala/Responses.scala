@@ -3,6 +3,7 @@ package org.analogweb.scala
 import java.io.OutputStream
 import scala.collection.mutable.Map
 import scala.collection.convert.decorateAsJava._
+import scala.xml.NodeSeq
 import org.analogweb.{ Renderable, ResponseFormatter, RequestContext, ResponseContext }
 import org.analogweb.ResponseContext.ResponseEntity
 import org.analogweb.core.response._
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.JsonMappingException
 object Responses {
   def asText(obj: String) = Text.`with`(obj)
   def asHtmlEntity(obj: String) = Html.`with`(obj)
+  def asHtmlEntity(obj: NodeSeq): Html = asHtmlEntity(obj.toString())
   def asHtml(templatePath: String) = Html.as(templatePath)
   def asHtml(templatePath: String, context: Map[String, AnyRef]) = Html.as(templatePath, context.asJava)
   def asJson(obj: AnyRef) = new ScalaJsonObject(obj)
