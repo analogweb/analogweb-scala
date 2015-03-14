@@ -16,13 +16,13 @@ val scalaplugin = "org.analogweb" %% "analogweb-scala" % "0.9.3-SNAPSHOT"
 ## Example
 
 ```scala
-import org.analogweb.core.httpserver.HttpServers
+import org.analogweb.core.Servers
 import org.analogweb.scala.Analogweb
 import java.net.URI
 
 object Run {
   def main(args: Array[String]): Unit = {
-    HttpServers.create(URI.create("http://localhost:8080")).start()
+    Servers.create("http://localhost:8080").start
   }
 }
 
