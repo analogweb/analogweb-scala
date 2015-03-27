@@ -1,5 +1,6 @@
 package org.analogweb.scala
 
+import java.io.InputStream
 import scala.xml.NodeSeq
 import org.junit.runner.RunWith
 import org.specs2.mutable._
@@ -14,9 +15,12 @@ class ResponsesSpec extends Specification with Mockito {
   import org.analogweb.scala.Responses._
 
   val factory = new ScalaInvocationFactory
+  trait mocks extends org.specs2.specification.Scope {
+    var is = mock[InputStream]
+  }
 
   "Responses" should {
-    "Expected instance" in {
+    "Expected instance" in new mocks {
       val ok = Ok
       ok.getStatusCode === 200
       val redirect = RedirectTo("somewhere")
@@ -24,6 +28,9 @@ class ResponsesSpec extends Specification with Mockito {
       val okAsText = Ok(asText("foo"))
       okAsText.getStatusCode === 200
       okAsText.getRenderable.isInstanceOf[Text] === true
+      val okAsResource = Ok(asResource(is, "foo"))
+      okAsResource.getStatusCode === 200
+      okAsResource.getRenderable.isInstanceOf[Resource] === true
       val statusAsHtml = Status(asHtmlEntity(<h1>Hello</h1>), 200)
       statusAsHtml.getStatusCode === 200
       statusAsHtml.getRenderable.isInstanceOf[Html] === true

@@ -1,6 +1,6 @@
 package org.analogweb.scala
 
-import java.io.OutputStream
+import java.io.{ File, InputStream, OutputStream }
 import scala.collection.mutable.Map
 import scala.collection.convert.decorateAsJava._
 import scala.xml.NodeSeq
@@ -21,6 +21,7 @@ object Responses {
   def asJson(obj: AnyRef) = new ScalaJsonObject(obj)
   def asJson(jsonText: String) = new ScalaJsonText(jsonText)
   def asXml(obj: AnyRef) = Xml.as(obj)
+  def asResource(stream: InputStream, filename: String) = Resource.as(stream, filename)
   def Status(statusCode: Int) = HttpStatus.valueOf(statusCode)
   def Status(status: HttpStatus): HttpStatus = Status(status.getStatusCode())
   def Status(responseBody: Renderable, statusCode: Int) = HttpStatus.valueOf(statusCode).`with`(responseBody)
