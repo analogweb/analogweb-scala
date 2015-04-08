@@ -8,8 +8,8 @@ import scoverage._
 object BuildSettings {
     val buildOrganization = "org.analogweb"
     val buildVersion      = "0.9.5-SNAPSHOT"
-    val buildScalaVersion = "2.10.4"
-    val clossBuildScalaVersion = Seq("2.10.4","2.11.4")
+    val buildScalaVersion = "2.10.5"
+    val clossBuildScalaVersion = Seq("2.10.5","2.11.6")
 
     val buildSettings = Defaults.defaultSettings ++ ReleasePlugin.releaseSettings ++ sonatypeSettings ++ ScoverageSbtPlugin.projectSettings  ++ Seq (
       organization := buildOrganization,
@@ -49,12 +49,12 @@ object Dependencies {
   val core = "org.analogweb" % "analogweb-core" % "0.9.4"
   val fileupload = "org.analogweb" % "analogweb-commons-fileupload" % "0.9.4"
   val jackson = "com.fasterxml.jackson.module" % "jackson-module-scala" % "2.4.3" cross CrossVersion.fullMapped {
-      case "2.10.4" => "2.10"
-      case "2.11.4" => "2.11"
+      case "2.10.5" => "2.10"
+      case "2.11.6" => "2.11"
   }
   val specs =  "org.specs2" % "specs2" % "2.3.12" % "test" cross CrossVersion.fullMapped {
-      case "2.10.4" => "2.10"
-      case "2.11.4" => "2.11"
+      case "2.10.5" => "2.10"
+      case "2.11.6" => "2.11"
   }
 }
 
