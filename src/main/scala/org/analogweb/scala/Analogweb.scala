@@ -14,6 +14,8 @@ trait Analogweb {
 
   def delete(path: String)(action: Request => Any) = register(Route("DELETE", path)(action))
 
+  def response(f: => Any) = { implicit r: Request => f }
+
   private def register(route: Route) = routes += route
 
   protected[scala] val routes = ListBuffer[Route]()
