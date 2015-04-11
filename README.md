@@ -1,8 +1,8 @@
 Analogweb Framework Scala
 ===============================================
 
-[![Build Status](https://travis-ci.org/analogweb/scala-plugin.svg?branch=0.9.3)](https://travis-ci.org/analogweb/scala-plugin)
-[![Coverage Status](https://coveralls.io/repos/analogweb/scala-plugin/badge.svg?branch=0.9.3)](https://coveralls.io/r/analogweb/scala-plugin?branch=0.9.3)
+[![Build Status](https://travis-ci.org/analogweb/scala-plugin.svg)](https://travis-ci.org/analogweb/scala-plugin)
+[![Coverage Status](https://coveralls.io/repos/analogweb/scala-plugin/badge.svg)](https://coveralls.io/r/analogweb/scala-plugin)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.analogweb/analogweb-scala_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.analogweb/analogweb-scala_2.11)
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 
@@ -11,7 +11,7 @@ This plugin enables to execute Analogweb's route that was written in Scala.
 Add to SBT dependency.
 
 ```scala
-val scalaplugin = "org.analogweb" %% "analogweb-scala" % "0.9.3"
+val scalaplugin = "org.analogweb" %% "analogweb-scala" % "0.9.5-SNAPSHOT"
 ```
 ## Example
 
@@ -26,8 +26,17 @@ object Run {
 }
 
 class Hello extends Analogweb {
-  get("/hello") { r => 
-    s"Hello, ${r.query("name")} !"
+  get("/ping") {
+    "PONG"
   }
 }
+```
+
+And you will get then.
+
+```
+
+$ curl http://localhost:8080/ping
+PONG
+
 ```
