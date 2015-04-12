@@ -15,6 +15,8 @@ val scalaplugin = "org.analogweb" %% "analogweb-scala" % "0.9.5-SNAPSHOT"
 ```
 ## Example
 
+Write such code as below
+
 ```scala
 import org.analogweb.core.Servers
 import org.analogweb.scala.Analogweb
@@ -23,16 +25,14 @@ object Run {
   def main(args: Array[String]) = {
     Servers.create("http://localhost:8080").start
   }
-}
-
-class Hello extends Analogweb {
+  
   get("/ping") {
     "PONG"
   }
 }
 ```
 
-And you will get then.
+and you will get them.
 
 ```
 

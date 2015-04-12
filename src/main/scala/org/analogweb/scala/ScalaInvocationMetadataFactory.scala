@@ -16,7 +16,7 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
   def createInvocationMetadatas(clazz: Class[_]): Collection[InvocationMetadata] = {
     clazz match {
       case c if classOf[Analogweb] isAssignableFrom c => {
-        val routes = c.newInstance.asInstanceOf[Analogweb].routes
+        val routes = instantiate(c).routes
         val metadatas = routes.map(route =>
           new DefaultScalaInvocationMetadata(clazz, s"${route.method}(${route.rawPath})", Array(), route)).toSeq
         asJavaCollectionConverter[InvocationMetadata](metadatas).asJavaCollection
@@ -25,4 +25,11 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
     }
   }
 
+  def instantiate(c: Class[_]): Analogweb = {
+    try {
+      c.getField("MODULE$").get(c).asInstanceOf[Analogweb]
+    } catch {
+      case e: NoSuchFieldException => c.newInstance.asInstanceOf[Analogweb]
+    }
+  }
 }
