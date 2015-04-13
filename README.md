@@ -21,7 +21,7 @@ Write such code as below
 import org.analogweb.core.Servers
 import org.analogweb.scala.Analogweb
 
-object Run extends Analogweb {
+object App extends Analogweb {
 
   def main(args: Array[String]) = {
     Servers.create("http://localhost:8080").start
