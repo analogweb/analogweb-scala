@@ -7,7 +7,7 @@ import scoverage._
 
 object BuildSettings {
     val buildOrganization = "org.analogweb"
-    val buildVersion      = "0.9.6"
+    val buildVersion      = "0.9.7-SNAPSHOT"
     val buildScalaVersion = "2.11.4"
     val clossBuildScalaVersion = Seq("2.10.5","2.11.4")
 
