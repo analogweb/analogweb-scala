@@ -7,7 +7,7 @@ import scoverage._
 
 object BuildSettings {
     val buildOrganization = "org.analogweb"
-    val buildVersion      = "0.9.6-SNAPSHOT"
+    val buildVersion      = "0.9.6"
     val buildScalaVersion = "2.11.4"
     val clossBuildScalaVersion = Seq("2.10.5","2.11.4")
 
@@ -46,7 +46,7 @@ object BuildSettings {
     )
 }
 object Dependencies {
-  val core = "org.analogweb" % "analogweb-core" % "0.9.6-SNAPSHOT"
+  val core = "org.analogweb" % "analogweb-core" % "0.9.6"
   val jackson = "com.fasterxml.jackson.module" % "jackson-module-scala" % "2.4.3" cross CrossVersion.fullMapped {
       case "2.10.5" => "2.10"
       case "2.11.4" => "2.11"
