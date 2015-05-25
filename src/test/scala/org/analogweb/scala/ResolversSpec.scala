@@ -8,7 +8,6 @@ import org.mockito.Matchers.{ eq => isEq }
 import org.analogweb._
 import org.analogweb.core._
 import org.analogweb.scala._
-import org.analogweb.acf.{ MultipartParameterResolver, MultipartParameterStreamResolver }
 
 case class B(val name: String)
 
@@ -89,17 +88,6 @@ class ResolversSpec extends Specification with Mockito {
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
         s"${multipart.of("baa").getOrElse("a")}"
-      }
-    }
-    new A().routes(0).invoke(r) must beEqualTo("baz")
-  }
-
-  "Resolve with MultipartStreamParameterResolver" in new mocks {
-    resolver.resolveValue(isEq(rc), isEq(im), isEq("baa"), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
-    rvr.findRequestValueResolver(classOf[MultipartParameterStreamResolver]) returns resolver
-    class A extends Analogweb with Resolvers {
-      get("/foo") { implicit r =>
-        s"${smultipart.of("baa").getOrElse("a")}"
       }
     }
     new A().routes(0).invoke(r) must beEqualTo("baz")

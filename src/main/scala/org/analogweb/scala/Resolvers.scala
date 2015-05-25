@@ -2,8 +2,7 @@ package org.analogweb.scala
 
 import java.lang.annotation.Annotation
 import org.analogweb.{ InvocationMetadata, MediaType, RequestContext, RequestValueResolver, TypeMapper }
-import org.analogweb.core.{ MediaTypes, SpecificMediaTypeRequestValueResolver, ParameterValueResolver, PathVariableValueResolver, CookieValueResolver, RequestBodyValueResolver, XmlValueResolver, RequestContextValueResolver }
-import org.analogweb.acf.{ MultipartParameterResolver, MultipartParameterStreamResolver }
+import org.analogweb.core.{ MediaTypes, SpecificMediaTypeRequestValueResolver, ParameterValueResolver, PathVariableValueResolver, CookieValueResolver, RequestBodyValueResolver, XmlValueResolver, RequestContextValueResolver, MultipartParameterResolver }
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.databind.JsonMappingException
@@ -24,8 +23,6 @@ trait Resolvers {
   protected def json = classOf[ScalaJacksonJsonValueResolver]
 
   protected def multipart = classOf[MultipartParameterResolver]
-
-  protected def smultipart = classOf[MultipartParameterStreamResolver]
 
   protected def mapping = classOf[MappingRequestValueResolver]
 
