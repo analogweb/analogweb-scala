@@ -22,6 +22,12 @@ trait Analogweb {
 
   implicit def asScope[T <: RequestValueResolver](typeOfResolver: Class[T])(implicit request: Request) = DefaultScope(typeOfResolver, request)
 
-  implicit def asMappingScope[T <: MappingRequestValueResolver](typeOfResolver: Class[T])(implicit request: Request) = MappingScope(typeOfResolver, request)
+  type RequestObjectMapping[T] = Request => T
+
+  implicit def asRequestObjectMapping[T](mapping: RequestObjectMapping[T])(implicit request: Request) = RequestObjectMapper(mapping, request)
+
+  object RequestObjectMapper {
+    def apply[T](mapping: RequestObjectMapping[T], request: Request): T = mapping(request)
+  }
 
 }

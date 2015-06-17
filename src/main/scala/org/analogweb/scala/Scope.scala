@@ -34,8 +34,10 @@ trait Scope[T <: RequestValueResolver] {
 
 case class DefaultScope[T <: RequestValueResolver](override val resolverType: Class[T], override val request: Request) extends Scope[T]
 
+/*
 case class MappingScope[T <: MappingRequestValueResolver](override val resolverType: Class[T], override val request: Request) extends Scope[T] {
 
   def to[S](f: Request => S) = f(request)
 
 }
+*/

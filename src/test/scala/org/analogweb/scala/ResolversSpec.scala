@@ -105,12 +105,10 @@ class ResolversSpec extends Specification with Mockito {
   }
 
   "Resolve with MappingRequestValueResolver" in new mocks {
-    resolver.resolveValue(isEq(rc), isEq(im), isEq(""), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
-    rvr.findRequestValueResolver(classOf[MappingRequestValueResolver]) returns resolver
     class A extends Analogweb with Resolvers {
-      val m = { r: Request => "foo" }
+      val m: Request => B = { r => B(name = "foo") }
       get("/foo") { implicit r =>
-        s"${mapping.to[java.lang.String](m)}"
+        s"${m.name}"
       }
     }
     new A().routes(0).invoke(r) must beEqualTo("foo")

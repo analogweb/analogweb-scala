@@ -24,12 +24,13 @@ trait Resolvers {
 
   protected def multipart = classOf[MultipartParameterResolver]
 
-  protected def mapping = classOf[MappingRequestValueResolver]
+  //  protected def mapping = classOf[MappingRequestValueResolver]
 
   protected def context = classOf[RequestContextValueResolver]
 
 }
 
+/*
 trait ScalaValueResolver extends RequestValueResolver {
   override final def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = {
     // nop.
@@ -39,7 +40,6 @@ trait ScalaValueResolver extends RequestValueResolver {
   def resolveValue(request: Request, key: String, requiredType: Class[_])
 
 }
-
 class MappingRequestValueResolver extends ScalaValueResolver {
 
   def resolveValue(request: Request, key: String, requiredType: Class[_]) = {
@@ -47,7 +47,7 @@ class MappingRequestValueResolver extends ScalaValueResolver {
   }
 
 }
-
+*/
 class ScalaJacksonJsonValueResolver extends SpecificMediaTypeRequestValueResolver {
 
   protected val objectMapper: ObjectMapper = initObjectMapper
