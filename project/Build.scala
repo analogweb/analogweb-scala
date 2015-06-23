@@ -42,7 +42,7 @@ object BuildSettings {
             </developers>
       ),
       isSnapshot := true,
-      scalacOptions ++= Seq("-feature","-deprecation")
+      scalacOptions ++= Seq("-feature","-deprecation", "-Yrangepos")
     )
 }
 object Dependencies {
@@ -51,18 +51,35 @@ object Dependencies {
       case "2.10.5" => "2.10"
       case "2.11.6" => "2.11"
   }
-  val specs  = "org.specs2" % "specs2" % "2.3.12" % "test" cross CrossVersion.fullMapped {
+  val specs  = "org.specs2" % "specs2-core" % "3.6.1" % "test" cross CrossVersion.fullMapped {
       case "2.10.5" => "2.10"
       case "2.11.6" => "2.11"
   }
+  val specsMock  = "org.specs2" % "specs2-mock" % "3.6.1" % "test" cross CrossVersion.fullMapped {
+      case "2.10.5" => "2.10"
+      case "2.11.6" => "2.11"
+  }
+  val specsJunit  = "org.specs2" % "specs2-junit" % "3.6.1" % "test" cross CrossVersion.fullMapped {
+      case "2.10.5" => "2.10"
+      case "2.11.6" => "2.11"
+  }
+  val all = Seq (
+    core,
+    json4s,
+    specs,
+    specsMock,
+    specsJunit
+  )
 }
 
 object Resolvers {
   val m2local = Resolver.mavenLocal 
   val sonatype = Resolver.sonatypeRepo("snapshots")
+  val scalazBintray = "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
   val all = Seq (
     m2local,
-    sonatype
+    sonatype,
+    scalazBintray
   )
 }
 
@@ -75,11 +92,7 @@ object AnalogwebScala extends Build {
     base = file("."),
     settings = buildSettings ++ Seq (
       resolvers ++= Resolvers.all,
-      libraryDependencies ++= Seq(
-          core,
-          json4s,
-          specs
-      )
+      libraryDependencies ++= Dependencies.all 
     )
   )
 }
