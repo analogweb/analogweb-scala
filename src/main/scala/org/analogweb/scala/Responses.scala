@@ -7,10 +7,9 @@ import scala.xml.NodeSeq
 import org.analogweb.{ Renderable, ResponseFormatter, RequestContext, ResponseContext }
 import org.analogweb.ResponseContext.ResponseEntity
 import org.analogweb.core.response._
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.JsonMappingException
+import org.json4s._
+import org.json4s.jackson.JsonMethods
+import org.json4s.jackson.Serialization
 
 object Responses {
   def asText(obj: String) = Text.`with`(obj)
@@ -20,7 +19,7 @@ object Responses {
   def asHtml(templatePath: String, context: Map[String, AnyRef]) = Html.as(templatePath, context.asJava)
   def asJson(obj: AnyRef) = new ScalaJsonObject(obj)
   def asJson(jsonText: String) = new ScalaJsonText(jsonText)
-  def asXml(obj: AnyRef) = Xml.as(obj)
+  def asXml(obj: AnyRef) = org.analogweb.core.response.Xml.as(obj)
   def asResource(stream: InputStream, filename: String) = Resource.as(stream, filename)
   def Status(statusCode: Int) = HttpStatus.valueOf(statusCode)
   def Status(status: HttpStatus): HttpStatus = Status(status.getStatusCode())
@@ -44,20 +43,17 @@ class ScalaJsonText(text: String) extends Json(text)
 
 class ScalaJsonFormatter extends ResponseFormatter {
 
-  protected val objectMapper = initObjectMapper
-
-  private[this] def initObjectMapper = {
-    val m = new ObjectMapper
-    m.registerModule(DefaultScalaModule)
-    m.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false)
-    m
-  }
+  implicit val formats = Serialization.formats(NoTypeHints)
 
   override def formatAndWriteInto(request: RequestContext, response: ResponseContext, charset: String,
     source: Any): ResponseEntity = {
     new ResponseEntity() {
       override def writeInto(responseBody: OutputStream) = {
-        objectMapper.writeValue(responseBody, source)
+        val s = source match {
+          case v: JValue => JsonMethods.compact(JsonMethods.render(v))
+          case _         => Serialization.write(source.asInstanceOf[AnyRef])
+        }
+        responseBody.write(s.getBytes)
       }
       override def getContentLength = -1
     }

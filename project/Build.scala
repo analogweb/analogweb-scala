@@ -46,12 +46,12 @@ object BuildSettings {
     )
 }
 object Dependencies {
-  val core = "org.analogweb" % "analogweb-core" % "0.9.7"
-  val jackson = "com.fasterxml.jackson.module" % "jackson-module-scala" % "2.4.3" cross CrossVersion.fullMapped {
+  val core   = "org.analogweb" % "analogweb-core" % "0.9.7"
+  val json4s = "org.json4s" % "json4s-jackson" % "3.2.11" cross CrossVersion.fullMapped {
       case "2.10.5" => "2.10"
       case "2.11.6" => "2.11"
   }
-  val specs =  "org.specs2" % "specs2" % "2.3.12" % "test" cross CrossVersion.fullMapped {
+  val specs  = "org.specs2" % "specs2" % "2.3.12" % "test" cross CrossVersion.fullMapped {
       case "2.10.5" => "2.10"
       case "2.11.6" => "2.11"
   }
@@ -77,7 +77,7 @@ object AnalogwebScala extends Build {
       resolvers ++= Resolvers.all,
       libraryDependencies ++= Seq(
           core,
-          jackson,
+          json4s,
           specs
       )
     )
