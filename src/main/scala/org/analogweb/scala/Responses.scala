@@ -53,7 +53,8 @@ class ScalaJsonFormatter extends ResponseFormatter {
           case v: JValue => JsonMethods.compact(JsonMethods.render(v))
           case _         => Serialization.write(source.asInstanceOf[AnyRef])
         }
-        responseBody.write(s.getBytes)
+        responseBody.write(s.getBytes(charset))
+        responseBody.flush
       }
       override def getContentLength = -1
     }
