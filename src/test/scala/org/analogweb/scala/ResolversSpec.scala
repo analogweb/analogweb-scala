@@ -125,4 +125,21 @@ class ResolversSpec extends Specification with Mockito {
     }
     new A().routes(0).invoke(r) must beEqualTo("foo")
   }
+  "Resolve with ScalaJacksonJsonValueResolver as JValue" in new mocks {
+    rc.getRequestBody() returns new java.io.ByteArrayInputStream("""{"name": "foo"}""".getBytes())
+    rc.getContentType() returns org.analogweb.core.MediaTypes.APPLICATION_JSON_TYPE
+    rvr.findRequestValueResolver(classOf[ScalaJacksonJsonValueResolver]) returns new ScalaJacksonJsonValueResolver()
+    class A extends Analogweb with Resolvers {
+      get("/foo") { implicit r =>
+        import org.json4s.JsonDSL._
+        json.as[org.json4s.JValue].map { x =>
+          println(x)
+          for {
+            org.json4s.JString(name) <- x \ "name"
+          } yield name
+        }.head.head
+      }
+    }
+    new A().routes(0).invoke(r) must beEqualTo("foo")
+  }
 }
