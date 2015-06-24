@@ -62,6 +62,9 @@ class ResponsesSpec extends Specification with Mockito {
     }
   }
 
+  import org.json4s._
+  import org.json4s.JsonDSL._
+
   "ScalaJsonFormatter" should {
     "be render" in {
       val formatter = new ScalaJsonFormatter
@@ -69,6 +72,26 @@ class ResponsesSpec extends Specification with Mockito {
       val req = mock[RequestContext]
       val res = mock[ResponseContext]
       val c = new ScalaJsonFormatterA("snowgooseyk")
+      val out = new java.io.ByteArrayOutputStream()
+      formatter.formatAndWriteInto(req, res, "UTF-8", c).writeInto(out)
+      new String(out.toByteArray()) === """{"id":"snowgooseyk"}"""
+    }
+    "be render with JValue" in {
+      val formatter = new ScalaJsonFormatter
+
+      val req = mock[RequestContext]
+      val res = mock[ResponseContext]
+      val c = ("name" -> "snowgooseyk") ~ ("email" -> "snowgoose.yk@gmail.com")
+      val out = new java.io.ByteArrayOutputStream()
+      formatter.formatAndWriteInto(req, res, "UTF-8", c).writeInto(out)
+      new String(out.toByteArray()) === """{"name":"snowgooseyk","email":"snowgoose.yk@gmail.com"}"""
+    }
+    "be render with Tuple" in {
+      val formatter = new ScalaJsonFormatter
+
+      val req = mock[RequestContext]
+      val res = mock[ResponseContext]
+      val c = ("id" -> "snowgooseyk")
       val out = new java.io.ByteArrayOutputStream()
       formatter.formatAndWriteInto(req, res, "UTF-8", c).writeInto(out)
       new String(out.toByteArray()) === """{"id":"snowgooseyk"}"""
