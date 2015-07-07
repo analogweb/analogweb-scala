@@ -16,7 +16,10 @@ trait Analogweb {
 
   implicit def response(f: => Any) = { implicit r: Request => f }
 
-  private def register(route: Route) = routes += route
+  private def register(route: Route) = {
+    routes += route
+    route
+  }
 
   protected[scala] val routes = ListBuffer[Route]()
 
