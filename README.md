@@ -23,9 +23,7 @@ import org.analogweb.scala.Analogweb
 
 object App extends Analogweb {
 
-  def main(args: Array[String]) = {
-    Servers.create("http://localhost:8080").start
-  }
+  def main(args: Array[String]) = Servers.run
   
   get("/ping") {
     "PONG"
