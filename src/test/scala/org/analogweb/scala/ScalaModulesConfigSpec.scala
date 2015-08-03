@@ -18,6 +18,8 @@ class ScalaModulesConfigSpec extends Specification with Mockito {
       mb.setInvocationFactoryClass(classOf[ScalaInvocationFactory]) returns mb
       mb.addResponseFormatterClass(classOf[ScalaJsonObject], classOf[ScalaJsonFormatter]) returns mb
       mb.addResponseFormatterClass(classOf[ScalaJsonText], classOf[ScalaJsonFormatter]) returns mb
+      mb.setResponseResolverClass(classOf[ScalaResponseResolver]) returns mb
+      mb.setResponseHandlerClass(classOf[ScalaResponseHandler]) returns mb
       val actual = config.prepare(mb)
       actual === mb
     }
