@@ -46,7 +46,7 @@ object BuildSettings {
     )
 }
 object Dependencies {
-  val core   = "org.analogweb" % "analogweb-core" % "0.9.8"
+  val core   = "org.analogweb" % "analogweb-core" % "0.9.9-SNAPSHOT"
   val json4s = "org.json4s" % "json4s-jackson" % "3.2.11" cross CrossVersion.fullMapped {
       case "2.10.5" => "2.10"
       case "2.11.6" => "2.11"
