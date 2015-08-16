@@ -12,7 +12,7 @@ class ScalaRenderableResolver extends DefaultRenderableResolver {
 
   override def resolve(result: Any, metadata: InvocationMetadata, request: RequestContext, response: ResponseContext) = {
     result match {
-      case f: Future[_] => RenderableFuture(f.map { x => super.resolve(x, metadata, request, response) })
+      case f: Future[_] => RenderableFuture(f.map(this.resolve(_, metadata, request, response)))
       case _            => super.resolve(result, metadata, request, response)
     }
   }

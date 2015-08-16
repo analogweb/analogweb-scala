@@ -10,10 +10,10 @@ class ScalaResponseHandler extends DefaultResponseHandler {
 
   override def handleResult(result: Renderable, formatter: ResponseFormatter, request: RequestContext, response: ResponseContext) = {
     result match {
-      case rf: RenderableFuture => {
+      case r: RenderableFuture => {
         def futureResultHandler = { (request: RequestContext, response: ResponseContext) =>
-          rf.future.andThen { a =>
-            a match {
+          r.future.andThen { f =>
+            f match {
               case Success(s) => {
                 try {
                   super.handleResult(s, formatter, request, response).commit(request, response)
