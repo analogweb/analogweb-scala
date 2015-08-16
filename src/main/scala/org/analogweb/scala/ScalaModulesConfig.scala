@@ -16,7 +16,7 @@ class ScalaModuleConfig extends PluginModulesConfig {
       .setInvocationFactoryClass(classOf[ScalaInvocationFactory])
       .addResponseFormatterClass(classOf[ScalaJsonObject], classOf[ScalaJsonFormatter])
       .addResponseFormatterClass(classOf[ScalaJsonText], classOf[ScalaJsonFormatter])
-      .setResponseResolverClass(classOf[ScalaResponseResolver])
+      .setRenderableResolverClass(classOf[ScalaRenderableResolver])
       .setResponseHandlerClass(classOf[ScalaResponseHandler])
   }
 

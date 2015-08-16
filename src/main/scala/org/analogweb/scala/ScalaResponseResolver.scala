@@ -3,12 +3,12 @@ package org.analogweb.scala
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import org.analogweb.{ Renderable, RequestContext, ResponseContext, InvocationMetadata }
-import org.analogweb.core.DefaultResponseResolver
-import org.analogweb.core.response.DefaultResponse
+import org.analogweb.core.DefaultRenderableResolver
+import org.analogweb.core.response.DefaultRenderable
 
-case class RenderableFuture(future: Future[Renderable]) extends DefaultResponse
+case class RenderableFuture(future: Future[Renderable]) extends DefaultRenderable
 
-class ScalaResponseResolver extends DefaultResponseResolver {
+class ScalaRenderableResolver extends DefaultRenderableResolver {
 
   override def resolve(result: Any, metadata: InvocationMetadata, request: RequestContext, response: ResponseContext) = {
     result match {

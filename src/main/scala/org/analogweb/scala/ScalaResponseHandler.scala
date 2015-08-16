@@ -3,7 +3,7 @@ package org.analogweb.scala
 import scala.util.{ Success, Failure }
 import scala.concurrent.Future
 import org.analogweb.{ Renderable, ResponseFormatter, RequestContext, ResponseContext }
-import org.analogweb.core.{ DefaultResponseHandler, DefaultResponseWriter }
+import org.analogweb.core.{ DefaultResponseHandler, DefaultResponse }
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class ScalaResponseHandler extends DefaultResponseHandler {
@@ -25,7 +25,7 @@ class ScalaResponseHandler extends DefaultResponseHandler {
             }
           }
         }
-        new DefaultResponseWriter {
+        new DefaultResponse {
           override def commit(request: RequestContext, response: ResponseContext) = {
             futureResultHandler(request, response)
           }
