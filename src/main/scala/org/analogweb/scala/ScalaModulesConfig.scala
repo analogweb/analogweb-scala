@@ -1,6 +1,7 @@
 package org.analogweb.scala
 
 import org.analogweb.{ PluginModulesConfig, InvocationMetadataFactory, ModulesBuilder, ModulesConfig }
+import org.analogweb.core.{ BindAttributeArgumentPreparator, ConsumesMediaTypeVerifier, ScopedMapArgumentPreparator }
 import org.analogweb.core.response.Json
 import org.analogweb.util.logging.Logs
 import org.analogweb.util.PropertyResourceBundleMessageResource
@@ -18,6 +19,10 @@ class ScalaModuleConfig extends PluginModulesConfig {
       .addResponseFormatterClass(classOf[ScalaJsonText], classOf[ScalaJsonFormatter])
       .setRenderableResolverClass(classOf[ScalaRenderableResolver])
       .setResponseHandlerClass(classOf[ScalaResponseHandler])
+      // ignore ApplicationProcessors for Java.
+      .ignore(classOf[BindAttributeArgumentPreparator])
+      .ignore(classOf[ConsumesMediaTypeVerifier])
+      .ignore(classOf[ScopedMapArgumentPreparator])
   }
 
 }
