@@ -11,7 +11,7 @@ import org.json4s._
 import org.json4s.jackson.JsonMethods
 import org.json4s.jackson.Serialization
 
-object Responses {
+trait Responses {
   def asText(obj: String) = Text.`with`(obj)
   def asHtmlEntity(obj: String) = Html.`with`(obj)
   def asHtmlEntity(obj: NodeSeq): Html = asHtmlEntity(obj.toString())
@@ -37,6 +37,7 @@ object Responses {
   def InternalServerError(obj: Renderable) = HttpStatus.INTERNAL_SERVER_ERROR.`with`(obj)
   def InternalServerError = HttpStatus.INTERNAL_SERVER_ERROR
 }
+object Responses extends Responses
 
 class ScalaJsonObject(obj: AnyRef) extends Json(obj)
 class ScalaJsonText(text: String) extends Json(text)
