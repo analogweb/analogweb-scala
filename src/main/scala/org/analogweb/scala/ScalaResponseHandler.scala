@@ -4,7 +4,7 @@ import scala.util.{ Success, Failure }
 import scala.concurrent.Future
 import org.analogweb.{ Renderable, ResponseFormatter, RequestContext, ResponseContext }
 import org.analogweb.core.{ DefaultResponseHandler, DefaultResponse }
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.analogweb.scala.Execution.Implicits.defaultContext
 
 class ScalaResponseHandler extends DefaultResponseHandler {
 

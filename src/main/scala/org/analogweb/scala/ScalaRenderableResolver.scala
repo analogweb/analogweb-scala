@@ -1,10 +1,10 @@
 package org.analogweb.scala
 
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
 import org.analogweb.{ Renderable, RequestContext, ResponseContext, InvocationMetadata }
 import org.analogweb.core.DefaultRenderableResolver
 import org.analogweb.core.response.DefaultRenderable
+import org.analogweb.scala.Execution.Implicits.defaultContext
 
 case class RenderableFuture(future: Future[Renderable]) extends DefaultRenderable
 
