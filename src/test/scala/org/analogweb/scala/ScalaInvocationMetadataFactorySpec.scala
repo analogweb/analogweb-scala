@@ -3,9 +3,11 @@ package org.analogweb.scala
 import org.junit.runner.RunWith
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
+import org.specs2.mock.Mockito
+import org.analogweb.ContainerAdaptor
 
 @RunWith(classOf[JUnitRunner])
-class ScalaInvocationMetadataFactorySpec extends Specification {
+class ScalaInvocationMetadataFactorySpec extends Specification with Mockito {
 
   val factory = new ScalaInvocationMetadataFactory
 
@@ -19,7 +21,8 @@ class ScalaInvocationMetadataFactorySpec extends Specification {
       actual must beFalse
     }
     "Create InvocationMetadata successful" in {
-      val actual = factory.createInvocationMetadatas(classOf[Foo]).iterator().next()
+      val ca = mock[ContainerAdaptor]
+      val actual = factory.createInvocationMetadatas(classOf[Foo], ca).iterator().next()
       actual.getMethodName() === "GET(/foo)"
       actual.getArgumentTypes().isEmpty must beTrue
       actual.getInvocationClass() === classOf[Foo]
@@ -27,7 +30,8 @@ class ScalaInvocationMetadataFactorySpec extends Specification {
       actual.getDefinedPath().getRequestMethods().get(0) === "GET"
     }
     "Create InvocationMetadata NOT work" in {
-      val actual = factory.createInvocationMetadatas(classOf[Baa])
+      val ca = mock[ContainerAdaptor]
+      val actual = factory.createInvocationMetadatas(classOf[Baa], ca)
       actual.isEmpty() must beTrue
     }
   }

@@ -4,7 +4,7 @@ import java.util.Collection
 import java.util.Collections
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.convert.decorateAsJava._
-import org.analogweb.{ InvocationMetadata, InvocationMetadataFactory }
+import org.analogweb.{ ContainerAdaptor, InvocationMetadata, InvocationMetadataFactory }
 import org.analogweb.core.DefaultInvocationMetadata
 
 class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
@@ -13,10 +13,10 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
     classOf[Analogweb].isAssignableFrom(clazz) && classOf[Analogweb].getCanonicalName != clazz.getCanonicalName
   }
 
-  def createInvocationMetadatas(clazz: Class[_]): Collection[InvocationMetadata] = {
+  def createInvocationMetadatas(clazz: Class[_], instances: ContainerAdaptor): Collection[InvocationMetadata] = {
     clazz match {
       case c if classOf[Analogweb] isAssignableFrom c => {
-        val routes = instantiate(c).routes
+        val routes = obtainInstance(c, instances).routes
         val metadatas = routes.map(route =>
           new DefaultScalaInvocationMetadata(clazz, s"${route.method}(${route.rawPath})", Array(), route)).toSeq
         asJavaCollectionConverter[InvocationMetadata](metadatas).asJavaCollection
@@ -25,7 +25,11 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
     }
   }
 
-  def instantiate(c: Class[_]): Analogweb = {
+  private def obtainInstance(c: Class[_], instances: ContainerAdaptor): Analogweb = {
+    Option(instances.getInstanceOfType(c)).map(_.asInstanceOf[Analogweb]).getOrElse(instantiate(c))
+  }
+
+  private def instantiate(c: Class[_]): Analogweb = {
     try {
       c.getField("MODULE$").get(c).asInstanceOf[Analogweb]
     } catch {
