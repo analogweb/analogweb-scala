@@ -12,13 +12,13 @@ class RequestSpec extends Specification with Mockito {
   val factory = new ScalaInvocationFactory
 
   trait mocks extends org.specs2.specification.Scope {
-    var rc = mock[RequestContext]
-    var rvr = mock[RequestValueResolvers]
-    var im = mock[ScalaInvocationMetadata]
-    var tc = mock[TypeMapperContext]
-    var qp = mock[Parameters]
-    var rh = mock[Headers]
-    var request = new Request(rc, rvr, im, tc)
+    val rc = mock[RequestContext]
+    val rvr = mock[RequestValueResolvers]
+    val im = mock[ScalaInvocationMetadata]
+    val tc = mock[TypeMapperContext]
+    val qp = mock[Parameters]
+    val rh = mock[Headers]
+    val request = new Request(rc, rvr, im, tc)
   }
 
   "Request" should {

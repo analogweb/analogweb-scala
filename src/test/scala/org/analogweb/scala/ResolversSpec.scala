@@ -16,12 +16,12 @@ case class B(val name: String)
 class ResolversSpec extends Specification with Mockito {
 
   trait mocks extends org.specs2.specification.Scope {
-    var rc = mock[RequestContext]
-    var rvr = mock[RequestValueResolvers]
-    var im = mock[ScalaInvocationMetadata]
-    var tc = mock[TypeMapperContext]
-    var qp = mock[Parameters]
-    var rh = mock[Headers]
+    val rc = mock[RequestContext]
+    val rvr = mock[RequestValueResolvers]
+    val im = mock[ScalaInvocationMetadata]
+    val tc = mock[TypeMapperContext]
+    val qp = mock[Parameters]
+    val rh = mock[Headers]
     val resolver = mock[RequestValueResolver]
     var r = new Request(rc, rvr, im, tc)
   }

@@ -11,5 +11,4 @@ trait ScalaInvocationMetadata extends InvocationMetadata {
 case class DefaultScalaInvocationMetadata(clazz: Class[_], name: String,
   argumentTypes: Array[Class[_]], override val route: Route)
     extends DefaultInvocationMetadata(clazz, name, argumentTypes, route.path) with ScalaInvocationMetadata {
-  override def resolveMethod() = null
 }
