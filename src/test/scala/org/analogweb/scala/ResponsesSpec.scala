@@ -7,16 +7,17 @@ import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mock.Mockito
 import org.analogweb._
+import org.json4s._
+import org.json4s.JsonDSL._
 import org.analogweb.core.response._
+import org.analogweb.scala.Responses._
 
 @RunWith(classOf[JUnitRunner])
 class ResponsesSpec extends Specification with Mockito {
 
-  import org.analogweb.scala.Responses._
-
   val factory = new ScalaInvocationFactory
   trait mocks extends org.specs2.specification.Scope {
-    var is = mock[InputStream]
+    val is = mock[InputStream]
   }
 
   "Responses" should {
@@ -61,9 +62,6 @@ class ResponsesSpec extends Specification with Mockito {
       notImplemented.getStatusCode === 501
     }
   }
-
-  import org.json4s._
-  import org.json4s.JsonDSL._
 
   "ScalaJsonFormatter" should {
     "be render" in {

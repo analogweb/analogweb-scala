@@ -5,6 +5,7 @@ import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mock.Mockito
 import org.mockito.Matchers.{ eq => isEq }
+import org.json4s.JsonDSL._
 import org.analogweb._
 import org.analogweb.core._
 import org.analogweb.scala._
@@ -131,7 +132,6 @@ class ResolversSpec extends Specification with Mockito {
     rvr.findRequestValueResolver(classOf[ScalaJacksonJsonValueResolver]) returns new ScalaJacksonJsonValueResolver()
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
-        import org.json4s.JsonDSL._
         json.as[org.json4s.JValue].map { x =>
           println(x)
           for {

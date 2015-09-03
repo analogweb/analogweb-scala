@@ -4,12 +4,10 @@ import java.io.{ File, InputStream, OutputStream }
 import scala.collection.mutable.Map
 import scala.collection.convert.decorateAsJava._
 import scala.xml.NodeSeq
-import org.analogweb.{ Renderable, ResponseFormatter, RequestContext, ResponseContext }
-import org.analogweb.ResponseEntity
+import org.analogweb.{ Renderable, ResponseFormatter, RequestContext, ResponseContext, ResponseEntity }
 import org.analogweb.core.response._
 import org.json4s._
-import org.json4s.jackson.JsonMethods
-import org.json4s.jackson.Serialization
+import org.json4s.jackson.{ JsonMethods, Serialization }
 
 trait Responses {
   def asText(obj: String) = Text.`with`(obj)

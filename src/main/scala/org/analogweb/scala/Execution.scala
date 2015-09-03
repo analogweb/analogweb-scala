@@ -1,16 +1,17 @@
 package org.analogweb.scala
 
 import java.util.concurrent.{ Executors, ForkJoinPool }
+import scala.util.Try
 import scala.concurrent.ExecutionContext
 
 object Execution {
   object Implicits {
-    implicit val defaultContext: ExecutionContext = createExecutionContext
+    implicit val defaultContext: ExecutionContext = create
 
-    def createExecutionContext = {
+    def create = {
 
       def getInt(name: String, f: String => Int): Int =
-        try f(System.getProperty(name)) catch { case e: Exception => Runtime.getRuntime.availableProcessors }
+        Try(f(System.getProperty(name))).getOrElse(Runtime.getRuntime.availableProcessors)
       def range(floor: Int, desired: Int, ceiling: Int): Int =
         if (ceiling < floor) range(ceiling, desired, floor) else scala.math.min(scala.math.max(desired, floor), ceiling)
 

@@ -4,15 +4,7 @@ import org.junit.runner.RunWith
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mock.Mockito
-import org.analogweb.ContainerAdaptor
-import org.analogweb.InvocationMetadata
-import org.analogweb.Invocation
-import org.analogweb.RequestContext
-import org.analogweb.RequestValueResolvers
-import org.analogweb.RequestValueResolver
-import org.analogweb.TypeMapperContext
-import org.analogweb.ResponseContext
-import org.analogweb.RequestPathMetadata
+import org.analogweb.{ ContainerAdaptor, InvocationMetadata, Invocation, RequestContext, RequestValueResolvers, RequestValueResolver, TypeMapperContext, ResponseContext, RequestPathMetadata }
 import org.analogweb.core.DefaultInvocation
 
 @RunWith(classOf[JUnitRunner])

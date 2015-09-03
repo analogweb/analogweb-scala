@@ -3,6 +3,7 @@ package org.analogweb.scala
 import org.specs2.mutable._
 import org.junit.runner.RunWith
 import org.specs2.runner.JUnitRunner
+import org.analogweb.scala.Responses._
 
 @RunWith(classOf[JUnitRunner])
 class AnalogwebSpec extends Specification {
@@ -33,7 +34,6 @@ class AnalogwebSpec extends Specification {
 }
 
 class AnalogwebSpecFoo extends Analogweb {
-  import org.analogweb.scala.Responses._
   get("/foo") { r =>
     "Foo"
   }
