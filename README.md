@@ -3,6 +3,7 @@ Analogweb Framework Scala
 
 [![Build Status](https://travis-ci.org/analogweb/scala-plugin.svg)](https://travis-ci.org/analogweb/scala-plugin)
 [![Coverage Status](https://coveralls.io/repos/analogweb/scala-plugin/badge.svg)](https://coveralls.io/r/analogweb/scala-plugin)
+[![Codacy Badge](https://api.codacy.com/project/badge/bf94abcf981242debe9df3dbcd8d1764)](https://www.codacy.com/app/snowgoose-yk/scala-plugin)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.analogweb/analogweb-scala_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.analogweb/analogweb-scala_2.11)
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 
