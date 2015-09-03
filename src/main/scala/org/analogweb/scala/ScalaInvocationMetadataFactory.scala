@@ -1,6 +1,7 @@
 package org.analogweb.scala
 
 import java.util.{ Collection, Collections }
+import scala.util.Try
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.convert.decorateAsJava._
 import org.analogweb.{ ContainerAdaptor, InvocationMetadata, InvocationMetadataFactory }
@@ -25,7 +26,9 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
   }
 
   private def obtainInstance(c: Class[_], instances: ContainerAdaptor): RouteDef = {
-    Option(instances.getInstanceOfType(c)).map(_.asInstanceOf[RouteDef]).getOrElse(instantiate(c))
+    Try {
+      Option(instances.getInstanceOfType(c)).map(_.asInstanceOf[RouteDef]).getOrElse(instantiate(c))
+    }.getOrElse(instantiate(c))
   }
 
   private def instantiate(c: Class[_]): RouteDef = {
