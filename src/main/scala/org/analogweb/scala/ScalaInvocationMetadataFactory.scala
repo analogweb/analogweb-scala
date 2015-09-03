@@ -1,7 +1,6 @@
 package org.analogweb.scala
 
-import java.util.Collection
-import java.util.Collections
+import java.util.{ Collection, Collections }
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.convert.decorateAsJava._
 import org.analogweb.{ ContainerAdaptor, InvocationMetadata, InvocationMetadataFactory }
@@ -10,12 +9,12 @@ import org.analogweb.core.DefaultInvocationMetadata
 class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
 
   def containsInvocationClass(clazz: Class[_]): Boolean = {
-    classOf[Analogweb].isAssignableFrom(clazz) && classOf[Analogweb].getCanonicalName != clazz.getCanonicalName
+    classOf[RouteDef].isAssignableFrom(clazz) && classOf[RouteDef].getCanonicalName != clazz.getCanonicalName
   }
 
   def createInvocationMetadatas(clazz: Class[_], instances: ContainerAdaptor): Collection[InvocationMetadata] = {
     clazz match {
-      case c if classOf[Analogweb] isAssignableFrom c => {
+      case c if (classOf[RouteDef].isAssignableFrom(c) && classOf[Analogweb].getCanonicalName() != c.getCanonicalName()) => {
         val routes = obtainInstance(c, instances).routes
         val metadatas = routes.map(route =>
           new DefaultScalaInvocationMetadata(clazz, s"${route.method}(${route.rawPath})", Array(), route)).toSeq
@@ -25,15 +24,15 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
     }
   }
 
-  private def obtainInstance(c: Class[_], instances: ContainerAdaptor): Analogweb = {
-    Option(instances.getInstanceOfType(c)).map(_.asInstanceOf[Analogweb]).getOrElse(instantiate(c))
+  private def obtainInstance(c: Class[_], instances: ContainerAdaptor): RouteDef = {
+    Option(instances.getInstanceOfType(c)).map(_.asInstanceOf[RouteDef]).getOrElse(instantiate(c))
   }
 
-  private def instantiate(c: Class[_]): Analogweb = {
+  private def instantiate(c: Class[_]): RouteDef = {
     try {
-      c.getField("MODULE$").get(c).asInstanceOf[Analogweb]
+      c.getField("MODULE$").get(c).asInstanceOf[RouteDef]
     } catch {
-      case e: NoSuchFieldException => c.newInstance.asInstanceOf[Analogweb]
+      case e: NoSuchFieldException => c.newInstance.asInstanceOf[RouteDef]
     }
   }
 }
