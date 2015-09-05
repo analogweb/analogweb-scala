@@ -29,7 +29,7 @@ class RequestSpec extends Specification with Mockito {
       val none = request.queryOption("foo")
       none must beNone
       val actual = request.queryOption("baa")
-      actual.get must beEqualTo("baz")
+      actual must beSome(===("baz"))
       val noOption = request.query("baa")
       noOption must beEqualTo("baz")
     }
@@ -40,7 +40,7 @@ class RequestSpec extends Specification with Mockito {
       val none = request.headerOption("x-foo")
       none must beNone
       val actual = request.headerOption("x-baa")
-      actual.get must beEqualTo("baz")
+      actual must beSome(===("baz"))
       val noOption = request.header("x-baa")
       noOption must beEqualTo("baz")
     }
@@ -49,10 +49,9 @@ class RequestSpec extends Specification with Mockito {
       mt.toString returns "application/json"
       rc.getContentType returns mt
       val actual = request.content
-      actual.get must beEqualTo("application/json")
+      actual must beSome(===("application/json"))
     }
     "Content type not avairable" in new mocks {
-      rc.getContentType returns null
       val actual = request.content
       actual must beNone
     }

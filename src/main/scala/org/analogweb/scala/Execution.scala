@@ -18,9 +18,9 @@ object Execution {
       val desiredParallelism = range(
         getInt("analogweb.threads.min", _.toInt),
         getInt("analogweb.threads", {
-          case null | ""               => Runtime.getRuntime.availableProcessors
-          case s if s.charAt(0) == 'x' => (Runtime.getRuntime.availableProcessors * s.substring(1).toDouble).ceil.toInt
-          case other                   => other.toInt
+          case n if Some(n) == None | n == "" => Runtime.getRuntime.availableProcessors
+          case s if s.charAt(0) == 'x'        => (Runtime.getRuntime.availableProcessors * s.substring(1).toDouble).ceil.toInt
+          case other                          => other.toInt
         }),
         getInt("analogweb.threads.max", _.toInt))
       ExecutionContext.fromExecutorService(new ForkJoinPool(desiredParallelism))

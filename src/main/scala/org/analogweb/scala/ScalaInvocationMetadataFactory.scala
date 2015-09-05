@@ -1,7 +1,7 @@
 package org.analogweb.scala
 
 import java.util.{ Collection, Collections }
-import scala.util.Try
+import scala.util.{ Try, Success, Failure }
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.convert.decorateAsJava._
 import org.analogweb.{ ContainerAdaptor, InvocationMetadata, InvocationMetadataFactory }
@@ -32,10 +32,14 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
   }
 
   private def instantiate(c: Class[_]): RouteDef = {
-    try {
+    val r = Try {
       c.getField("MODULE$").get(c).asInstanceOf[RouteDef]
-    } catch {
+    } recover {
       case e: NoSuchFieldException => c.newInstance.asInstanceOf[RouteDef]
+    }
+    r match {
+      case Success(s) => s
+      case Failure(e) => throw e
     }
   }
 }
