@@ -7,7 +7,7 @@ Analogweb Framework Scala
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.analogweb/analogweb-scala_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.analogweb/analogweb-scala_2.11)
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 
-This plugin enables to execute Analogweb's route written in Scala.
+This plugin enables to execute Analogweb's route that was written in Scala.
 
 Add to SBT dependency.
 
