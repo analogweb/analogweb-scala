@@ -50,10 +50,13 @@ class ScalaJsonFormatter extends ResponseFormatter {
     new ResponseEntity() {
       override def writeInto(responseBody: OutputStream) = {
         val s = source match {
-          case (obj, formats) => Serialization.write(obj.asInstanceOf[AnyRef])(formats.asInstanceOf[Formats])
-          case v: JValue      => JsonMethods.compact(JsonMethods.render(v))
-          case s: String      => s
-          case _              => Serialization.write(source.asInstanceOf[AnyRef])(defaultFormats)
+          case (obj, formats) => formats match {
+            case f: Formats => Serialization.write(obj.asInstanceOf[AnyRef])(f)
+            case _          => Serialization.write(source.asInstanceOf[AnyRef])(defaultFormats)
+          }
+          case v: JValue => JsonMethods.compact(JsonMethods.render(v))
+          case s: String => s
+          case _         => Serialization.write(source.asInstanceOf[AnyRef])(defaultFormats)
         }
         responseBody.write(s.getBytes(charset))
         responseBody.flush
