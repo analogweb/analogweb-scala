@@ -15,9 +15,10 @@ trait Responses {
   def asHtmlEntity(obj: NodeSeq): Html = asHtmlEntity(obj.toString())
   def asHtml(templatePath: String) = Html.as(templatePath)
   def asHtml(templatePath: String, context: Map[String, AnyRef]) = Html.as(templatePath, context.asJava)
-  def asJson(obj: AnyRef) = new ScalaJsonObject(obj)
+  def asJson(obj: AnyRef)(implicit formats: Formats = Serialization.formats(NoTypeHints)) = new ScalaJsonObject((obj, formats))
   def asJson(jsonText: String) = new ScalaJsonText(jsonText)
   def asXml(obj: AnyRef) = org.analogweb.core.response.Xml.as(obj)
+  def asResource(stream: InputStream) = Resource.as(stream, "").withoutContentDisposition
   def asResource(stream: InputStream, filename: String) = Resource.as(stream, filename)
   def Status(statusCode: Int) = HttpStatus.valueOf(statusCode)
   def Status(status: HttpStatus): HttpStatus = Status(status.getStatusCode())
@@ -42,15 +43,17 @@ class ScalaJsonText(text: String) extends Json(text)
 
 class ScalaJsonFormatter extends ResponseFormatter {
 
-  implicit val formats = Serialization.formats(NoTypeHints)
+  val defaultFormats = Serialization.formats(NoTypeHints)
 
   override def formatAndWriteInto(request: RequestContext, response: ResponseContext, charset: String,
     source: Any): ResponseEntity = {
     new ResponseEntity() {
       override def writeInto(responseBody: OutputStream) = {
         val s = source match {
-          case v: JValue => JsonMethods.compact(JsonMethods.render(v))
-          case _         => Serialization.write(source.asInstanceOf[AnyRef])
+          case (obj, formats) => Serialization.write(obj.asInstanceOf[AnyRef])(formats.asInstanceOf[Formats])
+          case v: JValue      => JsonMethods.compact(JsonMethods.render(v))
+          case s: String      => s
+          case _              => Serialization.write(source.asInstanceOf[AnyRef])(defaultFormats)
         }
         responseBody.write(s.getBytes(charset))
         responseBody.flush

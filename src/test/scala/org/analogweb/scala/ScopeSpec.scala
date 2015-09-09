@@ -41,7 +41,7 @@ class ScopeSpec extends Specification with Mockito {
     "Returns avairable scope" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
       val actual = DefaultScope(mockResolver, request)
-      actual.as[String]("foo").get mustEqual "That's it"
+      actual.as[String]("foo") must beSome(===("That's it"))
     }
     "Returns not avairable scope" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
@@ -52,7 +52,7 @@ class ScopeSpec extends Specification with Mockito {
       rvr.findRequestValueResolver(specificResolver) returns new SpecificRequestValueResolver()
       rc.getContentType() returns MediaTypes.TEXT_PLAIN_TYPE
       val actual = DefaultScope(specificResolver, request)
-      actual.as[String]("foo").get mustEqual "That's it"
+      actual.as[String]("foo") must beSome(===("That's it"))
     }
     "Not supports content types" in new mocks {
       rvr.findRequestValueResolver(specificResolver) returns new SpecificRequestValueResolver()

@@ -23,7 +23,7 @@ class ResolversSpec extends Specification with Mockito {
     val qp = mock[Parameters]
     val rh = mock[Headers]
     val resolver = mock[RequestValueResolver]
-    var r = new Request(rc, rvr, im, tc)
+    val r = new Request(rc, rvr, im, tc)
   }
 
   "Resolve with ParameterValueResolver" in new mocks {
@@ -36,7 +36,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${parameter.of("baa").getOrElse("a")}"
       }
     }
-    new A().routes(0).invoke(r) must beEqualTo("baz")
+    new A().routes(0).invoke(r) must_== "baz"
   }
 
   "Resolve with PathVariableValueResolver" in new mocks {
@@ -47,7 +47,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${path.of("baa").getOrElse("a")}"
       }
     }
-    new A().routes(0).invoke(r) must beEqualTo("baz")
+    new A().routes(0).invoke(r) must_== "baz"
   }
 
   "Resolve with CookieValueResolver" in new mocks {
@@ -58,7 +58,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${cookie.of("baa").getOrElse("a")}"
       }
     }
-    new A().routes(0).invoke(r) must beEqualTo("baz")
+    new A().routes(0).invoke(r) must_== "baz"
   }
 
   "Resolve with RequestBodyValueResolver" in new mocks {
@@ -69,7 +69,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${body.as[java.lang.String].getOrElse("a")}"
       }
     }
-    new A().routes(0).invoke(r) must beEqualTo("baz")
+    new A().routes(0).invoke(r) must_== "baz"
   }
 
   "Resolve with XmlValueResolver" in new mocks {
@@ -80,7 +80,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${xml.as[java.lang.String].getOrElse("a")}"
       }
     }
-    new A().routes(0).invoke(r) must beEqualTo("baz")
+    new A().routes(0).invoke(r) must_== "baz"
   }
 
   "Resolve with MultipartParameterResolver" in new mocks {
@@ -91,7 +91,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${multipart.of("baa").getOrElse("a")}"
       }
     }
-    new A().routes(0).invoke(r) must beEqualTo("baz")
+    new A().routes(0).invoke(r) must_== "baz"
   }
 
   "Resolve with RequestContextValueResolver" in new mocks {
@@ -102,7 +102,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${context.as[java.lang.String].getOrElse("a")}"
       }
     }
-    new A().routes(0).invoke(r) must beEqualTo("baz")
+    new A().routes(0).invoke(r) must_== "baz"
   }
 
   "Resolve with MappingRequestValueResolver" in new mocks {
@@ -112,7 +112,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${m.name}"
       }
     }
-    new A().routes(0).invoke(r) must beEqualTo("foo")
+    new A().routes(0).invoke(r) must_== "foo"
   }
 
   "Resolve with ScalaJacksonJsonValueResolver" in new mocks {
@@ -124,7 +124,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${json.as[org.analogweb.scala.B].map(x => x.name).getOrElse("a")}"
       }
     }
-    new A().routes(0).invoke(r) must beEqualTo("foo")
+    new A().routes(0).invoke(r) must_== "foo"
   }
   "Resolve with ScalaJacksonJsonValueResolver as JValue" in new mocks {
     rc.getRequestBody() returns new java.io.ByteArrayInputStream("""{"name": "foo"}""".getBytes())
@@ -133,13 +133,13 @@ class ResolversSpec extends Specification with Mockito {
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
         json.as[org.json4s.JValue].map { x =>
-          println(x)
           for {
             org.json4s.JString(name) <- x \ "name"
           } yield name
-        }.head.head
+        }.headOption
       }
     }
-    new A().routes(0).invoke(r) must beEqualTo("foo")
+    val result = new A().routes(0).invoke(r)
+    result must_== Some(List("foo"))
   }
 }

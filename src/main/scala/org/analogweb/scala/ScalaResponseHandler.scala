@@ -1,6 +1,6 @@
 package org.analogweb.scala
 
-import scala.util.{ Success, Failure }
+import scala.util.{ Try, Success, Failure }
 import scala.concurrent.Future
 import org.analogweb.{ Renderable, ResponseFormatter, RequestContext, ResponseContext }
 import org.analogweb.core.{ DefaultResponseHandler, DefaultResponse }
@@ -15,13 +15,13 @@ class ScalaResponseHandler extends DefaultResponseHandler {
           r.future.andThen { f =>
             f match {
               case Success(s) => {
-                try {
+                Try {
                   super.handleResult(s, formatter, request, response).commit(request, response)
-                } finally {
-                  response.ensure()
                 }
+                response.ensure()
               }
               case Failure(f) => throw f
+              case _          => super.handleResult(result, formatter, request, response).commit(request, response)
             }
           }
         }

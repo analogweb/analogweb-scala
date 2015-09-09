@@ -35,7 +35,7 @@ class ScalaJacksonJsonValueResolver extends SpecificMediaTypeRequestValueResolve
     requiredType match {
       case x if x == classOf[JObject] => parsed
       case y if y == classOf[JValue]  => parsed
-      case z                          => parsed.extract(formats, Manifest.classType(requiredType))
+      case _                          => parsed.extract(formats, Manifest.classType(requiredType))
     }
   }
 
