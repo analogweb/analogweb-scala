@@ -16,7 +16,7 @@ val scalaplugin = "org.analogweb" %% "analogweb-scala" % "0.9.8"
 ```
 ## Example
 
-Write such code as below
+Write such code
 
 ```scala
 import org.analogweb.core.Servers

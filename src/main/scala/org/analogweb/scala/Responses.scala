@@ -46,7 +46,7 @@ class ScalaJsonFormatter extends ResponseFormatter {
   val defaultFormats = Serialization.formats(NoTypeHints)
 
   override def formatAndWriteInto(request: RequestContext, response: ResponseContext, charset: String,
-    source: Any): ResponseEntity = {
+                                  source: Any): ResponseEntity = {
     new ResponseEntity() {
       override def writeInto(responseBody: OutputStream) = {
         val s = source match {
