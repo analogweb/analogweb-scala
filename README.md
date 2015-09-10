@@ -12,7 +12,7 @@ This plugin enables to execute Analogweb's route that was written in Scala.
 Add to SBT dependency.
 
 ```scala
-val scalaplugin = "org.analogweb" %% "analogweb-scala" % "0.9.8"
+val scalaplugin = "org.analogweb" %% "analogweb-scala" % "0.9.10"
 ```
 ## Example
 
