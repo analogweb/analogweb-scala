@@ -1,6 +1,6 @@
 package org.analogweb.scala
 
-import java.io.{ File, InputStream, OutputStream }
+import java.io.{ File, InputStream, OutputStream, FileInputStream, ByteArrayInputStream }
 import scala.collection.mutable.Map
 import scala.collection.convert.decorateAsJava._
 import scala.xml.NodeSeq
@@ -48,8 +48,22 @@ class ScalaJsonFormatter extends ResponseFormatter {
   override def formatAndWriteInto(request: RequestContext, response: ResponseContext, charset: String,
                                   source: Any): ResponseEntity = {
     new ResponseEntity() {
-      override def writeInto(responseBody: OutputStream) = {
-        val s = source match {
+      lazy val contents: (InputStream, Int) = jsonContents
+
+      def jsonContents = {
+        source match {
+          case f: FileInputStream      => (f, f.available())
+          case b: ByteArrayInputStream => (b, b.available())
+          case i: InputStream          => (i, -1)
+          case _ => {
+            val bytes = toBytes
+            (new ByteArrayInputStream(bytes), bytes.length)
+          }
+        }
+      }
+
+      def toBytes = {
+        val serialized = source match {
           case (obj, formats) => formats match {
             case f: Formats => Serialization.write(obj.asInstanceOf[AnyRef])(f)
             case _          => Serialization.write(source.asInstanceOf[AnyRef])(defaultFormats)
@@ -58,10 +72,14 @@ class ScalaJsonFormatter extends ResponseFormatter {
           case s: String => s
           case _         => Serialization.write(source.asInstanceOf[AnyRef])(defaultFormats)
         }
-        responseBody.write(s.getBytes(charset))
+        serialized.getBytes(charset)
+      }
+
+      override def writeInto(responseBody: OutputStream) = {
+        org.analogweb.util.IOUtils.copy(contents._1, responseBody, if (contents._2 > 0) contents._2 else 8192)
         responseBody.flush
       }
-      override def getContentLength = -1
+      override def getContentLength = contents._2
     }
   }
 
