@@ -1,4 +1,4 @@
-Analogweb Framework Scala
+Analogweb Framework Scala DSL
 ===============================================
 
 [![Build Status](https://travis-ci.org/analogweb/scala-plugin.svg)](https://travis-ci.org/analogweb/scala-plugin)
