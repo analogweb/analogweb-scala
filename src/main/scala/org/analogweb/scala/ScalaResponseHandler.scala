@@ -10,35 +10,29 @@ class ScalaResponseHandler extends DefaultResponseHandler {
 
   override def handleResult(obj: Any, metadata: InvocationMetadata, resolver: RenderableResolver, request: RequestContext, response: ResponseContext, exh: ExceptionHandler, finder: ResponseFormatterFinder): Response = {
     val result = resolver.resolve(obj, metadata, request, response)
+    def commit(a: Any) = super.handleResult(a, metadata, resolver, request, response, exh, finder).commit(request, response)
     result match {
       case r: RenderableFuture => {
         def futureResultHandler = { (request: RequestContext, response: ResponseContext) =>
           r.future.andThen { f =>
             f match {
               case Success(s) => {
-                val committed = Try {
-                  super.handleResult(s, metadata, resolver, request, response, exh, finder).commit(request, response)
-                }
-                committed match {
-                  case Success(s) => response.ensure()
-                  case Failure(f) =>
-                    f match {
-                      case e: Exception => {
-                        super.handleResult(exh.handleException(e), metadata, resolver, request, response, exh, finder).commit(request, response)
-                        response.ensure()
-                      }
-                      case t => throw t
-                    }
+                try {
+                  commit(s)
+                } finally {
+                  response.ensure()
                 }
               }
               case Failure(f) => f match {
                 case e: Exception => {
-                  super.handleResult(exh.handleException(e), metadata, resolver, request, response, exh, finder).commit(request, response)
-                  response.ensure()
+                  try {
+                    commit(exh.handleException(e))
+                  } finally {
+                    response.ensure()
+                  }
                 }
                 case t => throw t
               }
-              case _ => super.handleResult(result, metadata, resolver, request, response, exh, finder).commit(request, response)
             }
           }
         }

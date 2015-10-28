@@ -9,6 +9,7 @@ import org.specs2.mock.Mockito
 import org.analogweb._
 import org.analogweb.core._
 import org.analogweb.core.response.Text
+import org.analogweb.scala.Execution.Implicits._
 
 @RunWith(classOf[JUnitRunner])
 class ScalaResponseHandlerSpec extends Specification with Mockito {
@@ -16,21 +17,29 @@ class ScalaResponseHandlerSpec extends Specification with Mockito {
   val handler = new ScalaResponseHandler
 
   "ScalaResponseHandler" should {
+    "resolve simple result" in new Fixture {
+      val txt = Text.`with`("hello!")
+      formatter.resolve(txt, metadata, request, response) returns txt
+      val actual = handler.handleResult(txt, metadata, formatter, request, response, exph, finder)
+      actual.commit(request, response)
+      response.writtenInBytes === "hello!"
+    }
     "resolve Future successfully" in new Fixture {
       val txt = Text.`with`("yay!")
-      val ft = Future.successful(txt)
+      val ft = Future(txt)
       val future = RenderableFuture(ft)
       formatter.resolve(future, metadata, request, response) returns future
       formatter.resolve(txt, metadata, request, response) returns txt
       val actual = handler.handleResult(future, metadata, formatter, request, response, exph, finder)
       actual.commit(request, response)
-      concurrent.Await.ready(ft, Duration.Inf)
+      //XXX improve test stability.
+      Thread sleep 1000
       actual.isInstanceOf[DefaultResponse] === true
       response.writtenInBytes === "yay!"
     }
     "resolve Future failure" in new Fixture {
       val exp = new RuntimeException("oops")
-      val ft = Future.failed(exp)
+      val ft = Future(throw exp)
       val future = RenderableFuture(ft)
       formatter.resolve(future, metadata, request, response) returns future
       val txt = Text.`with`("oops!")
@@ -38,7 +47,8 @@ class ScalaResponseHandlerSpec extends Specification with Mockito {
       formatter.resolve(txt, metadata, request, response) returns txt
       val actual = handler.handleResult(future, metadata, formatter, request, response, exph, finder)
       actual.commit(request, response)
-      concurrent.Await.ready(ft, Duration.Inf)
+      //XXX improve test stability.
+      Thread sleep 1000
       actual.isInstanceOf[DefaultResponse] === true
       response.writtenInBytes === "oops!"
     }
@@ -57,10 +67,7 @@ class ScalaResponseHandlerSpec extends Specification with Mockito {
   class StubResponseContext extends AbstractResponseContext {
     val bytes = new java.io.ByteArrayOutputStream
     def writtenInBytes = new String(bytes.toByteArray)
-    def commit(req: RequestContext, res: Response) = {
-      println(s"${res.getEntity}")
-      res.getEntity.writeInto(bytes)
-    }
+    def commit(req: RequestContext, res: Response) = res.getEntity.writeInto(bytes)
   }
 
 }
