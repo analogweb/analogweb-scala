@@ -12,7 +12,7 @@ import java.lang.annotation.Annotation
 class ScopeSpec extends Specification with Mockito {
 
   class MockRequestValueResolver extends RequestValueResolver {
-    override final def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = "That's it"
+    override final def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = if (key == "foo") "That's it" else null
   }
   class OtherRequestValueResolver extends RequestValueResolver {
     override final def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = "That's it"
@@ -42,6 +42,26 @@ class ScopeSpec extends Specification with Mockito {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
       val actual = DefaultScope(mockResolver, request)
       actual.as[String]("foo") must beSome(===("That's it"))
+    }
+    "Returns avairable scope of" in new mocks {
+      rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
+      val actual = DefaultScope(mockResolver, request)
+      actual.of("foo") must beSome(===("That's it"))
+    }
+    "Returns not avairable scope of" in new mocks {
+      rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
+      val actual = DefaultScope(mockResolver, request)
+      actual.of("bar") must beNone
+    }
+    "Returns avairable scope via get" in new mocks {
+      rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
+      val actual = DefaultScope(mockResolver, request)
+      actual.get("foo") must_== "That's it"
+    }
+    "Returns not avairable scope via get" in new mocks {
+      rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
+      val actual = DefaultScope(mockResolver, request)
+      actual.get("bar") must_== ""
     }
     "Returns not avairable scope" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()

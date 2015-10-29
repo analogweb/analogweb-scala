@@ -8,6 +8,7 @@ trait Scope[T <: RequestValueResolver] {
 
   def resolverType: Class[T]
   def request: Request
+  def get(name: String): String = of(name).getOrElse("")
   def of(name: String): Option[String] = as[String](name)
 
   def as[T](implicit ctag: ClassTag[T]): Option[T] = {
