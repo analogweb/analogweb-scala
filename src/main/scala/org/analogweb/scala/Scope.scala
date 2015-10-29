@@ -2,7 +2,7 @@ package org.analogweb.scala
 
 import scala.reflect.ClassTag
 import org.analogweb.{ RequestValueResolver, MediaType }
-import org.analogweb.core.{ SpecificMediaTypeRequestValueResolver, UnsupportedMediaTypeException }
+import org.analogweb.core.{ SpecificMediaTypeRequestValueResolver, UnsupportedMediaTypeException, UnresolvableValueException }
 
 trait Scope[T <: RequestValueResolver] {
 
@@ -18,7 +18,14 @@ trait Scope[T <: RequestValueResolver] {
   def as[T](name: String)(implicit ctag: ClassTag[T]): Option[T] = {
     Option(request.resolvers.findRequestValueResolver(resolverType)).map { implicit resolver =>
       verifyMediaType
-      Option(resolver.resolveValue(request.context, request.metadata, name, ctag.runtimeClass, Array()).asInstanceOf[T])
+      Option(resolver.resolveValue(request.context, request.metadata, name, ctag.runtimeClass, Array())).map { i =>
+        i match {
+          case t: T => t
+          case _ => request.converters.mapToType(null, i, ctag.runtimeClass, null) match {
+            case t: T => t
+          }
+        }
+      }
     }.getOrElse(throw new IllegalArgumentException)
   }
 
