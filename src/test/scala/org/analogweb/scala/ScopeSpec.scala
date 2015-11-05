@@ -14,8 +14,11 @@ class ScopeSpec extends Specification with Mockito {
   class MockRequestValueResolver extends RequestValueResolver {
     override final def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = if (key == "foo") "That's it" else null
   }
-  class OtherRequestValueResolver extends RequestValueResolver {
-    override final def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = "That's it"
+  class NumberRequestValueResolver extends RequestValueResolver {
+    override final def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = if (key == "foo") Integer.valueOf(1) else null
+  }
+  class OptionRequestValueResolver extends RequestValueResolver {
+    override final def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = if (key == "foo") Option("That's it") else None
   }
 
   class SpecificRequestValueResolver extends SpecificMediaTypeRequestValueResolver {
@@ -24,7 +27,8 @@ class ScopeSpec extends Specification with Mockito {
   }
 
   val mockResolver = classOf[MockRequestValueResolver]
-  val otherResolver = classOf[OtherRequestValueResolver]
+  val numberResolver = classOf[NumberRequestValueResolver]
+  val optionResolver = classOf[OptionRequestValueResolver]
   val specificResolver = classOf[SpecificRequestValueResolver]
 
   trait mocks extends org.specs2.specification.Scope {
@@ -43,10 +47,17 @@ class ScopeSpec extends Specification with Mockito {
       val actual = DefaultScope(mockResolver, request)
       actual.as[String]("foo") must beSome(===("That's it"))
     }
-    "Returns avairable scope of" in new mocks {
-      rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
-      val actual = DefaultScope(mockResolver, request)
-      actual.of("foo") must beSome(===("That's it"))
+    "Returns avairable scope and converters" in new mocks {
+      rvr.findRequestValueResolver(numberResolver) returns new NumberRequestValueResolver()
+      tc.mapToType(null, Integer.valueOf(1), classOf[String], null) returns "One"
+      val actual = DefaultScope(numberResolver, request)
+      actual.of("foo") must beSome(===("One"))
+    }
+    "Returns avairable scope and not avairable converters" in new mocks {
+      rvr.findRequestValueResolver(numberResolver) returns new NumberRequestValueResolver()
+      tc.mapToType(null, Integer.valueOf(1), classOf[String], null) returns null
+      val actual = DefaultScope(numberResolver, request)
+      actual.of("foo") must beNone
     }
     "Returns not avairable scope of" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
@@ -65,8 +76,18 @@ class ScopeSpec extends Specification with Mockito {
     }
     "Returns not avairable scope" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
-      val actual = DefaultScope(otherResolver, request)
+      val actual = DefaultScope(optionResolver, request)
       actual.as[String]("foo") must throwA[IllegalArgumentException]
+    }
+    "Returns option value via get" in new mocks {
+      rvr.findRequestValueResolver(optionResolver) returns new OptionRequestValueResolver()
+      val actual = DefaultScope(optionResolver, request)
+      actual.get("foo") must_== "That's it"
+    }
+    "Returns none value via get" in new mocks {
+      rvr.findRequestValueResolver(optionResolver) returns new OptionRequestValueResolver()
+      val actual = DefaultScope(optionResolver, request)
+      actual.get("bar") must_== ""
     }
     "Supports content types" in new mocks {
       rvr.findRequestValueResolver(specificResolver) returns new SpecificRequestValueResolver()

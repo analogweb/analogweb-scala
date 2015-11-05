@@ -18,11 +18,21 @@ trait Scope[T <: RequestValueResolver] {
   def as[T](name: String)(implicit ctag: ClassTag[T]): Option[T] = {
     Option(request.resolvers.findRequestValueResolver(resolverType)).map { implicit resolver =>
       verifyMediaType
-      Option(resolver.resolveValue(request.context, request.metadata, name, ctag.runtimeClass, Array())).map { i =>
+      Option(resolver.resolveValue(request.context, request.metadata, name, ctag.runtimeClass, Array())).flatMap { i =>
         i match {
-          case t: T => t
-          case _ => request.converters.mapToType(null, i, ctag.runtimeClass, null) match {
-            case t: T => t
+          case t: T => Some(t)
+          case Some(o) => o match {
+            case t: T => Some(t)
+            case _ => Option(request.converters.mapToType(null, o, ctag.runtimeClass, null)).flatMap { e =>
+              e match {
+                case t: T => Some(t)
+              }
+            }
+          }
+          case _ => Option(request.converters.mapToType(null, i, ctag.runtimeClass, null)).flatMap { e =>
+            e match {
+              case t: T => Some(t)
+            }
           }
         }
       }
