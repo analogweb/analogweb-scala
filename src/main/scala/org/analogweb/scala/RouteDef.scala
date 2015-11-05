@@ -25,12 +25,6 @@ trait RouteDef {
 
   implicit def asScope[T <: RequestValueResolver](typeOfResolver: Class[T])(implicit request: Request) = DefaultScope(typeOfResolver, request)
 
-  type RequestObjectMapping[T] = Request => T
-
-  implicit def asRequestObjectMapping[T](mapping: RequestObjectMapping[T])(implicit request: Request) = RequestObjectMapper(mapping, request)
-
-  object RequestObjectMapper {
-    def apply[T](mapping: RequestObjectMapping[T], request: Request): T = mapping(request)
-  }
+  implicit def asRequestObjectMapping[T](mapping: Request => T)(implicit request: Request) = mapping(request)
 
 }
