@@ -2,7 +2,7 @@ package org.analogweb.scala
 
 import scala.collection.mutable.ListBuffer
 import scala.language.implicitConversions
-import org.analogweb.RequestValueResolver
+import org.analogweb.{ Renderable, RequestValueResolver }
 
 trait RouteDef {
 
@@ -28,3 +28,12 @@ trait RouteDef {
   implicit def asRequestObjectMapping[T](mapping: Request => T)(implicit request: Request) = mapping(request)
 
 }
+
+trait Rejection
+case class reject(a: Renderable) extends Rejection
+case class pass() extends Rejection
+
+trait Around
+case class before(action: Request => Rejection) extends Around
+case class after(action: PartialFunction[Any, Renderable]) extends Around
+
