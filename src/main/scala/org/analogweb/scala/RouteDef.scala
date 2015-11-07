@@ -6,13 +6,13 @@ import org.analogweb.{ Renderable, RequestValueResolver }
 
 trait RouteDef {
 
-  def get(path: String)(action: Request => Any) = register(Route("GET", path)(action))
+  def get(path: String)(action: Request => Any)(implicit arounds: Arounds = Arounds()) = register(Route("GET", path, arounds)(action))
 
-  def post(path: String)(action: Request => Any) = register(Route("POST", path)(action))
+  def post(path: String)(action: Request => Any)(implicit arounds: Arounds = Arounds()) = register(Route("POST", path, arounds)(action))
 
-  def put(path: String)(action: Request => Any) = register(Route("PUT", path)(action))
+  def put(path: String)(action: Request => Any)(implicit arounds: Arounds = Arounds()) = register(Route("PUT", path, arounds)(action))
 
-  def delete(path: String)(action: Request => Any) = register(Route("DELETE", path)(action))
+  def delete(path: String)(action: Request => Any)(implicit arounds: Arounds = Arounds()) = register(Route("DELETE", path, arounds)(action))
 
   implicit def response(f: => Any) = { implicit r: Request => f }
 
@@ -27,6 +27,7 @@ trait RouteDef {
 
   implicit def asRequestObjectMapping[T](mapping: Request => T)(implicit request: Request) = mapping(request)
 
+  implicit def toArounds(around: Around) = Arounds(Seq(around))
 }
 
 trait Rejection
@@ -37,3 +38,6 @@ trait Around
 case class before(action: Request => Rejection) extends Around
 case class after(action: PartialFunction[Any, Renderable]) extends Around
 
+case class Arounds(arounds: Seq[Around] = Seq()) {
+  def :+(around: Around) = Arounds(arounds :+ around)
+}
