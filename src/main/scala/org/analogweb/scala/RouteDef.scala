@@ -40,4 +40,6 @@ case class after(action: PartialFunction[Any, Renderable]) extends Around
 
 case class Arounds(arounds: Seq[Around] = Seq()) {
   def :+(around: Around) = Arounds(arounds :+ around)
+  def allAfter = arounds.collect { case a: after => a }
+  def allBefore = arounds.collect { case b: before => b }
 }
