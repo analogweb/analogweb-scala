@@ -16,9 +16,9 @@ trait Route {
 
 class RequestInvocation(override val method: String, override val rawPath: String, val arounds: Arounds)(val invocation: Request => Any) extends Route {
   override def invoke(request: Request): Any = {
-    val rejection = arounds.allBefore.map(_.action(request)).collect { case r: reject => r }.headOption.map(_.a)
+    val rejection = arounds.allBefore.map(_.action(request)).collect { case r: reject => r }.headOption.map(_.reason)
     val invocationResult = rejection.getOrElse(invocation(request))
-    arounds.allAfter.filter(_.action.isDefinedAt(invocationResult)).headOption.getOrElse(invocationResult)
+    arounds.allAfter.filter(_.action.isDefinedAt(invocationResult)).headOption.map(_.action(invocationResult)).getOrElse(invocationResult)
   }
   def :+(around: Around): RequestInvocation = new RequestInvocation(method, rawPath, arounds :+ around)(invocation)
 }
