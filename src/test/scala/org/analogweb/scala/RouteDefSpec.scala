@@ -6,7 +6,7 @@ import org.specs2.runner.JUnitRunner
 import org.analogweb.scala.Responses._
 
 @RunWith(classOf[JUnitRunner])
-class AnalogwebSpec extends Specification {
+class RouteDefSpec extends Specification {
 
   val analogweb = new AnalogwebSpecFoo
 
@@ -33,7 +33,7 @@ class AnalogwebSpec extends Specification {
 
 }
 
-class AnalogwebSpecFoo extends Analogweb {
+class AnalogwebSpecFoo extends RouteDef {
   get("/foo") { r =>
     "Foo"
   }
