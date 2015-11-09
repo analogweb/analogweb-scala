@@ -20,7 +20,6 @@ class RequestInvocation(override val method: String, override val rawPath: Strin
     val invocationResult = rejection.getOrElse(invocation(request))
     arounds.allAfter.filter(_.action.isDefinedAt(invocationResult)).headOption.map(_.action(invocationResult)).getOrElse(invocationResult)
   }
-  def :+(around: Around): RequestInvocation = new RequestInvocation(method, rawPath, arounds :+ around)(invocation)
 }
 
 object Route {
