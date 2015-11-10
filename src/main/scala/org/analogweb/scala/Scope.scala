@@ -1,7 +1,7 @@
 package org.analogweb.scala
 
 import scala.reflect.ClassTag
-import org.analogweb.{ RequestValueResolver, MediaType }
+import org.analogweb.{ RequestValueResolver, MediaType, TypeMapper }
 import org.analogweb.core.{ SpecificMediaTypeRequestValueResolver, UnsupportedMediaTypeException, UnresolvableValueException }
 
 trait Scope[T <: RequestValueResolver] {
@@ -23,13 +23,13 @@ trait Scope[T <: RequestValueResolver] {
           case t: T => Some(t)
           case Some(o) => o match {
             case t: T => Some(t)
-            case _ => Option(request.converters.mapToType(null, o, ctag.runtimeClass, null)).flatMap { e =>
+            case _ => Option(request.converters.mapToType(classOf[TypeMapper], o, ctag.runtimeClass, Array())).flatMap { e =>
               e match {
                 case t: T => Some(t)
               }
             }
           }
-          case _ => Option(request.converters.mapToType(null, i, ctag.runtimeClass, null)).flatMap { e =>
+          case _ => Option(request.converters.mapToType(classOf[TypeMapper], i, ctag.runtimeClass, Array())).flatMap { e =>
             e match {
               case t: T => Some(t)
             }

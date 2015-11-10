@@ -49,13 +49,13 @@ class ScopeSpec extends Specification with Mockito {
     }
     "Returns avairable scope and converters" in new mocks {
       rvr.findRequestValueResolver(numberResolver) returns new NumberRequestValueResolver()
-      tc.mapToType(null, Integer.valueOf(1), classOf[String], null) returns "One"
+      tc.mapToType(classOf[TypeMapper], Integer.valueOf(1), classOf[String], Array()) returns "One"
       val actual = DefaultScope(numberResolver, request)
       actual.of("foo") must beSome(===("One"))
     }
     "Returns avairable scope and not avairable converters" in new mocks {
       rvr.findRequestValueResolver(numberResolver) returns new NumberRequestValueResolver()
-      tc.mapToType(null, Integer.valueOf(1), classOf[String], null) returns null
+      tc.mapToType(classOf[TypeMapper], Integer.valueOf(1), classOf[String], Array()) returns null
       val actual = DefaultScope(numberResolver, request)
       actual.of("foo") must beNone
     }
