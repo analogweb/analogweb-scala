@@ -7,13 +7,13 @@ import scala.collection.convert.decorateAsScala._
 
 class Request(val context: RequestContext, val resolvers: RequestValueResolvers, val metadata: InvocationMetadata, val converters: TypeMapperContext) {
 
-  def query(name: String): String = queries(name).head
+  def query(name: String, defaultValue: String = ""): String = queryOption(name).getOrElse(defaultValue)
 
   def queryOption(name: String): Option[String] = queries(name).headOption
 
   def queries(name: String): Buffer[String] = context.getQueryParameters.getValues(name).asScala
 
-  def header(name: String): String = headers(name).head
+  def header(name: String, defaultValue: String = ""): String = headerOption(name).getOrElse(defaultValue)
 
   def headerOption(name: String): Option[String] = headers(name).headOption
 
