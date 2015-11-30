@@ -1,4 +1,4 @@
-Analogweb Framework Scala DSL
+Analogweb Framework Scala
 ===============================================
 
 [![Build Status](https://travis-ci.org/analogweb/analogweb-scala.svg)](https://travis-ci.org/analogweb/analogweb-scala)
@@ -7,16 +7,15 @@ Analogweb Framework Scala DSL
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.analogweb/analogweb-scala_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.analogweb/analogweb-scala_2.11)
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 
-This plugin enables to execute Analogweb's route that was written in Scala.
+## Quick Start
 
-Add to SBT dependency.
+Add to sbt dependency.
 
 ```scala
 val scalaplugin = "org.analogweb" %% "analogweb-scala" % "0.9.11"
 ```
-## Example
 
-Write such code
+Write a code.
 
 ```scala
 import org.analogweb.core.Servers
@@ -33,9 +32,11 @@ object App extends Analogweb {
 }
 ```
 
-and you will get them.
+Run and you can get them.
 
 ```
+$ sbt run
+...
 $ curl http://localhost:8080/ping
 PONG
 ```
