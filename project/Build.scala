@@ -11,7 +11,7 @@ object BuildSettings {
     val buildScalaVersion = "2.11.6"
     val clossBuildScalaVersion = Seq("2.10.5","2.11.6")
 
-    val buildSettings = Defaults.defaultSettings ++ ReleasePlugin.releaseSettings ++ sonatypeSettings ++ ScoverageSbtPlugin.projectSettings  ++ Seq (
+    val buildSettings = Defaults.defaultSettings ++ ReleasePlugin.projectSettings ++ sonatypeSettings ++ ScoverageSbtPlugin.projectSettings  ++ Seq (
       organization := buildOrganization,
       version      := buildVersion,
       scalaVersion := buildScalaVersion,
