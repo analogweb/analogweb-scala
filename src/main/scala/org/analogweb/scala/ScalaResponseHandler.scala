@@ -5,6 +5,7 @@ import scala.concurrent.Future
 import org.analogweb.{ Renderable, ResponseFormatterFinder, RequestContext, ResponseContext, InvocationMetadata, RenderableResolver, ExceptionHandler, Response }
 import org.analogweb.core.{ DefaultResponseHandler, DefaultResponse }
 import org.analogweb.scala.Execution.Implicits.defaultContext
+import org.analogweb.scala.utils.Implicits._
 
 class ScalaResponseHandler extends DefaultResponseHandler {
 
@@ -14,23 +15,13 @@ class ScalaResponseHandler extends DefaultResponseHandler {
     result match {
       case r: RenderableFuture => {
         def futureResultHandler = { (request: RequestContext, response: ResponseContext) =>
-          r.future.andThen { f =>
-            f match {
-              case Success(s) => {
-                try {
-                  commit(s)
-                } finally {
-                  response.ensure()
-                }
-              }
+          r.future.andThen { future =>
+            future match {
+              case Success(s) =>
+                Try(commit(s)).eventually(response.ensure())
               case Failure(f) => f match {
-                case e: Exception => {
-                  try {
-                    commit(exh.handleException(e))
-                  } finally {
-                    response.ensure()
-                  }
-                }
+                case e: Exception =>
+                  Try(commit(exh.handleException(e))).eventually(response.ensure())
                 case t => throw t
               }
             }
