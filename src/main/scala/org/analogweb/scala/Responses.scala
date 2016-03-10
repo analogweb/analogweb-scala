@@ -6,6 +6,7 @@ import scala.collection.convert.decorateAsJava._
 import scala.xml.NodeSeq
 import org.analogweb.{ Renderable, ResponseFormatter, RequestContext, ResponseContext, ResponseEntity }
 import org.analogweb.core.response._
+import org.analogweb.util.IOUtils
 import org.json4s._
 import org.json4s.jackson.{ JsonMethods, Serialization }
 
@@ -22,10 +23,14 @@ trait Responses {
   def asResource(stream: InputStream, filename: String) = Resource.as(stream, filename)
   def Status(statusCode: Int) = HttpStatus.valueOf(statusCode)
   def Status(status: HttpStatus): HttpStatus = Status(status.getStatusCode())
+  @deprecated("Use Status(statusCode,responseBody) instead.", "0.9.12")
   def Status(responseBody: Renderable, statusCode: Int) = HttpStatus.valueOf(statusCode).`with`(responseBody)
-  def Status(responseBody: Renderable, status: HttpStatus): HttpStatus = Status(responseBody, status.getStatusCode())
+  def Status(statusCode: Int, responseBody: Renderable) = HttpStatus.valueOf(statusCode).`with`(responseBody)
+  @deprecated("Use Status(status,responseBody) instead.", "0.9.12")
+  def Status(responseBody: Renderable, status: HttpStatus): HttpStatus = Status(status.getStatusCode(), responseBody)
+  def Status(status: HttpStatus, responseBody: Renderable): HttpStatus = Status(status.getStatusCode(), responseBody)
   def RedirectTo(url: String) = Redirect.to(url)
-  def Ok(obj: Renderable) = HttpStatus.OK.`with`(obj)
+  def Ok(responseBody: Renderable) = HttpStatus.OK.`with`(responseBody)
   def Ok = HttpStatus.OK
   def BadRequest(obj: Renderable) = HttpStatus.BAD_REQUEST.`with`(obj)
   def BadRequest = HttpStatus.BAD_REQUEST
@@ -76,7 +81,8 @@ class ScalaJsonFormatter extends ResponseFormatter {
       }
 
       override def writeInto(responseBody: OutputStream) = {
-        org.analogweb.util.IOUtils.copy(contents._1, responseBody, if (contents._2 > 0) contents._2 else 8192)
+        val length = if (contents._2 > 0) contents._2 else 8192
+        IOUtils.copy(contents._1, responseBody, length)
         responseBody.flush
       }
       override def getContentLength = contents._2

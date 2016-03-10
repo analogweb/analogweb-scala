@@ -1,6 +1,6 @@
 package org.analogweb.scala
 
-import org.analogweb.{ ContainerAdaptor, InvocationMetadata, RequestContext, TypeMapperContext, RequestValueResolvers, Invocation, ResponseContext }
+import org.analogweb._
 import org.analogweb.core.DefaultInvocationFactory
 
 class ScalaInvocationFactory extends DefaultInvocationFactory {

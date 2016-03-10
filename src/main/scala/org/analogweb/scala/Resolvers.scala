@@ -2,7 +2,7 @@ package org.analogweb.scala
 
 import java.lang.annotation.Annotation
 import org.analogweb.{ InvocationMetadata, MediaType, RequestContext, RequestValueResolver, TypeMapper }
-import org.analogweb.core.{ MediaTypes, SpecificMediaTypeRequestValueResolver, ParameterValueResolver, PathVariableValueResolver, CookieValueResolver, RequestBodyValueResolver, XmlValueResolver, RequestContextValueResolver, MultipartParameterResolver }
+import org.analogweb.core._
 import org.json4s._
 import org.json4s.jackson.JsonMethods
 
