@@ -9,7 +9,7 @@ import org.analogweb.core._
 import java.lang.annotation.Annotation
 
 @RunWith(classOf[JUnitRunner])
-class ScopeSpec extends Specification with Mockito {
+class ResolverSyntaxSpec extends Specification with Mockito {
 
   class MockRequestValueResolver extends RequestValueResolver {
     override final def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = if (key == "foo") "That's it" else null
@@ -44,61 +44,61 @@ class ScopeSpec extends Specification with Mockito {
   "Scope" should {
     "Returns avairable scope" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
-      val actual = DefaultScope(mockResolver, request)
+      val actual = DefaultResolverSyntax(mockResolver, request)
       actual.as[String]("foo") must beSome(===("That's it"))
     }
     "Returns avairable scope and converters" in new mocks {
       rvr.findRequestValueResolver(numberResolver) returns new NumberRequestValueResolver()
       tc.mapToType(classOf[TypeMapper], Integer.valueOf(1), classOf[String], Array()) returns "One"
-      val actual = DefaultScope(numberResolver, request)
+      val actual = DefaultResolverSyntax(numberResolver, request)
       actual.of("foo") must beSome(===("One"))
     }
     "Returns avairable scope and not avairable converters" in new mocks {
       rvr.findRequestValueResolver(numberResolver) returns new NumberRequestValueResolver()
       tc.mapToType(classOf[TypeMapper], Integer.valueOf(1), classOf[String], Array()) returns null
-      val actual = DefaultScope(numberResolver, request)
+      val actual = DefaultResolverSyntax(numberResolver, request)
       actual.of("foo") must beNone
     }
     "Returns not avairable scope of" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
-      val actual = DefaultScope(mockResolver, request)
+      val actual = DefaultResolverSyntax(mockResolver, request)
       actual.of("bar") must beNone
     }
     "Returns avairable scope via get" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
-      val actual = DefaultScope(mockResolver, request)
+      val actual = DefaultResolverSyntax(mockResolver, request)
       actual.get("foo") must_== "That's it"
     }
     "Returns not avairable scope via get" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
-      val actual = DefaultScope(mockResolver, request)
+      val actual = DefaultResolverSyntax(mockResolver, request)
       actual.get("bar") must_== ""
     }
     "Returns not avairable scope" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
-      val actual = DefaultScope(optionResolver, request)
+      val actual = DefaultResolverSyntax(optionResolver, request)
       actual.as[String]("foo") must throwA[IllegalArgumentException]
     }
     "Returns option value via get" in new mocks {
       rvr.findRequestValueResolver(optionResolver) returns new OptionRequestValueResolver()
-      val actual = DefaultScope(optionResolver, request)
+      val actual = DefaultResolverSyntax(optionResolver, request)
       actual.get("foo") must_== "That's it"
     }
     "Returns none value via get" in new mocks {
       rvr.findRequestValueResolver(optionResolver) returns new OptionRequestValueResolver()
-      val actual = DefaultScope(optionResolver, request)
+      val actual = DefaultResolverSyntax(optionResolver, request)
       actual.get("bar") must_== ""
     }
     "Supports content types" in new mocks {
       rvr.findRequestValueResolver(specificResolver) returns new SpecificRequestValueResolver()
       rc.getContentType() returns MediaTypes.TEXT_PLAIN_TYPE
-      val actual = DefaultScope(specificResolver, request)
+      val actual = DefaultResolverSyntax(specificResolver, request)
       actual.as[String]("foo") must beSome(===("That's it"))
     }
     "Not supports content types" in new mocks {
       rvr.findRequestValueResolver(specificResolver) returns new SpecificRequestValueResolver()
       rc.getContentType() returns MediaTypes.APPLICATION_JSON_TYPE
-      val actual = DefaultScope(specificResolver, request)
+      val actual = DefaultResolverSyntax(specificResolver, request)
       actual.as[String]("foo") must throwA[UnsupportedMediaTypeException]
     }
   }

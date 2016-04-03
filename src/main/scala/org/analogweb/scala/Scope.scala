@@ -4,7 +4,7 @@ import scala.reflect.ClassTag
 import org.analogweb.{ RequestValueResolver, MediaType, TypeMapper }
 import org.analogweb.core.{ SpecificMediaTypeRequestValueResolver, UnsupportedMediaTypeException, UnresolvableValueException }
 
-trait Scope[T <: RequestValueResolver] {
+trait ResolverSyntax[T <: RequestValueResolver] {
 
   def resolverType: Class[T]
   def request: Request
@@ -50,4 +50,4 @@ trait Scope[T <: RequestValueResolver] {
 
 }
 
-case class DefaultScope[T <: RequestValueResolver](override val resolverType: Class[T], override val request: Request) extends Scope[T]
+case class DefaultResolverSyntax[T <: RequestValueResolver](override val resolverType: Class[T], override val request: Request) extends ResolverSyntax[T]
