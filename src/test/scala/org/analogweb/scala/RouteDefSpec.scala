@@ -3,7 +3,6 @@ package org.analogweb.scala
 import org.specs2.mutable._
 import org.junit.runner.RunWith
 import org.specs2.runner.JUnitRunner
-import org.analogweb.scala.Responses._
 
 @RunWith(classOf[JUnitRunner])
 class RouteDefSpec extends Specification {
@@ -30,6 +29,17 @@ class RouteDefSpec extends Specification {
     actual.rawPath must_== "/baz"
     actual.method must_== "DELETE"
   }
+  "Valid Scope Routes" in {
+    val actual = analogweb.routes(4)
+    actual.rawPath must_== "/root/foo"
+    actual.method must_== "GET"
+    val actualPost = analogweb.routes(5)
+    actualPost.rawPath must_== "/root/bar"
+    actualPost.method must_== "POST"
+    val actualGet = analogweb.routes(6)
+    actualGet.rawPath must_== "/root/bar"
+    actualGet.method must_== "GET"
+  }
 
 }
 
@@ -41,10 +51,19 @@ class AnalogwebSpecFoo extends RouteDef {
     "Foo"
   }
   put("/baa") { r =>
-    Forbidden
+    "Baa"
   }
   delete("/baz") { r =>
-    Ok
+    "Baz"
+  }
+  scope("/root") {
+    get("/foo") { r =>
+      "Foo"
+    } ~ post("/bar") { r =>
+      "Bar"
+    } ~ get("/bar") { r =>
+      "Bar"
+    }
   }
 }
 

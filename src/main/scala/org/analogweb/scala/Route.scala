@@ -12,6 +12,8 @@ trait Route {
 
   def invoke(request: Request): Any
 
+  def update(parentPath: String): Route
+
 }
 
 class RequestInvocation(override val method: String, override val rawPath: String, val arounds: Arounds)(val invocation: Request => Any) extends Route {
@@ -20,6 +22,7 @@ class RequestInvocation(override val method: String, override val rawPath: Strin
     val invocationResult = rejection.getOrElse(invocation(request))
     arounds.allAfter.filter(_.action.isDefinedAt(invocationResult)).headOption.map(_.action(invocationResult)).getOrElse(invocationResult)
   }
+  override def update(parentPath: String) = new RequestInvocation(method, parentPath + rawPath, arounds)(invocation)
 }
 
 object Route {

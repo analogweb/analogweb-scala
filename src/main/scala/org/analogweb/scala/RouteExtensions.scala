@@ -15,6 +15,7 @@ trait RouteExtensions {
 
   implicit def toArounds(around: Around) = Arounds(Seq(around))
 
+
   def param(query: String)(implicit r: Request): String = {
     parameter.as[String](query).getOrElse(
       path.as[String](query).getOrElse(""))
