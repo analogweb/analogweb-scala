@@ -7,7 +7,7 @@ import scoverage._
 
 object BuildSettings {
     val buildOrganization = "org.analogweb"
-    val buildVersion      = "0.9.12-SNAPSHOT"
+    val buildVersion      = "0.9.12"
     val buildScalaVersion = "2.11.6"
     val clossBuildScalaVersion = Seq("2.10.5","2.11.6")
 
@@ -46,8 +46,8 @@ object BuildSettings {
     )
 }
 object Dependencies {
-  val core   = "org.analogweb" % "analogweb-core" % "0.9.11"
-  val json4s = "org.json4s" % "json4s-jackson" % "3.2.11" cross CrossVersion.fullMapped {
+  val core   = "org.analogweb" % "analogweb-core" % "0.9.12"
+  val json4s = "org.json4s" % "json4s-jackson" % "3.3.0" cross CrossVersion.fullMapped {
       case "2.10.5" => "2.10"
       case "2.11.6" => "2.11"
   }
