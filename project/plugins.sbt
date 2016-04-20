@@ -4,7 +4,7 @@ addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.1.10")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.3.0")
 
-addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.2")
+addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.3")
 
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "1.1")
 
