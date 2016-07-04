@@ -44,8 +44,8 @@ val allResolvers = Seq(
   "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 )
 val analogwebV = "0.9.12"
-val jsonV = "3.3.0"
-val specs2V = "3.7.2"
+val jsonV = "3.4.0"
+val specs2V = "3.8.4"
 val allDependencies = Seq(
   "org.analogweb" % "analogweb-core" % analogwebV,
   "org.json4s" % "json4s-jackson" % jsonV cross CrossVersion.fullMapped {
