@@ -5,7 +5,7 @@ import org.analogweb.core.{ ParameterValueResolver, PathVariableValueResolver }
 import scala.collection.mutable.Buffer
 import scala.collection.convert.decorateAsScala._
 
-class Request(val context: RequestContext, val resolvers: RequestValueResolvers, val metadata: InvocationMetadata, val converters: TypeMapperContext) {
+case class Request(val context: RequestContext, val resolvers: RequestValueResolvers, val metadata: InvocationMetadata, val converters: TypeMapperContext) {
 
   def query(name: String, defaultValue: String = ""): String = queryOption(name).getOrElse(defaultValue)
 

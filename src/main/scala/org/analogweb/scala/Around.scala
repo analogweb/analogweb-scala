@@ -2,12 +2,13 @@ package org.analogweb.scala
 
 import org.analogweb.Renderable
 
-trait Rejection
-case class reject(reason: Renderable) extends Rejection
-case class pass() extends Rejection
+trait Adoption
+case class reject(reason: Renderable) extends Adoption
+case class pass() extends Adoption
+case class passWith[T](val key: String = "", val result: T) extends Adoption
 
 trait Around
-case class before(action: Request => Rejection) extends Around
+case class before(action: Request => Adoption) extends Around
 case class after(action: PartialFunction[Any, Renderable]) extends Around
 
 case class Arounds(arounds: Seq[Around] = Seq()) {
