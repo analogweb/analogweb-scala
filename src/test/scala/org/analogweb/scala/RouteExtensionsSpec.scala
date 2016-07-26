@@ -61,4 +61,25 @@ class RouteExtensionsSpec extends Specification with Mockito {
     }
     new A().routes(0).invoke(r) must_== ""
   }
+
+  "Passed With" in new mocks {
+    class A extends Analogweb with Resolvers with RouteExtensions {
+      get("/foo") { r =>
+        implicit val copied = r.copy(passedWith = Map("foo" -> "bar", "baz" -> true))
+        passedWith[String]("foo")
+      }
+    }
+    new A().routes(0).invoke(r) must_== Some("bar")
+  }
+
+  "Passed With Nothing" in new mocks {
+    class A extends Analogweb with Resolvers with RouteExtensions {
+      get("/foo") { r =>
+        implicit val copied = r.copy(passedWith = Map("foo" -> "bar", "baz" -> true))
+        passedWith[String]("bar")
+      }
+    }
+    new A().routes(0).invoke(r) must_== None
+  }
+
 }

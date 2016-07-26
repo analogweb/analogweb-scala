@@ -1,6 +1,7 @@
 package org.analogweb.scala
 
 import scala.language.implicitConversions
+import scala.util.Try
 import org.analogweb.RequestValueResolver
 
 trait RouteExtensions {
@@ -21,4 +22,7 @@ trait RouteExtensions {
       path.as[String](query).getOrElse(""))
   }
 
+  def passedWith[T](key: String)(implicit r: Request): Option[T] = {
+    r.passedWith.get(key).flatMap(v => Try{v.asInstanceOf[T]}.toOption)
+  }
 }
