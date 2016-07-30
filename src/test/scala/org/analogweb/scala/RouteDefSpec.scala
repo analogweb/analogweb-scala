@@ -43,7 +43,7 @@ class RouteDefSpec extends Specification {
 
 }
 
-class AnalogwebSpecFoo extends RouteDef {
+class AnalogwebSpecFoo extends LooseRouteDef {
   get("/foo") { r =>
     "Foo"
   }

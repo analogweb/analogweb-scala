@@ -1,3 +1,3 @@
 package org.analogweb.scala
 
-trait Analogweb extends RouteDef with Resolvers with Responses with RouteExtensions
+trait Analogweb extends LooseRouteDef with Resolvers with Responses with RouteExtensions
