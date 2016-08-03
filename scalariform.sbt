@@ -1,9 +1,10 @@
 import scalariform.formatter.preferences._
-import ScalariformKeys._
+import com.typesafe.sbt.SbtScalariform
+import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 
-scalariformSettings
+SbtScalariform.scalariformSettings
 
-preferences := preferences.value
+ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(AlignParameters, true)
   .setPreference(AlignSingleLineCaseStatements, true)
   .setPreference(DoubleIndentClassDeclaration, true)
