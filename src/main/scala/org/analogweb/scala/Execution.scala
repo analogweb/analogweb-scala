@@ -22,7 +22,8 @@ object Execution {
           case s if s.charAt(0) == 'x'        => (Runtime.getRuntime.availableProcessors * s.substring(1).toDouble).ceil.toInt
           case other                          => other.toInt
         }),
-        getInt("analogweb.threads.max", _.toInt))
+        getInt("analogweb.threads.max", _.toInt)
+      )
       ExecutionContext.fromExecutorService(new ForkJoinPool(desiredParallelism))
     }
   }

@@ -77,7 +77,7 @@ class ResolverSyntaxSpec extends Specification with Mockito {
     "Returns not avairable scope" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
       val actual = DefaultResolverSyntax(optionResolver, request)
-      actual.as[String]("foo") must throwA[IllegalArgumentException]
+      actual.as[String]("foo") must beNone
     }
     "Returns option value via get" in new mocks {
       rvr.findRequestValueResolver(optionResolver) returns new OptionRequestValueResolver()
@@ -99,7 +99,7 @@ class ResolverSyntaxSpec extends Specification with Mockito {
       rvr.findRequestValueResolver(specificResolver) returns new SpecificRequestValueResolver()
       rc.getContentType() returns MediaTypes.APPLICATION_JSON_TYPE
       val actual = DefaultResolverSyntax(specificResolver, request)
-      actual.as[String]("foo") must throwA[UnsupportedMediaTypeException]
+      actual.as[String]("foo") must beNone
     }
   }
 }

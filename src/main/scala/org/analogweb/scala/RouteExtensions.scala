@@ -16,13 +16,13 @@ trait RouteExtensions {
 
   implicit def toArounds(around: Around) = Arounds(Seq(around))
 
-
   def param(query: String)(implicit r: Request): String = {
     parameter.as[String](query).getOrElse(
-      path.as[String](query).getOrElse(""))
+      path.as[String](query).getOrElse("")
+    )
   }
 
   def passedWith[T](key: String)(implicit r: Request): Option[T] = {
-    r.passedWith.get(key).flatMap(v => Try{v.asInstanceOf[T]}.toOption)
+    r.passedWith.get(key).flatMap(v => Try { v.asInstanceOf[T] }.toOption)
   }
 }
