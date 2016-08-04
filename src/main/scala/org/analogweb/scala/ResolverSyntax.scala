@@ -19,7 +19,7 @@ trait ResolverSyntax[T <: RequestValueResolver] {
   def asEach[T](name: String)(implicit ctag: ClassTag[T]): Try[T] = {
     Option(request.resolvers.findRequestValueResolver(resolverType)).map { resolver =>
       resolveInternal(name, resolver)
-    }.getOrElse(Failure(new IllegalArgumentException)) //Resolver Not Found.
+    }.getOrElse(Failure(ResolverNotFound(name)))
   }
 
   private[this] def resolveInternal[T](name: String, resolver: RequestValueResolver)(implicit ctag: ClassTag[T]) = {
@@ -27,9 +27,9 @@ trait ResolverSyntax[T <: RequestValueResolver] {
     verified.flatMap { verifiedResolver =>
       Option(verifiedResolver.resolveValue(request.context, request.metadata, name, ctag.runtimeClass, Array())).map {
         case Some(resolved) => mappingToType(resolved)(ctag)
-        case None           => Failure(new IllegalArgumentException)
+        case None           => Failure(NoValuesResolved(name, resolver, ctag.runtimeClass))
         case resolved       => mappingToType(resolved)(ctag)
-      }.getOrElse(Failure(new IllegalArgumentException)) //No Values Resolved
+      }.getOrElse(Failure(NoValuesResolved(name, resolver, ctag.runtimeClass)))
     }
   }
 
@@ -40,15 +40,15 @@ trait ResolverSyntax[T <: RequestValueResolver] {
         if (ctag.runtimeClass.isInstance(resolved))
           Success(resolved.asInstanceOf[T])
         else
-          Failure(new IllegalArgumentException)
+          Failure(ResolvedValueTypeMismatched(resolved, ctag.runtimeClass))
       }
       case mapped => Success(mapped.asInstanceOf[T])
     }.getOrElse {
       if (ctag.runtimeClass.isInstance(resolved))
         Success(resolved.asInstanceOf[T])
       else
-        Failure(new IllegalArgumentException)
-    } //Mapper Not Found
+        Failure(ResolvedValueTypeMismatched(resolved, ctag.runtimeClass))
+    }
   }
 
   private[this] def verifyMediaType: PartialFunction[RequestValueResolver, Try[RequestValueResolver]] = {
