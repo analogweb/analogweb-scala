@@ -1,8 +1,9 @@
 package org.analogweb.scala
 
 import scala.language.implicitConversions
+import scala.concurrent.Future
 import scala.util.Try
-import org.analogweb.RequestValueResolver
+import org.analogweb._
 
 trait RouteExtensions {
 
@@ -15,6 +16,10 @@ trait RouteExtensions {
   implicit def asRequestObjectMapping[T](mapping: Request => T)(implicit request: Request) = mapping(request)
 
   implicit def toArounds(around: Around) = Arounds(Seq(around))
+
+  implicit class FutureExtensions(future: Future[Renderable]) {
+    def asRenderable() = RenderableFuture(future)
+  }
 
   def param(query: String)(implicit r: Request): String = {
     parameter.as[String](query).getOrElse(
