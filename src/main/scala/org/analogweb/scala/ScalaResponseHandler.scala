@@ -9,7 +9,16 @@ import org.analogweb.scala.utils.Implicits._
 
 class ScalaResponseHandler extends DefaultResponseHandler {
 
-  override def handleResult(obj: Any, metadata: InvocationMetadata, resolver: RenderableResolver, request: RequestContext, response: ResponseContext, exh: ExceptionHandler, finder: ResponseFormatterFinder): Response = {
+  override def handleResult(
+    obj:      Any,
+    metadata: InvocationMetadata,
+    resolver: RenderableResolver,
+    request:  RequestContext,
+    response: ResponseContext,
+    exh:      ExceptionHandler,
+    finder:   ResponseFormatterFinder
+  ): Response = {
+
     val result = resolver.resolve(obj, metadata, request, response)
     def commit(a: Any) = super.handleResult(a, metadata, resolver, request, response, exh, finder).commit(request, response)
     result match {

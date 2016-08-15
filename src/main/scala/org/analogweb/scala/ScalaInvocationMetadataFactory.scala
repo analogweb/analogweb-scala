@@ -17,11 +17,12 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
     clazz match {
       case c if (classOf[RouteDef].isAssignableFrom(c) && classOf[Analogweb].getCanonicalName() != c.getCanonicalName()) => {
         val routes = obtainInstance(c, instances).routes
-        val metadatas = routes.map(route =>
-          new DefaultScalaInvocationMetadata(clazz, s"${route.method}(${route.rawPath})", Array(), route)).toSeq
-        asJavaCollectionConverter[InvocationMetadata](metadatas).asJavaCollection
+        val metadatas: Seq[InvocationMetadata] = routes.map { route =>
+          new DefaultScalaInvocationMetadata(clazz, s"${route.method}(${route.rawPath})", Array.empty, route)
+        }
+        metadatas.asJavaCollection
       }
-      case _ => new java.util.ArrayList[InvocationMetadata]
+      case _ => Seq.empty.asJava
     }
   }
 
