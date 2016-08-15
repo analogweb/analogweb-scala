@@ -3,6 +3,7 @@ package org.analogweb.scala
 import java.io.{ File, InputStream, OutputStream, FileInputStream, ByteArrayInputStream }
 import scala.collection.mutable.Map
 import scala.collection.convert.decorateAsJava._
+import scala.concurrent.Future
 import scala.xml.NodeSeq
 import org.analogweb.{ Renderable, ResponseFormatter, RequestContext, ResponseContext, ResponseEntity }
 import org.analogweb.core.response._
@@ -13,6 +14,7 @@ import org.json4s.jackson.{ JsonMethods, Serialization }
 trait Responses {
   def asText(obj: String) = Text.`with`(obj)
   def asHtmlEntity(obj: String) = Html.`with`(obj)
+  @deprecated("Nothing to alternative.", "0.9.13")
   def asHtmlEntity(obj: NodeSeq): Html = asHtmlEntity(obj.toString())
   def asHtml(templatePath: String) = Html.as(templatePath)
   def asHtml(templatePath: String, context: Map[String, AnyRef]) = Html.as(templatePath, context.asJava)
