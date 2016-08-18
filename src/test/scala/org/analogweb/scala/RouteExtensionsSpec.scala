@@ -1,5 +1,6 @@
 package org.analogweb.scala
 
+import scala.concurrent.Future
 import org.junit.runner.RunWith
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
@@ -82,4 +83,12 @@ class RouteExtensionsSpec extends Specification with Mockito {
     new A().routes(0).invoke(r) must_== None
   }
 
+  "Converting Future to Renderable" in new mocks {
+    class A extends StrictRouteDef with Resolvers with Responses with RouteExtensions {
+      get("/foo") { r =>
+        Future.successful(Ok(asText("hoge"))).asRenderable
+      }
+    }
+    new A().routes(0).invoke(r).isInstanceOf[RenderableFuture] must beTrue
+  }
 }
