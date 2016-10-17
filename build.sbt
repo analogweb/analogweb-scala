@@ -34,7 +34,7 @@ lazy val baseSettings = Seq(
         </developer>
       </developers>
     ),
-  isSnapshot := true,
+  isSnapshot := false,
   scalacOptions ++= Seq("-feature", "-deprecation", "-Yrangepos")
 )
 val additionalSettings = Defaults.defaultSettings ++ ReleasePlugin.projectSettings ++ sonatypeSettings ++ ScoverageSbtPlugin.projectSettings
