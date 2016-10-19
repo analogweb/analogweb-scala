@@ -20,6 +20,18 @@ class ScalaInvocationMetadataFactorySpec extends Specification with Mockito {
       val actual = factory.containsInvocationClass(classOf[Baa])
       actual must beFalse
     }
+    "RouteDef exclude invocation" in {
+      val actual = factory.containsInvocationClass(classOf[RouteDef])
+      actual must beFalse
+    }
+    "StringRouteDef exclude from invocation" in {
+      val actual = factory.containsInvocationClass(classOf[StrictRouteDef])
+      actual must beFalse
+    }
+    "LooseRouteDef exclude invocation" in {
+      val actual = factory.containsInvocationClass(classOf[LooseRouteDef])
+      actual must beFalse
+    }
     "Create InvocationMetadata successful" in {
       val ca = mock[ContainerAdaptor]
       val actual = factory.createInvocationMetadatas(classOf[Foo], ca).iterator().next()

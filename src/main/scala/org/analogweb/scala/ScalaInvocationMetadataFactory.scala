@@ -10,7 +10,10 @@ import org.analogweb.core.DefaultInvocationMetadata
 class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
 
   def containsInvocationClass(clazz: Class[_]): Boolean = {
-    classOf[RouteDef].isAssignableFrom(clazz) && classOf[RouteDef].getCanonicalName != clazz.getCanonicalName
+    classOf[RouteDef].isAssignableFrom(clazz) &&
+      classOf[RouteDef].getCanonicalName != clazz.getCanonicalName &&
+      classOf[StrictRouteDef].getCanonicalName != clazz.getCanonicalName &&
+      classOf[LooseRouteDef].getCanonicalName != clazz.getCanonicalName
   }
 
   def createInvocationMetadatas(clazz: Class[_], instances: ContainerAdaptor): Collection[InvocationMetadata] = {
