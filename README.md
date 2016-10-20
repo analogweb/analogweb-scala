@@ -12,7 +12,7 @@ Analogweb Framework Scala
 Add to sbt dependency.
 
 ```scala
-val scalaplugin = "org.analogweb" %% "analogweb-scala" % "0.9.12"
+val scalaplugin = "org.analogweb" %% "analogweb-scala" % "0.9.14"
 ```
 
 Write a code.
