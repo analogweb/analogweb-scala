@@ -23,7 +23,7 @@ import org.analogweb.scala.Analogweb
 
 object App extends Analogweb {
 
-  def main(args: Array[String]) = Servers.run
+  def main(args: Array[String]) = Servers.run()
   
   get("/ping") {
     "PONG"
