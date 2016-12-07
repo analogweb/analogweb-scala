@@ -7,14 +7,14 @@ import scoverage._
 
 lazy val baseSettings = Seq(
   organization := "org.analogweb",
-  scalaVersion := "2.11.7",
-  crossScalaVersions := Seq("2.10.5", "2.11.7"),
+  crossScalaVersions := Seq("2.11.8", "2.12.1"),
+  scalaVersion := crossScalaVersions.value.head,
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
   description := "Analogweb Framework is tiny, simple, and pluggable web framework.",
   publishMavenStyle := true,
-  publishTo <<= version { (v: String) =>
+  publishTo := {
     val nexus = "https://oss.sonatype.org/"
-    if (v.trim.endsWith("SNAPSHOT"))
+    if (version.value.trim.endsWith("SNAPSHOT"))
       Some("snapshots" at nexus + "content/repositories/snapshots")
     else
       Some("releases" at nexus + "service/local/staging/deploy/maven2")
@@ -24,46 +24,30 @@ lazy val baseSettings = Seq(
     url("https://github.com/analogweb/scala-plugin"),
     "scm:git:git@github.com:analogweb/scala-plugin.git"
   )),
-  pomExtra := (
-    <url>http://analogweb.org</url>
-      <developers>
-        <developer>
-          <id>y2k2mt</id>
-          <name>y2k2mt</name>
-          <url>https://github.com/y2k2mt</url>
-        </developer>
-      </developers>
-    ),
+  developers := List(
+    Developer("y2k2mt", "y2k2mt", "y2_k2mt@gmail.com",url("https://github.com/y2k2mt"))
+  ),
+  startYear := Some(2014),
   isSnapshot := false,
-  scalacOptions ++= Seq("-feature", "-deprecation", "-Yrangepos")
+  scalacOptions ++= Seq("-feature", "-deprecation", "-Yrangepos"),
+  releasePublishArtifactsAction := PgpKeys.publishSigned.value
 )
-val additionalSettings = Defaults.defaultSettings ++ ReleasePlugin.projectSettings ++ sonatypeSettings ++ ScoverageSbtPlugin.projectSettings
+val additionalSettings = ReleasePlugin.projectSettings ++ sonatypeSettings ++ ScoverageSbtPlugin.projectSettings
 val allResolvers = Seq(
   Resolver.mavenLocal,
   Resolver.sonatypeRepo("snapshots"),
   "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 )
 val analogwebV = "0.9.12"
-val jsonV = "3.4.0"
-val specs2V = "3.8.4"
+val jsonV = "3.5.0"
+val specs2V = "3.8.6"
+
 val allDependencies = Seq(
   "org.analogweb" % "analogweb-core" % analogwebV,
-  "org.json4s" % "json4s-jackson" % jsonV cross CrossVersion.fullMapped {
-    case "2.10.5" => "2.10"
-    case "2.11.7" => "2.11"
-  },
-  "org.specs2" % "specs2-core" % specs2V % "test" cross CrossVersion.fullMapped {
-    case "2.10.5" => "2.10"
-    case "2.11.7" => "2.11"
-  },
-  "org.specs2" % "specs2-mock" % specs2V % "test" cross CrossVersion.fullMapped {
-    case "2.10.5" => "2.10"
-    case "2.11.7" => "2.11"
-  },
-  "org.specs2" % "specs2-junit" % specs2V % "test" cross CrossVersion.fullMapped {
-    case "2.10.5" => "2.10"
-    case "2.11.7" => "2.11"
-  }
+  "org.json4s" %% "json4s-jackson" % jsonV,
+  "org.specs2" %% "specs2-core" % specs2V % "test",
+  "org.specs2" %% "specs2-mock" % specs2V % "test",
+  "org.specs2" %% "specs2-junit" % specs2V % "test"
 )
 lazy val root = (project in file(".")).
   settings(baseSettings: _*).
