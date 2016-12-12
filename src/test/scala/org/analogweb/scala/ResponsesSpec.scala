@@ -32,9 +32,6 @@ class ResponsesSpec extends Specification with Mockito {
       val okAsResource = Ok(asResource(is, "foo"))
       okAsResource.getStatusCode === 200
       okAsResource.getRenderable.isInstanceOf[Resource] === true
-      val statusAsHtml = Status(200, asHtmlEntity(<h1>Hello</h1>))
-      statusAsHtml.getStatusCode === 200
-      statusAsHtml.getRenderable.isInstanceOf[Html] === true
       val statusObjAsHtml = Status(HttpStatus.OK, asHtml("foo"))
       statusObjAsHtml.getStatusCode === 200
       statusObjAsHtml.getRenderable.isInstanceOf[Html] === true
