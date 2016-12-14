@@ -9,14 +9,14 @@ trait ResolverSyntax[T <: RequestValueResolver] {
 
   def resolverType: Class[T]
   def request: Request
-  def get(name: String): String = of(name).getOrElse("")
-  def of(name: String): Option[String] = as[String](name)
+  def get(name: String)(implicit resolverContext: ResolverContext = NoResolverContext): String = of(name).getOrElse("")
+  def of(name: String)(implicit resolverContext: ResolverContext = NoResolverContext): Option[String] = as[String](name)
 
   def as[T](implicit ctag: ClassTag[T]): Option[T] = as("")(ctag)
 
-  def as[T](name: String)(implicit ctag: ClassTag[T]): Option[T] = asEach[T](name).toOption
+  def as[T](name: String)(implicit ctag: ClassTag[T], resolverContext: ResolverContext = NoResolverContext): Option[T] = asEach[T](name).toOption
 
-  def asEach[T](name: String)(implicit ctag: ClassTag[T]): Try[T] = {
+  def asEach[T](name: String)(implicit ctag: ClassTag[T], resolverContext: ResolverContext = NoResolverContext): Try[T] = {
     Option(request.resolvers.findRequestValueResolver(resolverType)).map { resolver =>
       resolveInternal(name, resolver)
     }.getOrElse(Failure(ResolverNotFound(name)))
