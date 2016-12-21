@@ -25,3 +25,20 @@ trait Resolvers {
 trait ResolverContext
 
 object NoResolverContext extends ResolverContext
+
+abstract class ScalaRequestValueResolver extends SpecificMediaTypeRequestValueResolver {
+
+  def resolve(
+    request:      RequestContext,
+    metadata:     InvocationMetadata,
+    key:          String,
+    requiredType: Class[_]
+  )(implicit context: ResolverContext): AnyRef
+
+  override final def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = {
+    resolve(request, metadata, key, requiredType)(NoResolverContext)
+  }
+
+  override def supports(contentType: MediaType) = true
+
+}

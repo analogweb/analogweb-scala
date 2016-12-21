@@ -1,10 +1,12 @@
 package org.analogweb.scala
 
+import org.analogweb.json4s._
 import org.junit.runner.RunWith
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mock.Mockito
 import org.mockito.Matchers.{ eq => isEq }
+import org.json4s._
 import org.json4s.JsonDSL._
 import org.analogweb._
 import org.analogweb.core._
@@ -28,11 +30,11 @@ class ScalaJacksonJsonValueResolverSpec extends Specification with Mockito {
   "Resolve with ScalaJacksonJsonValueResolver" in new mocks {
     rc.getRequestBody() returns new java.io.ByteArrayInputStream("""{"name": "foo"}""".getBytes())
     rc.getContentType() returns org.analogweb.core.MediaTypes.APPLICATION_JSON_TYPE
-    rvr.findRequestValueResolver(classOf[ScalaJacksonJsonValueResolver]) returns new ScalaJacksonJsonValueResolver()
+    rvr.findRequestValueResolver(classOf[Json4SJsonValueResolver]) returns new Json4SJsonValueResolver()
     case class B(val name: String)
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
-        s"${json.as[org.analogweb.scala.B].map(x => x.name).getOrElse("a")}"
+        s"${json.as[org.analogweb.scala.B](DefaultFormats).map(x => x.name).getOrElse("a")}"
       }
     }
     new A().routes(0).invoke(r) must_== "foo"
@@ -41,7 +43,7 @@ class ScalaJacksonJsonValueResolverSpec extends Specification with Mockito {
   "Resolve with ScalaJacksonJsonValueResolver as JValue" in new mocks {
     rc.getRequestBody() returns new java.io.ByteArrayInputStream("""{"name": "foo"}""".getBytes())
     rc.getContentType() returns org.analogweb.core.MediaTypes.APPLICATION_JSON_TYPE
-    rvr.findRequestValueResolver(classOf[ScalaJacksonJsonValueResolver]) returns new ScalaJacksonJsonValueResolver()
+    rvr.findRequestValueResolver(classOf[Json4SJsonValueResolver]) returns new Json4SJsonValueResolver()
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
         json.as[org.json4s.JValue].map { x =>

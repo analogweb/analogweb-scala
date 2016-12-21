@@ -8,24 +8,34 @@ import org.analogweb.core._
 trait ResolverSyntax[T <: RequestValueResolver] {
 
   def resolverType: Class[T]
+
   def request: Request
-  def get(name: String)(implicit resolverContext: ResolverContext = NoResolverContext): String = of(name).getOrElse("")
-  def of(name: String)(implicit resolverContext: ResolverContext = NoResolverContext): Option[String] = as[String](name)
 
-  def as[T](implicit ctag: ClassTag[T]): Option[T] = as("")(ctag)
+  def get(name: String): String = of(name).getOrElse("")
 
-  def as[T](name: String)(implicit ctag: ClassTag[T], resolverContext: ResolverContext = NoResolverContext): Option[T] = asEach[T](name).toOption
+  def of(name: String): Option[String] = as[String](name, NoResolverContext)
 
-  def asEach[T](name: String)(implicit ctag: ClassTag[T], resolverContext: ResolverContext = NoResolverContext): Try[T] = {
-    Option(request.resolvers.findRequestValueResolver(resolverType)).map { resolver =>
-      resolveInternal(name, resolver)
+  def as[T](implicit ctag: ClassTag[T]): Option[T] = asEach("", NoResolverContext)(ctag).toOption
+
+  def as[T](resolverContext: ResolverContext)(implicit ctag: ClassTag[T]): Option[T] = asEach("", resolverContext)(ctag).toOption
+
+  def as[T](name: String, resolverContext: ResolverContext = NoResolverContext)(implicit ctag: ClassTag[T]): Option[T] = asEach[T](name, resolverContext).toOption
+
+  def asEach[T](name: String, resolverContext: ResolverContext)(implicit ctag: ClassTag[T]): Try[T] = {
+    Option(request.resolvers.findRequestValueResolver(resolverType)).map {
+      case scalaResolver: ScalaRequestValueResolver => resolveInternal[T, ScalaRequestValueResolver](name, scalaResolver) {
+        _.resolve(request.context, request.metadata, name, ctag.runtimeClass)(resolverContext)
+      }
+      case resolver => resolveInternal(name, resolver) {
+        _.resolveValue(request.context, request.metadata, name, ctag.runtimeClass, Array())
+      }
     }.getOrElse(Failure(ResolverNotFound(name)))
   }
 
-  private[this] def resolveInternal[T](name: String, resolver: RequestValueResolver)(implicit ctag: ClassTag[T]) = {
-    val verified = verifyMediaType(resolver)
+  private[this] def resolveInternal[T, R <: RequestValueResolver](name: String, resolver: R)(f: R => AnyRef)(implicit ctag: ClassTag[T]) = {
+    val verified = verifyMediaType[R](resolver)
     verified.flatMap { verifiedResolver =>
-      Option(verifiedResolver.resolveValue(request.context, request.metadata, name, ctag.runtimeClass, Array())).map {
+      Option(f(verifiedResolver.asInstanceOf[R])).map {
         case Some(resolved) => mappingToType(resolved)(ctag)
         case None           => Failure(NoValuesResolved(name, resolver, ctag.runtimeClass))
         case resolved       => mappingToType(resolved)(ctag)
@@ -51,11 +61,11 @@ trait ResolverSyntax[T <: RequestValueResolver] {
     }
   }
 
-  private[this] def verifyMediaType: PartialFunction[RequestValueResolver, Try[RequestValueResolver]] = {
+  private[this] def verifyMediaType[R <: RequestValueResolver]: PartialFunction[R, Try[R]] = {
     case resolver: SpecificMediaTypeRequestValueResolver => request.contentTypeOption.map {
       case contentType if (!resolver.supports(contentType)) => Failure(new UnsupportedMediaTypeException(request.requestPath))
-      case _ => Success(resolver)
-    }.getOrElse(Success(resolver))
+      case _ => Success(resolver.asInstanceOf[R])
+    }.getOrElse(Success(resolver.asInstanceOf[R]))
     case resolver => Success(resolver)
   }
 

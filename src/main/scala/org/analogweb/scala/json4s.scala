@@ -1,25 +1,32 @@
 package org.analogweb
 
 import java.lang.annotation.Annotation
+import language.implicitConversions
 import org.analogweb.core._
+import org.analogweb.scala._
+import org.json4s._
+import org.json4s.jackson.JsonMethods
 
-object json4s {
+package object json4s {
 
-  import org.json4s._
-  import org.json4s.jackson.JsonMethods
+  val json = classOf[Json4SJsonValueResolver]
 
-  val json = classOf[ScalaJacksonJsonValueResolver]
+  case class Json4SResolverContext(val formats: Formats) extends ResolverContext
 
-  class ScalaJacksonJsonValueResolver extends SpecificMediaTypeRequestValueResolver {
+  implicit def Formats2Json4SResolverContext(formats: Formats): Json4SResolverContext = Json4SResolverContext(formats)
+  implicit def Json4SResolverContext2Format(context: ResolverContext): Formats = context match {
+    case Json4SResolverContext(formats) => formats
+    case _                              => DefaultFormats
+  }
 
-    implicit val formats = DefaultFormats
+  class Json4SJsonValueResolver extends ScalaRequestValueResolver {
 
-    override def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = {
+    override def resolve(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_])(implicit context: ResolverContext): AnyRef = {
       val parsed = JsonMethods.parse(request.getRequestBody)
       requiredType match {
         case x if x == classOf[JObject] => parsed
         case y if y == classOf[JValue]  => parsed
-        case _                          => parsed.extract(formats, Manifest.classType(requiredType))
+        case _                          => parsed.extract(context, Manifest.classType(requiredType))
       }
     }
 
