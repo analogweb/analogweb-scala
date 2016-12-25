@@ -7,17 +7,12 @@ import scala.concurrent.Future
 import scala.xml.NodeSeq
 import org.analogweb.{ Renderable, ResponseFormatter, RequestContext, ResponseContext, ResponseEntity }
 import org.analogweb.core.response._
-import org.analogweb.util.IOUtils
-import org.json4s._
-import org.json4s.jackson.{ JsonMethods, Serialization }
 
 trait Responses {
   def asText(obj: String) = Text.`with`(obj)
   def asHtmlEntity(obj: String) = Html.`with`(obj)
   def asHtml(templatePath: String) = Html.as(templatePath)
   def asHtml(templatePath: String, context: Map[String, AnyRef]) = Html.as(templatePath, context.asJava)
-  def asJson(obj: AnyRef)(implicit formats: Formats = Serialization.formats(NoTypeHints)) = new ScalaJsonObject((obj, formats))
-  def asJson(jsonText: String) = new ScalaJsonText(jsonText)
   def asXml(obj: AnyRef) = org.analogweb.core.response.Xml.as(obj)
   def asResource(stream: InputStream) = Resource.as(stream, "").withoutContentDisposition
   def asResource(stream: InputStream, filename: String) = Resource.as(stream, filename)
@@ -40,49 +35,6 @@ trait Responses {
 object Responses extends Responses
 
 class ScalaJsonObject(obj: AnyRef) extends Json(obj)
+
 class ScalaJsonText(text: String) extends Json(text)
 
-class ScalaJsonFormatter extends ResponseFormatter {
-
-  val defaultFormats = Serialization.formats(NoTypeHints)
-
-  override def formatAndWriteInto(request: RequestContext, response: ResponseContext, charset: String,
-                                  source: Any): ResponseEntity = {
-    new ResponseEntity() {
-      lazy val contents: (InputStream, Int) = jsonContents
-
-      def jsonContents = {
-        source match {
-          case f: FileInputStream      => (f, f.available())
-          case b: ByteArrayInputStream => (b, b.available())
-          case i: InputStream          => (i, -1)
-          case _ => {
-            val bytes = toBytes
-            (new ByteArrayInputStream(bytes), bytes.length)
-          }
-        }
-      }
-
-      def toBytes = {
-        val serialized = source match {
-          case (obj, formats) => formats match {
-            case f: Formats => Serialization.write(obj.asInstanceOf[AnyRef])(f)
-            case _          => Serialization.write(source.asInstanceOf[AnyRef])(defaultFormats)
-          }
-          case v: JValue => JsonMethods.compact(JsonMethods.render(v))
-          case s: String => s
-          case _         => Serialization.write(source.asInstanceOf[AnyRef])(defaultFormats)
-        }
-        serialized.getBytes(charset)
-      }
-
-      override def writeInto(responseBody: OutputStream) = {
-        val length = if (contents._2 > 0) contents._2 else 8192
-        IOUtils.copy(contents._1, responseBody, length)
-        responseBody.flush
-      }
-      override def getContentLength = contents._2
-    }
-  }
-
-}

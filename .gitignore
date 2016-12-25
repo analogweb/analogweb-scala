@@ -4,5 +4,6 @@
 .classpath
 .settings
 .swp
+.idea
 target
 /bin
