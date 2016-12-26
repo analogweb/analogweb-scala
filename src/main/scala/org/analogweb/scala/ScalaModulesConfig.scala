@@ -15,8 +15,6 @@ class ScalaModuleConfig extends PluginModulesConfig {
     log.log(messageLog, "ISB000001")
     builder.addInvocationMetadataFactoriesClass(classOf[ScalaInvocationMetadataFactory])
       .setInvocationFactoryClass(classOf[ScalaInvocationFactory])
-      //      .addResponseFormatterClass(classOf[ScalaJsonObject], classOf[ScalaJsonFormatter])
-      //      .addResponseFormatterClass(classOf[ScalaJsonText], classOf[ScalaJsonFormatter])
       .setRenderableResolverClass(classOf[ScalaRenderableResolver])
       .setResponseHandlerClass(classOf[ScalaResponseHandler])
       // ignore ApplicationProcessors for Java.

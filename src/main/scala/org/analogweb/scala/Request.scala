@@ -1,9 +1,9 @@
 package org.analogweb.scala
 
-import org.analogweb.{ RequestContext, RequestPathMetadata, RequestValueResolvers, InvocationMetadata, TypeMapperContext, MediaType }
+import org.analogweb._
 import org.analogweb.core.{ ParameterValueResolver, PathVariableValueResolver }
-import scala.collection.mutable.Buffer
-import scala.collection.convert.decorateAsScala._
+import collection.mutable.Buffer
+import collection.convert.decorateAsScala._
 
 case class Request(
     val context:                   RequestContext,

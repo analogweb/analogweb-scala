@@ -1,7 +1,7 @@
 package org.analogweb.scala
 
 import java.lang.annotation.Annotation
-import org.analogweb.{ InvocationMetadata, MediaType, RequestContext, RequestValueResolver, TypeMapper }
+import org.analogweb._
 import org.analogweb.core._
 
 trait Resolvers {

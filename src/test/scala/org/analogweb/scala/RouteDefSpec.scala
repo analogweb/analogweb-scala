@@ -66,4 +66,3 @@ class AnalogwebSpecFoo extends LooseRouteDef {
     }
   }
 }
-

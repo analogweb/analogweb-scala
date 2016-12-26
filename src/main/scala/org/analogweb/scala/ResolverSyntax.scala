@@ -33,9 +33,9 @@ trait ResolverSyntax[T <: RequestValueResolver] {
   }
 
   private[this] def resolveInternal[T, R <: RequestValueResolver](name: String, resolver: R)(f: R => AnyRef)(implicit ctag: ClassTag[T]) = {
-    val verified = verifyMediaType[R](resolver)
-    verified.flatMap { verifiedResolver =>
-      Option(f(verifiedResolver.asInstanceOf[R])).map {
+    val mayBeVerified: Try[R] = verifyMediaType[R](resolver)
+    mayBeVerified.flatMap { verifiedResolver =>
+      Option(f(verifiedResolver)).map {
         case Some(resolved) => mappingToType(resolved)(ctag)
         case None           => Failure(NoValuesResolved(name, resolver, ctag.runtimeClass))
         case resolved       => mappingToType(resolved)(ctag)

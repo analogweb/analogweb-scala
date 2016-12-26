@@ -35,6 +35,8 @@ class ResponsesSpec extends Specification with Mockito {
       val statusObjAsHtml = Status(HttpStatus.OK, asHtml("foo"))
       statusObjAsHtml.getStatusCode === 200
       statusObjAsHtml.getRenderable.isInstanceOf[Html] === true
+      val statusOfUnauthorized = Status(Unauthorized)
+      statusOfUnauthorized.getStatusCode === 401
       val badRequest = BadRequest
       badRequest.getStatusCode === 400
       val notfound = NotFound

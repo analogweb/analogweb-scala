@@ -11,8 +11,8 @@ import org.analogweb.core.response._
 trait Responses {
   def asText(obj: String) = Text.`with`(obj)
   def asHtmlEntity(obj: String) = Html.`with`(obj)
-  def asHtml(templatePath: String) = Html.as(templatePath)
-  def asHtml(templatePath: String, context: Map[String, AnyRef]) = Html.as(templatePath, context.asJava)
+  def asHtml(templatePath: String): Html = asHtml(templatePath, Map.empty)
+  def asHtml(templatePath: String, context: Map[String, AnyRef]): Html = Html.as(templatePath, context.asJava)
   def asXml(obj: AnyRef) = org.analogweb.core.response.Xml.as(obj)
   def asResource(stream: InputStream) = Resource.as(stream, "").withoutContentDisposition
   def asResource(stream: InputStream, filename: String) = Resource.as(stream, filename)
@@ -21,16 +21,18 @@ trait Responses {
   def Status(statusCode: Int, responseBody: Renderable) = HttpStatus.valueOf(statusCode).`with`(responseBody)
   def Status(status: HttpStatus, responseBody: Renderable): HttpStatus = Status(status.getStatusCode(), responseBody)
   def RedirectTo(url: String) = Redirect.to(url)
-  def Ok(responseBody: Renderable) = HttpStatus.OK.`with`(responseBody)
-  def Ok = HttpStatus.OK
-  def BadRequest(obj: Renderable) = HttpStatus.BAD_REQUEST.`with`(obj)
-  def BadRequest = HttpStatus.BAD_REQUEST
-  def NotFound(obj: Renderable) = HttpStatus.NOT_FOUND.`with`(obj)
-  def NotFound = HttpStatus.NOT_FOUND
-  def Forbidden(obj: Renderable) = HttpStatus.FORBIDDEN.`with`(obj)
-  def Forbidden = HttpStatus.FORBIDDEN
-  def InternalServerError(obj: Renderable) = HttpStatus.INTERNAL_SERVER_ERROR.`with`(obj)
-  def InternalServerError = HttpStatus.INTERNAL_SERVER_ERROR
+  def Ok(responseBody: Renderable): HttpStatus = Ok.`with`(responseBody)
+  def Ok: HttpStatus = HttpStatus.OK
+  def BadRequest(obj: Renderable): HttpStatus = BadRequest.`with`(obj)
+  def BadRequest: HttpStatus = HttpStatus.BAD_REQUEST
+  def Unauthorized(obj: Renderable): HttpStatus = Unauthorized.`with`(obj)
+  def Unauthorized: HttpStatus = HttpStatus.UNAUTHORIZED
+  def NotFound(obj: Renderable): HttpStatus = NotFound.`with`(obj)
+  def NotFound: HttpStatus = HttpStatus.NOT_FOUND
+  def Forbidden(obj: Renderable): HttpStatus = Forbidden.`with`(obj)
+  def Forbidden: HttpStatus = HttpStatus.FORBIDDEN
+  def InternalServerError(obj: Renderable): HttpStatus = InternalServerError.`with`(obj)
+  def InternalServerError: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR
 }
 object Responses extends Responses
 
