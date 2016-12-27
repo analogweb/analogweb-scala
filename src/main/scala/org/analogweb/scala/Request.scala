@@ -3,7 +3,7 @@ package org.analogweb.scala
 import org.analogweb._
 import org.analogweb.core.{ ParameterValueResolver, PathVariableValueResolver }
 import collection.mutable.Buffer
-import collection.convert.decorateAsScala._
+import collection.JavaConverters._
 
 case class Request(
     val context:                   RequestContext,
@@ -17,13 +17,13 @@ case class Request(
 
   def queryOption(name: String): Option[String] = queries(name).headOption
 
-  def queries(name: String): Buffer[String] = context.getQueryParameters.getValues(name).asScala
+  def queries(name: String): Seq[String] = context.getQueryParameters.getValues(name).asScala
 
   def header(name: String, defaultValue: String = ""): String = headerOption(name).getOrElse(defaultValue)
 
   def headerOption(name: String): Option[String] = headers(name).headOption
 
-  def headers(name: String): Buffer[String] = context.getRequestHeaders.getValues(name).asScala
+  def headers(name: String): Seq[String] = context.getRequestHeaders.getValues(name).asScala
 
   def contentType: MediaType = context.getContentType()
 

@@ -2,7 +2,7 @@ package org.analogweb.scala
 
 import java.io.{ File, InputStream, OutputStream, FileInputStream, ByteArrayInputStream }
 import scala.collection.mutable.Map
-import scala.collection.convert.decorateAsJava._
+import scala.collection.JavaConverters._
 import scala.concurrent.Future
 import org.analogweb.{ Renderable, ResponseFormatter, RequestContext, ResponseContext, ResponseEntity }
 import org.analogweb.core.response._

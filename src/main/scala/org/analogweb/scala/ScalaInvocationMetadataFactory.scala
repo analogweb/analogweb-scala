@@ -3,7 +3,7 @@ package org.analogweb.scala
 import java.util.{ Collection, Collections }
 import scala.util.{ Try, Success, Failure }
 import scala.collection.mutable.ArrayBuffer
-import scala.collection.convert.decorateAsJava._
+import scala.collection.JavaConverters._
 import org.analogweb.{ ContainerAdaptor, InvocationMetadata, InvocationMetadataFactory }
 import org.analogweb.core.DefaultInvocationMetadata
 
