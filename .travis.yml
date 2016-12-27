@@ -1,14 +1,33 @@
+sudo: required
 language: scala
 
 scala:
-    - 2.10.5
-    - 2.11.6
-jdk:
-    - oraclejdk7
-    - oraclejdk8
+  - 2.11.8
+  - 2.12.1
+env:
+  - JDK=oraclejdk8
+  - JDK=openjdk8
+  - JDK=oraclejdk7
+  - JDK=openjdk7
+
+addons:
+  # https://github.com/travis-ci/travis-ci/issues/5227#issuecomment-165131913
+  hosts:
+    - scala-logging
+  hostname: scala-logging
+before_script:
+  - jdk_switcher use $JDK
+
+matrix:
+  # scala 2.12 requires java 8
+  exclude:
+    - scala: 2.12.1
+      env: JDK=oraclejdk7
+    - scala: 2.12.1
+      env: JDK=openjdk7
 
 script:
-    - "sbt clean coverage test coverageReport" 
+  - "sbt clean coverage test coverageReport" 
 
 after_success:
-    - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)
