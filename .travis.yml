@@ -1,26 +1,11 @@
-sudo: required
 language: scala
 
 scala:
   - 2.11.8
   - 2.12.1
-env:
-  - JDK=oraclejdk8
-  - JDK=oraclejdk7
 
-addons:
-  # https://github.com/travis-ci/travis-ci/issues/5227#issuecomment-165131913
-  hosts:
-    - analogweb-scala
-  hostname: scala-logging
-before_script:
-  - jdk_switcher use $JDK
-
-matrix:
-  # scala 2.12 requires java 8
-  exclude:
-    - scala: 2.12.1
-      env: JDK=oraclejdk7
+jdk:
+  - oraclejdk8
 
 script:
   - "sbt clean coverage test coverageReport" 
