@@ -7,8 +7,6 @@ import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mock.Mockito
 import org.analogweb._
-import org.json4s._
-import org.json4s.JsonDSL._
 import org.analogweb.core.response._
 import org.analogweb.scala.Responses._
 

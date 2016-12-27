@@ -6,7 +6,6 @@ import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mock.Mockito
 import org.mockito.Matchers.{ eq => isEq }
-import org.json4s.JsonDSL._
 import org.analogweb._
 import org.analogweb.core._
 import org.analogweb.scala._

@@ -29,7 +29,16 @@ lazy val baseSettings = Seq(
   ),
   startYear := Some(2014),
   isSnapshot := false,
-  scalacOptions ++= Seq("-feature", "-deprecation", "-Yrangepos"),
+  scalacOptions ++= Seq(
+    "-feature",
+    "-deprecation",
+    "-unchecked",
+    "-Xlint",
+    "-Yrangepos",
+    "-Ybackend:GenBCode",
+    "-Ydelambdafy:method",
+    "-target:jvm-1.8"
+  ),
   releasePublishArtifactsAction := PgpKeys.publishSigned.value
 )
 val additionalSettings = ReleasePlugin.projectSettings ++ sonatypeSettings ++ ScoverageSbtPlugin.projectSettings
@@ -39,12 +48,10 @@ val allResolvers = Seq(
   "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 )
 val analogwebV = "0.9.12"
-val jsonV = "3.5.0"
 val specs2V = "3.8.6"
 
 val allDependencies = Seq(
   "org.analogweb" % "analogweb-core" % analogwebV,
-  "org.json4s" %% "json4s-jackson" % jsonV,
   "org.specs2" %% "specs2-core" % specs2V % "test",
   "org.specs2" %% "specs2-mock" % specs2V % "test",
   "org.specs2" %% "specs2-junit" % specs2V % "test"

@@ -4,7 +4,6 @@ import java.io.{ File, InputStream, OutputStream, FileInputStream, ByteArrayInpu
 import scala.collection.mutable.Map
 import scala.collection.convert.decorateAsJava._
 import scala.concurrent.Future
-import scala.xml.NodeSeq
 import org.analogweb.{ Renderable, ResponseFormatter, RequestContext, ResponseContext, ResponseEntity }
 import org.analogweb.core.response._
 
