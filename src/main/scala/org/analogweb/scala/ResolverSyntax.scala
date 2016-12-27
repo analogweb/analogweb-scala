@@ -5,9 +5,9 @@ import scala.reflect.ClassTag
 import org.analogweb._
 import org.analogweb.core._
 
-trait ResolverSyntax[T <: RequestValueResolver] {
+trait ResolverSyntax[R <: RequestValueResolver] {
 
-  def resolverType: Class[T]
+  def resolverType: Class[R]
 
   def request: Request
 
@@ -32,8 +32,8 @@ trait ResolverSyntax[T <: RequestValueResolver] {
     }.getOrElse(Failure(ResolverNotFound(name)))
   }
 
-  private[this] def resolveInternal[T, R <: RequestValueResolver](name: String, resolver: R)(f: R => AnyRef)(implicit ctag: ClassTag[T]) = {
-    val mayBeVerified: Try[R] = verifyMediaType[R](resolver)
+  private[this] def resolveInternal[T, RV <: RequestValueResolver](name: String, resolver: RV)(f: RV => AnyRef)(implicit ctag: ClassTag[T]) = {
+    val mayBeVerified: Try[RV] = verifyMediaType[RV](resolver)
     mayBeVerified.flatMap { verifiedResolver =>
       Option(f(verifiedResolver)).map {
         case Some(resolved) => mappingToType(resolved)(ctag)
@@ -61,11 +61,11 @@ trait ResolverSyntax[T <: RequestValueResolver] {
     }
   }
 
-  private[this] def verifyMediaType[R <: RequestValueResolver]: PartialFunction[R, Try[R]] = {
+  private[this] def verifyMediaType[RV <: RequestValueResolver]: PartialFunction[RV, Try[RV]] = {
     case resolver: SpecificMediaTypeRequestValueResolver => request.contentTypeOption.map {
       case contentType if (!resolver.supports(contentType)) => Failure(new UnsupportedMediaTypeException(request.requestPath))
-      case _ => Success(resolver.asInstanceOf[R])
-    }.getOrElse(Success(resolver.asInstanceOf[R]))
+      case _ => Success(resolver.asInstanceOf[RV])
+    }.getOrElse(Success(resolver.asInstanceOf[RV]))
     case resolver => Success(resolver)
   }
 
