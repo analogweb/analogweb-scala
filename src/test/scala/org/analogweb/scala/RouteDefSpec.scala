@@ -29,16 +29,29 @@ class RouteDefSpec extends Specification {
     actual.rawPath must_== "/baz"
     actual.method must_== "DELETE"
   }
-  "Valid Scope Routes" in {
+  "Valid Head Route" in {
     val actual = analogweb.routes(4)
+    actual.rawPath must_== "/baz"
+    actual.method must_== "HEAD"
+  }
+  "Valid Options Route" in {
+    val actual = analogweb.routes(5)
+    actual.rawPath must_== "/baz"
+    actual.method must_== "OPTIONS"
+  }
+  "Valid Scope Routes" in {
+    val actual = analogweb.routes(6)
     actual.rawPath must_== "/root/foo"
     actual.method must_== "GET"
-    val actualPost = analogweb.routes(5)
+    val actualPost = analogweb.routes(7)
     actualPost.rawPath must_== "/root/bar"
     actualPost.method must_== "POST"
-    val actualGet = analogweb.routes(6)
-    actualGet.rawPath must_== "/root/bar"
-    actualGet.method must_== "GET"
+    val actualPut = analogweb.routes(8)
+    actualPut.rawPath must_== "/root/bar"
+    actualPut.method must_== "PUT"
+    val actualDelete = analogweb.routes(9)
+    actualDelete.rawPath must_== "/root/bar"
+    actualDelete.method must_== "DELETE"
   }
 
 }
@@ -56,12 +69,20 @@ class AnalogwebSpecFoo extends LooseRouteDef {
   delete("/baz") { r =>
     "Baz"
   }
+  head("/baz") { r =>
+    ""
+  }
+  options("/baz") { r =>
+    ""
+  }
   scope("/root") {
     get("/foo") { r =>
       "Foo"
     } ~ post("/bar") { r =>
       "Bar"
-    } ~ get("/bar") { r =>
+    } ~ put("/bar") { r =>
+      "Bar"
+    } ~ delete("/bar") { r =>
       "Bar"
     }
   }
