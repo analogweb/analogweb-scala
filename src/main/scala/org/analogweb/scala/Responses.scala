@@ -1,11 +1,10 @@
 package org.analogweb.scala
 
 import java.io.{ File, InputStream, OutputStream, FileInputStream, ByteArrayInputStream }
-import scala.collection.mutable.Map
 import scala.collection.JavaConverters._
+import scala.collection.mutable.Map
 import scala.concurrent.Future
-import org.analogweb.{ Renderable, ResponseFormatter, RequestContext, ResponseContext, ResponseEntity }
-import org.analogweb.core.response._
+import org.analogweb._, core.DefaultReadableBuffer._, core.response._
 
 trait Responses {
   def asText(obj: String) = Text.`with`(obj)
@@ -13,8 +12,9 @@ trait Responses {
   def asHtml(templatePath: String): Html = asHtml(templatePath, Map.empty)
   def asHtml(templatePath: String, context: Map[String, AnyRef]): Html = Html.as(templatePath, context.asJava)
   def asXml(obj: AnyRef) = org.analogweb.core.response.Xml.as(obj)
-  def asResource(stream: InputStream) = Resource.as(stream, "").withoutContentDisposition
-  def asResource(stream: InputStream, filename: String) = Resource.as(stream, filename)
+  def asResource(stream: InputStream): Resource = asResource(stream, "").withoutContentDisposition
+  def asResource(stream: InputStream, filename: String): Resource = asResource(readBuffer(stream), filename)
+  def asResource(buffer: ReadableBuffer, filename: String = ""): Resource = Resource.as(buffer, filename)
   def Status(statusCode: Int) = HttpStatus.valueOf(statusCode)
   def Status(status: HttpStatus): HttpStatus = Status(status.getStatusCode())
   def Status(statusCode: Int, responseBody: Renderable) = HttpStatus.valueOf(statusCode).`with`(responseBody)

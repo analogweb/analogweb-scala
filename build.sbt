@@ -46,7 +46,7 @@ val allResolvers = Seq(
   Resolver.sonatypeRepo("snapshots"),
   "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 )
-val analogwebV = "0.9.12"
+val analogwebV = "0.10.0-SNAPSHOT"
 val specs2V = "3.8.6"
 
 val allDependencies = Seq(

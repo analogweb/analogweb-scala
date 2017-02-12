@@ -6,10 +6,7 @@ import org.junit.runner.RunWith
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mock.Mockito
-import org.analogweb._
-import org.analogweb.core._
-import org.analogweb.core.response.Text
-import org.analogweb.scala.Execution.Implicits._
+import org.analogweb._, core._, core.response.Text, scala.Execution.Implicits._
 
 @RunWith(classOf[JUnitRunner])
 class ScalaResponseHandlerSpec extends Specification with Mockito {
@@ -67,7 +64,8 @@ class ScalaResponseHandlerSpec extends Specification with Mockito {
   class StubResponseContext extends AbstractResponseContext {
     val bytes = new java.io.ByteArrayOutputStream
     def writtenInBytes = new String(bytes.toByteArray)
-    def commit(req: RequestContext, res: Response) = res.getEntity.writeInto(bytes)
+    val buffer = DefaultWritableBuffer.writeBuffer(bytes)
+    def commit(req: RequestContext, res: Response) = res.getEntity.writeInto(buffer)
   }
 
 }
