@@ -47,7 +47,7 @@ val allResolvers = Seq(
   "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 )
 val analogwebV = "0.10.0-SNAPSHOT"
-val specs2V = "3.8.6"
+val specs2V = "3.8.8"
 
 val allDependencies = Seq(
   "org.analogweb" % "analogweb-core" % analogwebV,
