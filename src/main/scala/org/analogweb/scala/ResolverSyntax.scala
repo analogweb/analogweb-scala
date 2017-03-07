@@ -13,15 +13,19 @@ trait ResolverSyntax[R <: RequestValueResolver] {
 
   def get(name: String): String = of(name).getOrElse("")
 
-  def of(name: String): Option[String] = as[String](name, NoResolverContext)
+  def of(name: String): Option[String] = asTry[String](name, NoResolverContext).toOption
 
-  def as[T](implicit ctag: ClassTag[T]): Option[T] = asEach("", NoResolverContext)(ctag).toOption
+  def as[T](implicit ctag: ClassTag[T]): Either[Throwable, T] = asEach("", NoResolverContext)(ctag)
 
-  def as[T](resolverContext: ResolverContext)(implicit ctag: ClassTag[T]): Option[T] = asEach("", resolverContext)(ctag).toOption
+  def as[T](resolverContext: ResolverContext)(implicit ctag: ClassTag[T]): Either[Throwable, T] = asEach("", resolverContext)(ctag)
 
-  def as[T](name: String, resolverContext: ResolverContext = NoResolverContext)(implicit ctag: ClassTag[T]): Option[T] = asEach[T](name, resolverContext).toOption
+  def as[T](name: String, resolverContext: ResolverContext = NoResolverContext)(implicit ctag: ClassTag[T]): Either[Throwable, T] = asEach[T](name, resolverContext)
 
-  def asEach[T](name: String, resolverContext: ResolverContext)(implicit ctag: ClassTag[T]): Try[T] = {
+  def asEach[T](name: String, resolverContext: ResolverContext)(implicit ctag: ClassTag[T]): Either[Throwable, T] = {
+    asTry(name, resolverContext)(ctag).map(Right(_)).recover { case t => Left(t) }.get
+  }
+
+  def asTry[T](name: String, resolverContext: ResolverContext)(implicit ctag: ClassTag[T]): Try[T] = {
     Option(request.resolvers.findRequestValueResolver(resolverType)).map {
       case scalaResolver: ScalaRequestValueResolver => resolveInternal[T, ScalaRequestValueResolver](name, scalaResolver) {
         _.resolve(request.context, request.metadata, name, ctag.runtimeClass)(resolverContext)

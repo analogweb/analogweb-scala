@@ -1,5 +1,6 @@
 package org.analogweb.scala
 
+import scala.util._
 import org.junit.runner.RunWith
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
@@ -45,7 +46,7 @@ class ResolverSyntaxSpec extends Specification with Mockito {
     "Returns avairable scope" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
       val actual = DefaultResolverSyntax(mockResolver, request)
-      actual.as[String]("foo") must beSome(===("That's it"))
+      actual.as[String]("foo").right.toOption.get must be("That's it")
     }
     "Returns avairable scope and converters" in new mocks {
       rvr.findRequestValueResolver(numberResolver) returns new NumberRequestValueResolver()
@@ -77,7 +78,7 @@ class ResolverSyntaxSpec extends Specification with Mockito {
     "Returns not avairable scope" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
       val actual = DefaultResolverSyntax(optionResolver, request)
-      actual.as[String]("foo") must beNone
+      actual.as[String]("foo").right.toOption must beNone
     }
     "Returns option value via get" in new mocks {
       rvr.findRequestValueResolver(optionResolver) returns new OptionRequestValueResolver()
@@ -93,13 +94,13 @@ class ResolverSyntaxSpec extends Specification with Mockito {
       rvr.findRequestValueResolver(specificResolver) returns new SpecificRequestValueResolver()
       rc.getContentType() returns MediaTypes.TEXT_PLAIN_TYPE
       val actual = DefaultResolverSyntax(specificResolver, request)
-      actual.as[String]("foo") must beSome(===("That's it"))
+      actual.as[String]("foo").right.toOption must beSome(===("That's it"))
     }
     "Not supports content types" in new mocks {
       rvr.findRequestValueResolver(specificResolver) returns new SpecificRequestValueResolver()
       rc.getContentType() returns MediaTypes.APPLICATION_JSON_TYPE
       val actual = DefaultResolverSyntax(specificResolver, request)
-      actual.as[String]("foo") must beNone
+      actual.as[String]("foo").right.toOption must beNone
     }
   }
 }

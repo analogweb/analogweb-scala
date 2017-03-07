@@ -65,7 +65,7 @@ class ResolversSpec extends Specification with Mockito {
     rvr.findRequestValueResolver(classOf[RequestBodyValueResolver]) returns resolver
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
-        s"${body.as[java.lang.String].getOrElse("a")}"
+        s"${body.as[java.lang.String].right.toOption.getOrElse("a")}"
       }
     }
     new A().routes(0).invoke(r) must_== "baz"
@@ -76,7 +76,7 @@ class ResolversSpec extends Specification with Mockito {
     rvr.findRequestValueResolver(classOf[XmlValueResolver]) returns resolver
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
-        s"${xml.as[java.lang.String].getOrElse("a")}"
+        s"${xml.as[java.lang.String].right.toOption.getOrElse("a")}"
       }
     }
     new A().routes(0).invoke(r) must_== "baz"
@@ -98,7 +98,7 @@ class ResolversSpec extends Specification with Mockito {
     rvr.findRequestValueResolver(classOf[RequestContextValueResolver]) returns resolver
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
-        s"${context.as[java.lang.String].getOrElse("a")}"
+        s"${context.as[String].right.toOption.getOrElse("a")}"
       }
     }
     new A().routes(0).invoke(r) must_== "baz"

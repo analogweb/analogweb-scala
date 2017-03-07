@@ -22,8 +22,11 @@ trait RouteExtensions {
   }
 
   def param(query: String)(implicit r: Request): String = {
-    parameter.as[String](query).getOrElse(
-      path.as[String](query).getOrElse("")
+    parameter.of(query).getOrElse(
+      path.as[String](query) match {
+        case Right(v) => v
+        case Left(t)  => ""
+      }
     )
   }
 
