@@ -36,6 +36,18 @@ class ScalaInvocationMetadataFactorySpec extends Specification with Mockito {
         .find(x => x.asInstanceOf[ScalaInvocationMetadata].route.rawPath == "/baabaz").headOption
       actual === None
     }
+    "Create InvocationMetadata from inner RouteDef" in {
+      val f = new ScalaInvocationMetadataFactory(Some(new LooseRouteDef {
+        get("/foo/bar") { r =>
+          "Hello"
+        }
+      }))
+      val ca = mock[ContainerAdaptor]
+      val ap = mock[ApplicationProperties]
+      ap.getComponentPackageNames() returns new ArrayList()
+      val collected = f.createInvocationMetadatas(ap, ca).asScala.toSet
+      collected.size === 1
+    }
   }
 
 }

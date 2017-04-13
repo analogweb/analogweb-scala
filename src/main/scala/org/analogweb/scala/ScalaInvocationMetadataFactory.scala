@@ -6,10 +6,21 @@ import scala.collection.mutable.ArrayBuffer
 import scala.collection.JavaConverters._
 import org.analogweb._, core._, util._
 
-class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
+class ScalaInvocationMetadataFactory(val routeDef: Option[RouteDef]) extends InvocationMetadataFactory {
+
+  def this() {
+    this(None)
+  }
 
   override def createInvocationMetadatas(properties: ApplicationProperties, instances: ContainerAdaptor): Collection[InvocationMetadata] = {
-    createInvocationMetadatasReflectively(properties, instances)
+    routeDef.map { route =>
+      route.routes.map { d =>
+        val metadata: InvocationMetadata = new DefaultScalaInvocationMetadata(d.getClass(), s"${d.method}(${d.rawPath})", Array.empty, d)
+        metadata
+      }.asJava
+    }.getOrElse(
+      createInvocationMetadatasReflectively(properties, instances)
+    )
   }
 
   private[this] def createInvocationMetadatasReflectively(properties: ApplicationProperties, instances: ContainerAdaptor): Collection[InvocationMetadata] = {
@@ -25,7 +36,7 @@ class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
     }.toSeq.asJava
   }
 
-  protected val classCollectors = Seq(new JarClassCollector(), new FileClassCollector())
+  protected lazy val classCollectors = Seq(new JarClassCollector(), new FileClassCollector())
 
   protected def classLoader = Thread.currentThread.getContextClassLoader()
 
