@@ -6,19 +6,40 @@ import org.analogweb.core.response.Json
 import org.analogweb.util.PropertyResourceBundleMessageResource
 import org.analogweb.util.logging.Logs
 
-class ScalaModuleConfig extends PluginModulesConfig {
+class ScalaModuleConfig(
+    invocationMetadataFactory: Option[InvocationMetadataFactory] = None,
+    invocationFactory:         Option[ScalaInvocationFactory]    = None,
+    renderableResolver:        Option[ScalaRenderableResolver]   = None,
+    responseHandler:           Option[ScalaResponseHandler]      = None
+) extends PluginModulesConfig {
+
+  def this() {
+    this(None, None, None, None)
+  }
 
   val messageLog = new PropertyResourceBundleMessageResource("org.analogweb.scala.analog-messages")
   val log = Logs.getLog(classOf[ScalaModuleConfig])
 
   def prepare(builder: ModulesBuilder): ModulesBuilder = {
     log.log(messageLog, "ISB000001")
-    builder.addInvocationMetadataFactoriesClass(classOf[ScalaInvocationMetadataFactory])
-      .setInvocationFactoryClass(classOf[ScalaInvocationFactory])
-      .setRenderableResolverClass(classOf[ScalaRenderableResolver])
-      .setResponseHandlerClass(classOf[ScalaResponseHandler])
-      // ignore ApplicationProcessors for Java.
-      .ignore(classOf[BindAttributeArgumentPreparator])
+    val im = invocationMetadataFactory.map(builder.addInvocationMetadataFactories(_))
+      .getOrElse(
+        builder.addInvocationMetadataFactoriesClass(classOf[ScalaInvocationMetadataFactory])
+      )
+    val in = invocationFactory.map(im.setInvocationFactory(_))
+      .getOrElse(
+        im.setInvocationFactoryClass(classOf[ScalaInvocationFactory])
+      )
+    val rr = renderableResolver.map(in.setRenderableResolver(_))
+      .getOrElse(
+        in.setRenderableResolverClass(classOf[ScalaRenderableResolver])
+      )
+    val rh = responseHandler.map(rr.setResponseHandler(_))
+      .getOrElse(
+        rr.setResponseHandlerClass(classOf[ScalaResponseHandler])
+      )
+    // ignore ApplicationProcessors for Java.
+    rh.ignore(classOf[BindAttributeArgumentPreparator])
       .ignore(classOf[ConsumesMediaTypeVerifier])
       .ignore(classOf[ScopedMapArgumentPreparator])
   }
