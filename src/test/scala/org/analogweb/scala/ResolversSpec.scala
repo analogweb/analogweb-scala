@@ -35,7 +35,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${parameter.of("baa").getOrElse("a")}"
       }
     }
-    new A().routes(0).invoke(r) must_== "baz"
+    new A().routeList(0).invoke(r) must_== "baz"
   }
 
   "Resolve with PathVariableValueResolver" in new mocks {
@@ -46,7 +46,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${path.of("baa").getOrElse("a")}"
       }
     }
-    new A().routes(0).invoke(r) must_== "baz"
+    new A().routeList(0).invoke(r) must_== "baz"
   }
 
   "Resolve with CookieValueResolver" in new mocks {
@@ -57,7 +57,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${cookie.of("baa").getOrElse("a")}"
       }
     }
-    new A().routes(0).invoke(r) must_== "baz"
+    new A().routeList(0).invoke(r) must_== "baz"
   }
 
   "Resolve with RequestBodyValueResolver" in new mocks {
@@ -68,7 +68,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${body.as[java.lang.String].right.toOption.getOrElse("a")}"
       }
     }
-    new A().routes(0).invoke(r) must_== "baz"
+    new A().routeList(0).invoke(r) must_== "baz"
   }
 
   "Resolve with XmlValueResolver" in new mocks {
@@ -79,7 +79,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${xml.as[java.lang.String].right.toOption.getOrElse("a")}"
       }
     }
-    new A().routes(0).invoke(r) must_== "baz"
+    new A().routeList(0).invoke(r) must_== "baz"
   }
 
   "Resolve with MultipartParameterResolver" in new mocks {
@@ -90,7 +90,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${multipart.of("baa").getOrElse("a")}"
       }
     }
-    new A().routes(0).invoke(r) must_== "baz"
+    new A().routeList(0).invoke(r) must_== "baz"
   }
 
   "Resolve with RequestContextValueResolver" in new mocks {
@@ -101,7 +101,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${context.as[String].right.toOption.getOrElse("a")}"
       }
     }
-    new A().routes(0).invoke(r) must_== "baz"
+    new A().routeList(0).invoke(r) must_== "baz"
   }
 
   "Resolve with MappingRequestValueResolver" in new mocks {
@@ -111,7 +111,7 @@ class ResolversSpec extends Specification with Mockito {
         s"${m.name}"
       }
     }
-    new A().routes(0).invoke(r) must_== "foo"
+    new A().routeList(0).invoke(r) must_== "foo"
   }
 
 }

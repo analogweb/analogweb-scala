@@ -4,51 +4,56 @@ import scala.collection.mutable.ListBuffer
 import scala.language.implicitConversions
 import org.analogweb.Renderable
 
-trait RouteDef {
+case class RouteSeq(val routes: Seq[Route]) {
+  def ~(nextRoute: Route): RouteSeq = RouteSeq(routes :+ nextRoute)
+  def ~(nextRoutes: RouteSeq): RouteSeq = RouteSeq(routes ++ nextRoutes.routes)
+  def mapRoute[T](f: Route => T) = routes.map(f)
+}
+
+trait Routes {
+  def routes: RouteSeq
+}
+
+@deprecated("it will be removed in future version", "0.10.0")
+trait RouteDef extends Routes {
   type T
-  def connect(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(Route("CONNECT", path, arounds)(action))
-  def delete(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(Route("DELETE", path, arounds)(action))
-  def get(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(Route("GET", path, arounds)(action))
-  def head(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(Route("HEAD", path, arounds)(action))
-  def options(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(Route("OPTIONS", path, arounds)(action))
-  def patch(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(Route("PATCH", path, arounds)(action))
-  def post(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(Route("POST", path, arounds)(action))
-  def put(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(Route("PUT", path, arounds)(action))
-  def trace(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(Route("TRACE", path, arounds)(action))
-  def scope(path: String)(routeList: RouteList) = routeList.buffer.map { x =>
-    unRegister(x)
-    x.update(path)
-  }.foreach(register)
+  def connect(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.connect(path)(action)(arounds))
+  def delete(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.delete(path)(action)(arounds))
+  def get(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.get(path)(action)(arounds))
+  def head(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.head(path)(action)(arounds))
+  def options(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.options(path)(action)(arounds))
+  def patch(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.patch(path)(action)(arounds))
+  def post(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.post(path)(action)(arounds))
+  def put(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.put(path)(action)(arounds))
+  def trace(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.trace(path)(action)(arounds))
+  def scope(path: String)(routes: RouteSeq): Unit = (analogweb.scope(path)(routes)).routes.foreach(register)
 
   protected def register(route: Route) = {
-    routes += route
+    routeList += route
     route
   }
 
   protected def unRegister(route: Route) = {
-    routes -= route
+    routeList -= route
     route
   }
 
-  protected[scala] val routes = ListBuffer[Route]()
+  private[scala] val routeList = ListBuffer[Route]()
 
-  implicit def toRouteList(route: Route) = {
+  override def routes = RouteSeq(routeList.toSeq)
+
+  implicit def toRouteSeq(route: Route) = {
     unRegister(route)
-    RouteList(ListBuffer(route))
+    RouteSeq(Seq(route))
   }
 }
 
-case class RouteList(val buffer: ListBuffer[Route]) {
-  def ~(nextRoute: Route) = {
-    this.buffer += nextRoute
-    this
-  }
-}
-
+@deprecated("it will be removed in future version", "0.10.0")
 trait LooseRouteDef extends RouteDef {
   type T = Any
 }
 
+@deprecated("it will be removed in future version", "0.10.0")
 trait StrictRouteDef extends RouteDef {
   type T = Renderable
 }
