@@ -26,7 +26,10 @@ trait RouteDef extends Routes {
   def post(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.post(path)(action)(arounds))
   def put(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.put(path)(action)(arounds))
   def trace(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.trace(path)(action)(arounds))
-  def scope(path: String)(routes: RouteSeq): Unit = (analogweb.scope(path)(routes)).routes.foreach(register)
+  def scope(path: String)(routes: RouteSeq): Unit = routes.routes.map { r =>
+    unRegister(r)
+    r.update(path)
+  }.foreach(register)
 
   protected def register(route: Route) = {
     routeList += route
