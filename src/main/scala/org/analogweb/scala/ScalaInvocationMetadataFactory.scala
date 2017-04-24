@@ -54,6 +54,7 @@ class ScalaInvocationMetadataFactory(val routeDef: Option[Routes]) extends Invoc
       classOf[RouteDef].getCanonicalName != clazz.getCanonicalName &&
       classOf[StrictRouteDef].getCanonicalName != clazz.getCanonicalName &&
       classOf[LooseRouteDef].getCanonicalName != clazz.getCanonicalName
+    classOf[Analogweb].getCanonicalName != clazz.getCanonicalName
   }
 
   private def obtainInstance(c: Class[_], instances: ContainerAdaptor): Option[Routes] = {

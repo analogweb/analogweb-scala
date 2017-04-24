@@ -1,17 +1,24 @@
 package org.analogweb.scala
 
-import org.analogweb.{ PluginModulesConfig, InvocationMetadataFactory, ModulesBuilder, ModulesConfig }
+import org.analogweb.{ PluginModulesConfig, InvocationMetadataFactory, ModulesBuilder, ModulesConfig, UserModulesConfig }
 import org.analogweb.core.{ BindAttributeArgumentPreparator, ConsumesMediaTypeVerifier, ScopedMapArgumentPreparator }
 import org.analogweb.core.response.Json
 import org.analogweb.util.PropertyResourceBundleMessageResource
 import org.analogweb.util.logging.Logs
+
+class ScalaUserModuleConfig(
+  invocationMetadataFactory: Option[InvocationMetadataFactory] = None,
+  invocationFactory:         Option[ScalaInvocationFactory]    = None,
+  renderableResolver:        Option[ScalaRenderableResolver]   = None,
+  responseHandler:           Option[ScalaResponseHandler]      = None
+) extends ScalaModuleConfig(invocationMetadataFactory, invocationFactory, renderableResolver, responseHandler) with UserModulesConfig
 
 class ScalaModuleConfig(
     invocationMetadataFactory: Option[InvocationMetadataFactory] = None,
     invocationFactory:         Option[ScalaInvocationFactory]    = None,
     renderableResolver:        Option[ScalaRenderableResolver]   = None,
     responseHandler:           Option[ScalaResponseHandler]      = None
-) extends PluginModulesConfig {
+) { // extends PluginModulesConfig {
 
   def this() {
     this(None, None, None, None)
