@@ -6,26 +6,26 @@ import org.analogweb.core.response.Json
 import org.analogweb.util.PropertyResourceBundleMessageResource
 import org.analogweb.util.logging.Logs
 
-class ScalaUserModuleConfig(
+class ScalaUserModulesConfig(
   invocationMetadataFactory: Option[InvocationMetadataFactory] = None,
   invocationFactory:         Option[ScalaInvocationFactory]    = None,
   renderableResolver:        Option[ScalaRenderableResolver]   = None,
   responseHandler:           Option[ScalaResponseHandler]      = None
-) extends ScalaModuleConfig(invocationMetadataFactory, invocationFactory, renderableResolver, responseHandler) with UserModulesConfig
+) extends ScalaModulesConfig(invocationMetadataFactory, invocationFactory, renderableResolver, responseHandler) with UserModulesConfig
 
-class ScalaModuleConfig(
+class ScalaModulesConfig(
     invocationMetadataFactory: Option[InvocationMetadataFactory] = None,
     invocationFactory:         Option[ScalaInvocationFactory]    = None,
     renderableResolver:        Option[ScalaRenderableResolver]   = None,
     responseHandler:           Option[ScalaResponseHandler]      = None
-) { // extends PluginModulesConfig {
+) extends PluginModulesConfig {
 
   def this() {
     this(None, None, None, None)
   }
 
   val messageLog = new PropertyResourceBundleMessageResource("org.analogweb.scala.analog-messages")
-  val log = Logs.getLog(classOf[ScalaModuleConfig])
+  val log = Logs.getLog(classOf[ScalaModulesConfig])
 
   def prepare(builder: ModulesBuilder): ModulesBuilder = {
     log.log(messageLog, "ISB000001")
