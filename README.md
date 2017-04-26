@@ -9,34 +9,40 @@ Analogweb Framework Scala
 
 ## Quick Start
 
-Add to sbt dependency.
+Creae build.sbt
 
 ```scala
-val scalaplugin = "org.analogweb" %% "analogweb-scala" % "0.9.12"
+scalaVersion := "2.12.1" 
+libraryDependencies ++= Seq (
+  "org.analogweb" %% "analogweb-scala" % "0.10.1",
+//  "org.analogweb"  % "analogweb-netty" % "0.10.1"
+)
 ```
 
-Write a code.
+Start sbt console.
+
+```
+$ sbt console
+```
+
+Write a code and run.
 
 ```scala
-import org.analogweb.core.Servers
-import org.analogweb.scala.Analogweb
+scala> import analogweb._
+import analogweb._
 
-object App extends Analogweb {
-
-  def main(args: Array[String]) = Servers.run
-  
-  get("/ping") {
-    "PONG"
-  }
-
-}
-```
-
-Run and you can get them.
-
-```
-$ sbt run
+scala> http("localhost",8000) {
+    |   get("ping") { r =>
+    |     "PONG"
+    |   }
+    | }.run
 ...
+INFO: An Analogweb application has been booted. (Erapsed time: 412ms)
+```
+
+and you will get them.
+
+```
 $ curl http://localhost:8080/ping
 PONG
 ```
