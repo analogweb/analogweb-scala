@@ -15,7 +15,7 @@ class AroundSpec extends Specification with Mockito {
 
   "Around" should {
     "pass before rejection and append after" in {
-      val route = analogweb.routes(0)
+      val route = analogweb.routeList(0)
       val request = mock[Request]
       val actual = route.invoke(request)
       actual must_== Ok
@@ -26,19 +26,19 @@ class AroundSpec extends Specification with Mockito {
       }
     }
     "rejected" in {
-      val route = analogweb.routes(1)
+      val route = analogweb.routeList(1)
       val request = mock[Request]
       val actual = route.invoke(request)
       actual must_== BadRequest
     }
     "pass before rejection and throwgh after" in {
-      val route = analogweb.routes(2)
+      val route = analogweb.routeList(2)
       val request = mock[Request]
       val actual = route.invoke(request)
       actual.toString must_== "Foo"
     }
     "combined arounds" in {
-      val route = analogweb.routes(3)
+      val route = analogweb.routeList(3)
       val request = mock[Request]
       val actual = route.invoke(request)
       actual must_== BadRequest

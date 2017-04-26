@@ -6,7 +6,7 @@ import scala.collection.mutable.ArrayBuffer
 import scala.collection.JavaConverters._
 import org.analogweb._, core._, util._
 
-class ScalaInvocationMetadataFactory(val routeDef: Option[RouteDef]) extends InvocationMetadataFactory {
+class ScalaInvocationMetadataFactory(val routeDef: Option[Routes]) extends InvocationMetadataFactory {
 
   def this() {
     this(None)
@@ -14,7 +14,7 @@ class ScalaInvocationMetadataFactory(val routeDef: Option[RouteDef]) extends Inv
 
   override def createInvocationMetadatas(properties: ApplicationProperties, instances: ContainerAdaptor): Collection[InvocationMetadata] = {
     routeDef.map { route =>
-      route.routes.map { d =>
+      route.routes.mapRoute { d =>
         val metadata: InvocationMetadata = new DefaultScalaInvocationMetadata(d.getClass(), s"${d.method}(${d.rawPath})", Array.empty, d)
         metadata
       }.asJava
@@ -27,7 +27,7 @@ class ScalaInvocationMetadataFactory(val routeDef: Option[RouteDef]) extends Inv
     collectClasses(properties).flatMap {
       case c if (containsInvocationClass(c)) => {
         obtainInstance(c, instances).map { instance =>
-          instance.routes.map { route =>
+          instance.routes.mapRoute { route =>
             new DefaultScalaInvocationMetadata(c, s"${route.method}(${route.rawPath})", Array.empty, route)
           }
         }.getOrElse(Seq.empty[InvocationMetadata])
@@ -49,21 +49,23 @@ class ScalaInvocationMetadataFactory(val routeDef: Option[RouteDef]) extends Inv
   }
 
   private[this] def containsInvocationClass(clazz: Class[_]): Boolean = {
-    classOf[RouteDef].isAssignableFrom(clazz) &&
+    classOf[Routes].isAssignableFrom(clazz) &&
+      classOf[Routes].getCanonicalName != clazz.getCanonicalName &&
       classOf[RouteDef].getCanonicalName != clazz.getCanonicalName &&
       classOf[StrictRouteDef].getCanonicalName != clazz.getCanonicalName &&
-      classOf[LooseRouteDef].getCanonicalName != clazz.getCanonicalName
+      classOf[LooseRouteDef].getCanonicalName != clazz.getCanonicalName &&
+      classOf[Analogweb].getCanonicalName != clazz.getCanonicalName
   }
 
-  private def obtainInstance(c: Class[_], instances: ContainerAdaptor): Option[RouteDef] = {
-    Option(instances.getInstanceOfType(c)).map(_.asInstanceOf[RouteDef]).orElse(instantiate(c).toOption)
+  private def obtainInstance(c: Class[_], instances: ContainerAdaptor): Option[Routes] = {
+    Option(instances.getInstanceOfType(c)).map(_.asInstanceOf[Routes]).orElse(instantiate(c).toOption)
   }
 
-  private def instantiate(c: Class[_]): Try[RouteDef] = {
+  private def instantiate(c: Class[_]): Try[Routes] = {
     Try {
-      c.getField("MODULE$").get(c).asInstanceOf[RouteDef]
+      c.getField("MODULE$").get(c).asInstanceOf[Routes]
     } recover {
-      case e: NoSuchFieldException => c.newInstance.asInstanceOf[RouteDef]
+      case e: NoSuchFieldException => c.newInstance.asInstanceOf[Routes]
     }
   }
 }
