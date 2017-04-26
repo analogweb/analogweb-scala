@@ -44,7 +44,6 @@ package object analogweb {
     val metadataFactory = new ScalaInvocationMetadataFactory(Some(routes))
     val modulesConfig: ModulesConfig = new ScalaUserModulesConfig(Some(metadataFactory))
     val modulesConfigs: java.util.List[ModulesConfig] = List(modulesConfig).asJava
-    println(modulesConfig)
     Servers.create(
       serverUri,
       properties.getOrElse(defaultProperties()),

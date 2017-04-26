@@ -14,7 +14,7 @@ trait Routes {
   def routes: RouteSeq
 }
 
-@deprecated("it will be removed in future version", "0.10.0")
+@deprecated("it will be removed in future version", "0.10.1")
 trait RouteDef extends Routes {
   type T
   def connect(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.connect(path)(action)(arounds))
@@ -51,12 +51,12 @@ trait RouteDef extends Routes {
   }
 }
 
-@deprecated("it will be removed in future version", "0.10.0")
+@deprecated("it will be removed in future version", "0.10.1")
 trait LooseRouteDef extends RouteDef {
   type T = Any
 }
 
-@deprecated("it will be removed in future version", "0.10.0")
+@deprecated("it will be removed in future version", "0.10.1")
 trait StrictRouteDef extends RouteDef {
   type T = Renderable
 }
