@@ -9,7 +9,7 @@ Analogweb Framework Scala
 
 ## Quick Start
 
-Creae build.sbt
+Create build.sbt
 
 ```scala
 scalaVersion := "2.12.1" 
@@ -25,7 +25,7 @@ Start sbt console.
 $ sbt console
 ```
 
-Write a code and run.
+Write a code.
 
 ```scala
 scala> import analogweb._
