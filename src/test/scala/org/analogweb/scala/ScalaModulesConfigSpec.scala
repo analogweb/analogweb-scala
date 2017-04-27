@@ -10,7 +10,7 @@ import org.analogweb.core._
 @RunWith(classOf[JUnitRunner])
 class ScalaModulesConfigSpec extends Specification with Mockito {
 
-  val config = new ScalaModuleConfig
+  val config = new ScalaModulesConfig
 
   "ScalaModulesConfig" should {
     "sertainly configure" in {
