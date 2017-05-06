@@ -3,7 +3,7 @@ package org.analogweb.scala
 import scala.language.implicitConversions
 import scala.concurrent.Future
 import scala.util.Try
-import org.analogweb._
+import org.analogweb._, core._
 
 trait RouteExtensions {
 
@@ -11,7 +11,19 @@ trait RouteExtensions {
 
   implicit def response(f: => Any) = { implicit r: Request => f }
 
-  implicit def asResolverSyntax[T <: RequestValueResolver](typeOfResolver: Class[T])(implicit request: Request) = DefaultResolverSyntax(typeOfResolver, request)
+  implicit def asParameterResolverSyntax(typeOfResolver: Class[ParameterValueResolver])(implicit request: Request) = DefaultResolverSyntax(typeOfResolver, request)
+
+  implicit def asPathVariableResolverSyntax(typeOfResolver: Class[PathVariableValueResolver])(implicit request: Request) = DefaultResolverSyntax(typeOfResolver, request)
+
+  implicit def asCookieResolverSyntax(typeOfResolver: Class[CookieValueResolver])(implicit request: Request) = DefaultResolverSyntax(typeOfResolver, request)
+
+  implicit def asBodyResolverSyntax(typeOfResolver: Class[RequestBodyValueResolver])(implicit request: Request) = DefaultResolverSyntax(typeOfResolver, request)
+
+  implicit def asXmlResolverSyntax(typeOfResolver: Class[XmlValueResolver])(implicit request: Request) = DefaultResolverSyntax(typeOfResolver, request)
+
+  implicit def asMultipartResolverSyntax(typeOfResolver: Class[MultipartParameterResolver])(implicit request: Request) = DefaultResolverSyntax(typeOfResolver, request)
+
+  implicit def asContextResolverSyntax(typeOfResolver: Class[RequestContextValueResolver])(implicit request: Request) = DefaultResolverSyntax(typeOfResolver, request)
 
   implicit def asRequestObjectMapping[T](mapping: Request => T)(implicit request: Request) = mapping(request)
 
