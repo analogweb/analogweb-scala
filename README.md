@@ -43,6 +43,6 @@ INFO: An Analogweb application has been booted. (Erapsed time: 412ms)
 and you will get them.
 
 ```
-$ curl http://localhost:8080/ping
+$ curl localhost:8000/ping
 PONG
 ```
