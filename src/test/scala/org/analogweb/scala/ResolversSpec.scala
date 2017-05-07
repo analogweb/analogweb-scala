@@ -32,7 +32,7 @@ class ResolversSpec extends Specification with Mockito {
     rvr.findRequestValueResolver(classOf[ParameterValueResolver]) returns new ParameterValueResolver()
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
-        s"${parameter.of("baa").getOrElse("a")}"
+        s"${parameter.asOption[String]("baa").getOrElse("a")}"
       }
     }
     new A().routeList(0).invoke(r) must_== "baz"
@@ -43,7 +43,7 @@ class ResolversSpec extends Specification with Mockito {
     rvr.findRequestValueResolver(classOf[PathVariableValueResolver]) returns resolver
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
-        s"${path.of("baa").getOrElse("a")}"
+        s"${path.asOption[String]("baa").getOrElse("a")}"
       }
     }
     new A().routeList(0).invoke(r) must_== "baz"
@@ -54,7 +54,7 @@ class ResolversSpec extends Specification with Mockito {
     rvr.findRequestValueResolver(classOf[CookieValueResolver]) returns resolver
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
-        s"${cookie.of("baa").getOrElse("a")}"
+        s"${cookie.asOption[String]("baa").getOrElse("a")}"
       }
     }
     new A().routeList(0).invoke(r) must_== "baz"
@@ -87,7 +87,7 @@ class ResolversSpec extends Specification with Mockito {
     rvr.findRequestValueResolver(classOf[MultipartParameterResolver]) returns resolver
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
-        s"${multipart.of("baa").getOrElse("a")}"
+        s"${multipart.asOption[String]("baa").getOrElse("a")}"
       }
     }
     new A().routeList(0).invoke(r) must_== "baz"
