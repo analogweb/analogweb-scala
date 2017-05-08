@@ -7,7 +7,7 @@ import scoverage._
 
 lazy val baseSettings = Seq(
   organization := "org.analogweb",
-  crossScalaVersions := Seq("2.11.8", "2.12.1"),
+  crossScalaVersions := Seq("2.11.8", "2.12.2"),
   scalaVersion := crossScalaVersions.value.head,
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
   description := "Analogweb Framework is tiny, simple, and pluggable web framework.",
