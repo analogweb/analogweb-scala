@@ -1,8 +1,6 @@
 package org.analogweb.scala
 
 import org.analogweb._
-import org.analogweb.core.{ ParameterValueResolver, PathVariableValueResolver }
-import collection.mutable.Buffer
 import collection.JavaConverters._
 
 case class Request(

@@ -35,6 +35,7 @@ lazy val baseSettings = Seq(
     "-unchecked",
     "-Xlint",
     "-Yrangepos",
+    "-language:existentials",
     "-Ydelambdafy:method",
     "-target:jvm-1.8"
   ),

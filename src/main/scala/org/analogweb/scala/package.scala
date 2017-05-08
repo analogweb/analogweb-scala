@@ -4,14 +4,8 @@ package object analogweb
     with org.analogweb.scala.RouteExtensions
     with org.analogweb.scala.ServerApplications {
 
-  import java.net.URI
   import scala.language.implicitConversions
-  import scala.collection.JavaConverters._
   import org.analogweb._, scala._
-  import org.analogweb.core.Servers
-  import org.analogweb.core.DefaultApplicationProperties._
-  import org.analogweb.core.DefaultApplicationContext._
-  import org.analogweb.util.Maps
 
   def connect[T](path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()): Route = Route("CONNECT", path, arounds)(action)
   def delete[T](path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()): Route = Route("DELETE", path, arounds)(action)

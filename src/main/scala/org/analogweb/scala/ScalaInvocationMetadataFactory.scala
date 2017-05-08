@@ -1,10 +1,9 @@
 package org.analogweb.scala
 
-import java.util.{ Collection, Collections }
-import scala.util.{ Try, Success, Failure }
-import scala.collection.mutable.ArrayBuffer
+import java.util.Collection
+import scala.util.Try
 import scala.collection.JavaConverters._
-import org.analogweb._, core._, util._
+import org.analogweb._, util._
 
 class ScalaInvocationMetadataFactory(val routeDef: Option[Routes]) extends InvocationMetadataFactory {
 

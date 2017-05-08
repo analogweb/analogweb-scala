@@ -1,8 +1,7 @@
 package org.analogweb.scala
 
-import org.analogweb.{ PluginModulesConfig, InvocationMetadataFactory, ModulesBuilder, ModulesConfig, UserModulesConfig }
+import org.analogweb.{ PluginModulesConfig, InvocationMetadataFactory, ModulesBuilder, UserModulesConfig }
 import org.analogweb.core.{ BindAttributeArgumentPreparator, ConsumesMediaTypeVerifier, ScopedMapArgumentPreparator }
-import org.analogweb.core.response.Json
 import org.analogweb.util.PropertyResourceBundleMessageResource
 import org.analogweb.util.logging.Logs
 

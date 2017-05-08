@@ -1,9 +1,8 @@
 package org.analogweb.scala
 
 import java.net.URI
-import scala.language.implicitConversions
 import scala.collection.JavaConverters._
-import org.analogweb._, scala._
+import org.analogweb.{ ApplicationProperties, ApplicationContext, Server, ModulesConfig }
 import org.analogweb.core.Servers
 import org.analogweb.core.DefaultApplicationProperties._
 import org.analogweb.core.DefaultApplicationContext._

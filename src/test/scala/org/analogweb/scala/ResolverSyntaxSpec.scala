@@ -1,6 +1,5 @@
 package org.analogweb.scala
 
-import scala.util._
 import org.junit.runner.RunWith
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner

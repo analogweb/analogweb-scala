@@ -1,12 +1,10 @@
 package org.analogweb.scala
 
 import java.io.InputStream
-import scala.xml.NodeSeq
 import org.junit.runner.RunWith
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mock.Mockito
-import org.analogweb._
 import org.analogweb.core.response._
 import org.analogweb.scala.Responses._
 

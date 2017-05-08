@@ -1,9 +1,8 @@
 package org.analogweb.scala
 
-import java.io.{ File, InputStream, OutputStream, FileInputStream, ByteArrayInputStream }
+import java.io.InputStream
 import scala.collection.JavaConverters._
 import scala.collection.mutable.Map
-import scala.concurrent.Future
 import org.analogweb._, core.DefaultReadableBuffer._, core.response._
 
 trait Responses {
