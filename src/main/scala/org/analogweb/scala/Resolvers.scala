@@ -28,12 +28,12 @@ object NoResolverContext extends ResolverContext
 
 abstract class ScalaRequestValueResolver extends SpecificMediaTypeRequestValueResolver {
 
-  def resolve(
+  def resolve[A](
     request:      RequestContext,
     metadata:     InvocationMetadata,
     key:          String,
-    requiredType: Class[_]
-  )(implicit context: ResolverContext): AnyRef
+    requiredType: Class[A]
+  )(implicit context: ResolverContext): Either[NoValuesResolved[A], A]
 
   override final def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = {
     resolve(request, metadata, key, requiredType)(NoResolverContext)
