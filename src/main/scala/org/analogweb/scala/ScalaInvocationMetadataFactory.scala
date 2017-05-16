@@ -1,49 +1,70 @@
 package org.analogweb.scala
 
-import java.util.{ Collection, Collections }
-import scala.util.{ Try, Success, Failure }
-import scala.collection.mutable.ArrayBuffer
-import scala.collection.convert.decorateAsJava._
-import org.analogweb.{ ContainerAdaptor, InvocationMetadata, InvocationMetadataFactory }
-import org.analogweb.core.DefaultInvocationMetadata
+import java.util.Collection
+import scala.util.Try
+import scala.collection.JavaConverters._
+import org.analogweb._, util._
 
-class ScalaInvocationMetadataFactory extends InvocationMetadataFactory {
+class ScalaInvocationMetadataFactory(val routeDef: Option[Routes]) extends InvocationMetadataFactory {
 
-  def containsInvocationClass(clazz: Class[_]): Boolean = {
-    classOf[RouteDef].isAssignableFrom(clazz) &&
+  def this() {
+    this(None)
+  }
+
+  override def createInvocationMetadatas(properties: ApplicationProperties, instances: ContainerAdaptor): Collection[InvocationMetadata] = {
+    routeDef.map { route =>
+      route.routes.mapRoute { d =>
+        val metadata: InvocationMetadata = new DefaultScalaInvocationMetadata(d.getClass(), s"${d.method}(${d.rawPath})", Array.empty, d)
+        metadata
+      }.asJava
+    }.getOrElse(
+      createInvocationMetadatasReflectively(properties, instances)
+    )
+  }
+
+  private[this] def createInvocationMetadatasReflectively(properties: ApplicationProperties, instances: ContainerAdaptor): Collection[InvocationMetadata] = {
+    collectClasses(properties).flatMap {
+      case c if (containsInvocationClass(c)) => {
+        obtainInstance(c, instances).map { instance =>
+          instance.routes.mapRoute { route =>
+            new DefaultScalaInvocationMetadata(c, s"${route.method}(${route.rawPath})", Array.empty, route)
+          }
+        }.getOrElse(Seq.empty[InvocationMetadata])
+      }
+      case _ => Seq.empty
+    }.toSeq.asJava
+  }
+
+  protected lazy val classCollectors = Seq(new JarClassCollector(), new FileClassCollector())
+
+  protected def classLoader = Thread.currentThread.getContextClassLoader()
+
+  private[this] def collectClasses(properties: ApplicationProperties) = {
+    for {
+      packageName <- properties.getComponentPackageNames().asScala ++ Seq(Application.DEFAULT_PACKAGE_NAME)
+      uri <- ResourceUtils.findPackageResources(packageName, classLoader).asScala
+      collected <- classCollectors.flatMap(_.collect(packageName, uri, classLoader).asScala)
+    } yield collected
+  }
+
+  private[this] def containsInvocationClass(clazz: Class[_]): Boolean = {
+    classOf[Routes].isAssignableFrom(clazz) &&
+      classOf[Routes].getCanonicalName != clazz.getCanonicalName &&
       classOf[RouteDef].getCanonicalName != clazz.getCanonicalName &&
       classOf[StrictRouteDef].getCanonicalName != clazz.getCanonicalName &&
-      classOf[LooseRouteDef].getCanonicalName != clazz.getCanonicalName
+      classOf[LooseRouteDef].getCanonicalName != clazz.getCanonicalName &&
+      classOf[Analogweb].getCanonicalName != clazz.getCanonicalName
   }
 
-  def createInvocationMetadatas(clazz: Class[_], instances: ContainerAdaptor): Collection[InvocationMetadata] = {
-    clazz match {
-      case c if (classOf[RouteDef].isAssignableFrom(c) && classOf[Analogweb].getCanonicalName() != c.getCanonicalName()) => {
-        val routes = obtainInstance(c, instances).routes
-        val metadatas: Seq[InvocationMetadata] = routes.map { route =>
-          new DefaultScalaInvocationMetadata(clazz, s"${route.method}(${route.rawPath})", Array.empty, route)
-        }
-        metadatas.asJavaCollection
-      }
-      case _ => Seq.empty.asJava
-    }
+  private def obtainInstance(c: Class[_], instances: ContainerAdaptor): Option[Routes] = {
+    Option(instances.getInstanceOfType(c)).map(_.asInstanceOf[Routes]).orElse(instantiate(c).toOption)
   }
 
-  private def obtainInstance(c: Class[_], instances: ContainerAdaptor): RouteDef = {
+  private def instantiate(c: Class[_]): Try[Routes] = {
     Try {
-      Option(instances.getInstanceOfType(c)).map(_.asInstanceOf[RouteDef]).getOrElse(instantiate(c))
-    }.getOrElse(instantiate(c))
-  }
-
-  private def instantiate(c: Class[_]): RouteDef = {
-    val r = Try {
-      c.getField("MODULE$").get(c).asInstanceOf[RouteDef]
+      c.getField("MODULE$").get(c).asInstanceOf[Routes]
     } recover {
-      case e: NoSuchFieldException => c.newInstance.asInstanceOf[RouteDef]
-    }
-    r match {
-      case Success(s) => s
-      case Failure(e) => throw e
+      case e: NoSuchFieldException => c.newInstance.asInstanceOf[Routes]
     }
   }
 }

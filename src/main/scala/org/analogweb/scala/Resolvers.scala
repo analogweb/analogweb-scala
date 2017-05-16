@@ -1,10 +1,8 @@
 package org.analogweb.scala
 
 import java.lang.annotation.Annotation
-import org.analogweb.{ InvocationMetadata, MediaType, RequestContext, RequestValueResolver, TypeMapper }
+import org.analogweb._
 import org.analogweb.core._
-import org.json4s._
-import org.json4s.jackson.JsonMethods
 
 trait Resolvers {
 
@@ -18,27 +16,29 @@ trait Resolvers {
 
   protected def xml = classOf[XmlValueResolver]
 
-  protected def json = classOf[ScalaJacksonJsonValueResolver]
-
   protected def multipart = classOf[MultipartParameterResolver]
 
   protected def context = classOf[RequestContextValueResolver]
 
 }
 
-class ScalaJacksonJsonValueResolver extends SpecificMediaTypeRequestValueResolver {
+trait ResolverContext
 
-  implicit val formats = DefaultFormats
+object NoResolverContext extends ResolverContext
 
-  override def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = {
-    val parsed = JsonMethods.parse(request.getRequestBody)
-    requiredType match {
-      case x if x == classOf[JObject] => parsed
-      case y if y == classOf[JValue]  => parsed
-      case _                          => parsed.extract(formats, Manifest.classType(requiredType))
-    }
+abstract class ScalaRequestValueResolver extends SpecificMediaTypeRequestValueResolver {
+
+  def resolve(
+    request:      RequestContext,
+    metadata:     InvocationMetadata,
+    key:          String,
+    requiredType: Class[_]
+  )(implicit context: ResolverContext): AnyRef
+
+  override final def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = {
+    resolve(request, metadata, key, requiredType)(NoResolverContext)
   }
 
-  override def supports(contentType: MediaType) = MediaTypes.APPLICATION_JSON_TYPE.isCompatible(contentType);
+  override def supports(contentType: MediaType) = true
 
 }

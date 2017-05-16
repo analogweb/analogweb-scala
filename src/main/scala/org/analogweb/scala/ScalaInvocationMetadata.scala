@@ -1,6 +1,5 @@
 package org.analogweb.scala
 
-import scala.language.existentials
 import org.analogweb.core.DefaultInvocationMetadata
 import org.analogweb.InvocationMetadata
 

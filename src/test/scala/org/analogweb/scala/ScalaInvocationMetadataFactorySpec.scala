@@ -1,10 +1,12 @@
 package org.analogweb.scala
 
+import java.util.ArrayList
+import scala.collection.JavaConverters._
 import org.junit.runner.RunWith
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mock.Mockito
-import org.analogweb.ContainerAdaptor
+import org.analogweb.{ ContainerAdaptor, ApplicationProperties }
 
 @RunWith(classOf[JUnitRunner])
 class ScalaInvocationMetadataFactorySpec extends Specification with Mockito {
@@ -12,52 +14,52 @@ class ScalaInvocationMetadataFactorySpec extends Specification with Mockito {
   val factory = new ScalaInvocationMetadataFactory
 
   "ScalaInvocationMetadataFactory" should {
-    "Foo contains invocation" in {
-      val actual = factory.containsInvocationClass(classOf[Foo])
-      actual must beTrue
-    }
-    "Baa NOT contains invocation" in {
-      val actual = factory.containsInvocationClass(classOf[Baa])
-      actual must beFalse
-    }
-    "RouteDef exclude invocation" in {
-      val actual = factory.containsInvocationClass(classOf[RouteDef])
-      actual must beFalse
-    }
-    "StringRouteDef exclude from invocation" in {
-      val actual = factory.containsInvocationClass(classOf[StrictRouteDef])
-      actual must beFalse
-    }
-    "LooseRouteDef exclude invocation" in {
-      val actual = factory.containsInvocationClass(classOf[LooseRouteDef])
-      actual must beFalse
-    }
-    "Create InvocationMetadata successful" in {
+    "Create InvocationMetadata reflectively successful" in {
       val ca = mock[ContainerAdaptor]
-      val actual = factory.createInvocationMetadatas(classOf[Foo], ca).iterator().next()
-      actual.getMethodName() === "GET(/foo)"
+      val ap = mock[ApplicationProperties]
+      ap.getComponentPackageNames() returns new ArrayList()
+      val collected = factory.createInvocationMetadatas(ap, ca).asScala.toSet
+      val actual = collected
+        .find(x => x.asInstanceOf[ScalaInvocationMetadata].route.rawPath == "/imf/foo").head
+      actual.getMethodName() === "GET(/imf/foo)"
       actual.getArgumentTypes().isEmpty must beTrue
       actual.getInvocationClass() === classOf[Foo]
-      actual.getDefinedPath().getActualPath() === "/foo"
+      actual.getDefinedPath().getActualPath() === "/imf/foo"
       actual.getDefinedPath().getRequestMethods().get(0) === "GET"
     }
     "Create InvocationMetadata NOT work" in {
       val ca = mock[ContainerAdaptor]
-      val actual = factory.createInvocationMetadatas(classOf[Baa], ca)
-      actual.isEmpty() must beTrue
+      val ap = mock[ApplicationProperties]
+      ap.getComponentPackageNames() returns new ArrayList()
+      val collected = factory.createInvocationMetadatas(ap, ca).asScala.toSet
+      val actual = collected
+        .find(x => x.asInstanceOf[ScalaInvocationMetadata].route.rawPath == "/baabaz").headOption
+      actual === None
+    }
+    "Create InvocationMetadata from inner RouteDef" in {
+      val f = new ScalaInvocationMetadataFactory(Some(new LooseRouteDef {
+        get("/foo/bar") { r =>
+          "Hello"
+        }
+      }))
+      val ca = mock[ContainerAdaptor]
+      val ap = mock[ApplicationProperties]
+      ap.getComponentPackageNames() returns new ArrayList()
+      val collected = f.createInvocationMetadatas(ap, ca).asScala.toSet
+      collected.size === 1
     }
   }
 
 }
 
 class Foo extends Analogweb {
-  get("/foo") { r =>
+  get("/imf/foo") { r =>
     "Foo"
   }
 }
 
 class Baa {
-  def baa = { r: Request =>
+  def baabaz = { r: Request =>
     "Foo"
   }
 }

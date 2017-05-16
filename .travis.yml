@@ -1,14 +1,17 @@
 language: scala
 
 scala:
-    - 2.10.5
-    - 2.11.6
+  - 2.11.8
+  - 2.12.1
+
 jdk:
-    - oraclejdk7
-    - oraclejdk8
+  - oraclejdk8
+
+before_script:
+  - sudo chmod +x /usr/local/bin/sbt
 
 script:
-    - "sbt clean coverage test coverageReport" 
+  - "sbt clean coverage test coverageReport" 
 
 after_success:
-    - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)

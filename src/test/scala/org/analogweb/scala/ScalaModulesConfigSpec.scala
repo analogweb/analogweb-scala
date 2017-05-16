@@ -10,15 +10,13 @@ import org.analogweb.core._
 @RunWith(classOf[JUnitRunner])
 class ScalaModulesConfigSpec extends Specification with Mockito {
 
-  val config = new ScalaModuleConfig
+  val config = new ScalaModulesConfig
 
   "ScalaModulesConfig" should {
     "sertainly configure" in {
       val mb = mock[ModulesBuilder]
       mb.addInvocationMetadataFactoriesClass(classOf[ScalaInvocationMetadataFactory]) returns mb
       mb.setInvocationFactoryClass(classOf[ScalaInvocationFactory]) returns mb
-      mb.addResponseFormatterClass(classOf[ScalaJsonObject], classOf[ScalaJsonFormatter]) returns mb
-      mb.addResponseFormatterClass(classOf[ScalaJsonText], classOf[ScalaJsonFormatter]) returns mb
       mb.setRenderableResolverClass(classOf[ScalaRenderableResolver]) returns mb
       mb.setResponseHandlerClass(classOf[ScalaResponseHandler]) returns mb
       mb.ignore(classOf[BindAttributeArgumentPreparator]) returns mb

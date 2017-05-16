@@ -1,7 +1,6 @@
 package org.analogweb.scala
 
 import scala.util.{ Try, Success, Failure }
-import scala.concurrent.Future
 import org.analogweb._
 import org.analogweb.core.{ DefaultResponseHandler, DefaultResponse }
 import org.analogweb.scala.Execution.Implicits.defaultContext

@@ -1,7 +1,7 @@
 package org.analogweb.scala
 
 import java.util
-import scala.collection.convert.decorateAsJava._
+import scala.collection.JavaConverters._
 import org.analogweb._
 import collection.mutable.ArrayBuffer
 

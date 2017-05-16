@@ -6,7 +6,6 @@ import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mock.Mockito
 import org.analogweb._
-import org.analogweb.core._
 import org.analogweb.core.response.Text
 
 @RunWith(classOf[JUnitRunner])

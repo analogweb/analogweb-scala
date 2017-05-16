@@ -6,10 +6,8 @@ import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mock.Mockito
 import org.mockito.Matchers.{ eq => isEq }
-import org.json4s.JsonDSL._
 import org.analogweb._
 import org.analogweb.core._
-import org.analogweb.scala._
 
 @RunWith(classOf[JUnitRunner])
 class RouteExtensionsSpec extends Specification with Mockito {
@@ -34,7 +32,7 @@ class RouteExtensionsSpec extends Specification with Mockito {
         param("baa")
       }
     }
-    new A().routes(0).invoke(r) must_== "baz"
+    new A().routeList(0).invoke(r) must_== "baz"
   }
 
   "Resolve with PathVariableValueResolver" in new mocks {
@@ -47,7 +45,7 @@ class RouteExtensionsSpec extends Specification with Mockito {
         param("baa")
       }
     }
-    new A().routes(0).invoke(r) must_== "baz"
+    new A().routeList(0).invoke(r) must_== "baz"
   }
 
   "Not Resolved" in new mocks {
@@ -60,7 +58,7 @@ class RouteExtensionsSpec extends Specification with Mockito {
         param("baa")
       }
     }
-    new A().routes(0).invoke(r) must_== ""
+    new A().routeList(0).invoke(r) must_== ""
   }
 
   "Passed With" in new mocks {
@@ -70,7 +68,7 @@ class RouteExtensionsSpec extends Specification with Mockito {
         passedWith[String]("foo")
       }
     }
-    new A().routes(0).invoke(r) must_== Some("bar")
+    new A().routeList(0).invoke(r) must_== Some("bar")
   }
 
   "Passed With Nothing" in new mocks {
@@ -80,7 +78,7 @@ class RouteExtensionsSpec extends Specification with Mockito {
         passedWith[String]("bar")
       }
     }
-    new A().routes(0).invoke(r) must_== None
+    new A().routeList(0).invoke(r) must_== None
   }
 
   "Converting Future to Renderable" in new mocks {
@@ -89,6 +87,6 @@ class RouteExtensionsSpec extends Specification with Mockito {
         Future.successful(Ok(asText("hoge"))).asRenderable
       }
     }
-    new A().routes(0).invoke(r).isInstanceOf[RenderableFuture] must beTrue
+    new A().routeList(0).invoke(r).isInstanceOf[RenderableFuture] must beTrue
   }
 }

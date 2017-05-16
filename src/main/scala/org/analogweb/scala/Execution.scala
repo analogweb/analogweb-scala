@@ -1,6 +1,6 @@
 package org.analogweb.scala
 
-import java.util.concurrent.{ Executors, ForkJoinPool }
+import java.util.concurrent.ForkJoinPool
 import scala.util.Try
 import scala.concurrent.ExecutionContext
 

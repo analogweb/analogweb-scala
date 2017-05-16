@@ -10,35 +10,48 @@ class RouteDefSpec extends Specification {
   val analogweb = new AnalogwebSpecFoo
 
   "Valid Get Route" in {
-    val actual = analogweb.routes(0)
+    val actual = analogweb.routeList(0)
     actual.rawPath must_== "/foo"
     actual.method must_== "GET"
   }
   "Valid Post Route" in {
-    val actual = analogweb.routes(1)
+    val actual = analogweb.routeList(1)
     actual.rawPath must_== "/foo"
     actual.method must_== "POST"
   }
   "Valid Put Route" in {
-    val actual = analogweb.routes(2)
+    val actual = analogweb.routeList(2)
     actual.rawPath must_== "/baa"
     actual.method must_== "PUT"
   }
   "Valid Delete Route" in {
-    val actual = analogweb.routes(3)
+    val actual = analogweb.routeList(3)
     actual.rawPath must_== "/baz"
     actual.method must_== "DELETE"
   }
+  "Valid Head Route" in {
+    val actual = analogweb.routeList(4)
+    actual.rawPath must_== "/baz"
+    actual.method must_== "HEAD"
+  }
+  "Valid Options Route" in {
+    val actual = analogweb.routeList(5)
+    actual.rawPath must_== "/baz"
+    actual.method must_== "OPTIONS"
+  }
   "Valid Scope Routes" in {
-    val actual = analogweb.routes(4)
+    val actual = analogweb.routeList(6)
     actual.rawPath must_== "/root/foo"
     actual.method must_== "GET"
-    val actualPost = analogweb.routes(5)
+    val actualPost = analogweb.routeList(7)
     actualPost.rawPath must_== "/root/bar"
     actualPost.method must_== "POST"
-    val actualGet = analogweb.routes(6)
-    actualGet.rawPath must_== "/root/bar"
-    actualGet.method must_== "GET"
+    val actualPut = analogweb.routeList(8)
+    actualPut.rawPath must_== "/root/bar"
+    actualPut.method must_== "PUT"
+    val actualDelete = analogweb.routeList(9)
+    actualDelete.rawPath must_== "/root/bar"
+    actualDelete.method must_== "DELETE"
   }
 
 }
@@ -56,14 +69,21 @@ class AnalogwebSpecFoo extends LooseRouteDef {
   delete("/baz") { r =>
     "Baz"
   }
+  head("/baz") { r =>
+    ""
+  }
+  options("/baz") { r =>
+    ""
+  }
   scope("/root") {
     get("/foo") { r =>
       "Foo"
     } ~ post("/bar") { r =>
       "Bar"
-    } ~ get("/bar") { r =>
+    } ~ put("/bar") { r =>
+      "Bar"
+    } ~ delete("/bar") { r =>
       "Bar"
     }
   }
 }
-
