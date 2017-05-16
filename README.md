@@ -18,8 +18,7 @@ import org.analogweb.scala.Analogweb
 =======
 scalaVersion := "2.12.1" 
 libraryDependencies ++= Seq (
-  "org.analogweb" %% "analogweb-scala" % "0.10.1-SNAPSHOT",
-//  "org.analogweb"  % "analogweb-netty" % "0.10.1"
+  "org.analogweb" %% "analogweb-scala" % "0.10.1-SNAPSHOT"
 )
 ```
 
