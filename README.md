@@ -12,10 +12,6 @@ Analogweb Framework Scala
 Create build.sbt
 
 ```scala
-package org.analogweb.example
-import org.analogweb.core.Servers
-import org.analogweb.scala.Analogweb
-=======
 scalaVersion := "2.12.1" 
 libraryDependencies ++= Seq (
   "org.analogweb" %% "analogweb-scala" % "0.10.1-SNAPSHOT"
