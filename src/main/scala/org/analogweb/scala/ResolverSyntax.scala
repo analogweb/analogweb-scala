@@ -22,13 +22,32 @@ trait ResolverSyntax[R <: RequestValueResolver] {
 
   def as[T](name: String)(implicit ctag: ClassTag[T]): Either[Throwable, T] = {
     Option(request.resolvers.findRequestValueResolver(resolverType)).map {
-      case scalaResolver: ScalaRequestValueResolver => resolveInternal[T, ScalaRequestValueResolver](name, scalaResolver) {
-        _.resolve(request.context, request.metadata, name, ctag.runtimeClass)(resolverContext)
+      case scalaResolver: ScalaRequestValueResolver => {
+        resolveInternalWithScalaResolver[T](name, scalaResolver) {
+          _.resolve[T](
+            request.context,
+            request.metadata,
+            name,
+            ctag.runtimeClass.asInstanceOf[Class[T]]
+          )(resolverContext)
+        }.right.map(_.asInstanceOf[T])
       }
-      case resolver => resolveInternal(name, resolver) {
+      case javaResolver => resolveInternal(name, javaResolver) {
         _.resolveValue(request.context, request.metadata, name, ctag.runtimeClass, Array())
-      }
+      }.right.map(_.asInstanceOf[T])
     }.getOrElse(Left(ResolverNotFound(name)))
+  }
+
+  private[this] def resolveInternalWithScalaResolver[T](
+    name:     String,
+    resolver: ScalaRequestValueResolver
+  )(f: ScalaRequestValueResolver => Either[NoValuesResolved[T], T])(implicit ctag: ClassTag[T]) = {
+    val mayBeVerified = verifyMediaType[ScalaRequestValueResolver](resolver)
+    mayBeVerified.right.flatMap { verifiedResolver =>
+      f(verifiedResolver).right.map {
+        resolved => mappingToType(resolved)(ctag)
+      }
+    }
   }
 
   private[this] def resolveInternal[T, RV <: RequestValueResolver](
