@@ -30,7 +30,7 @@ trait ResolverSyntax[R <: RequestValueResolver] {
             name,
             ctag.runtimeClass.asInstanceOf[Class[T]]
           )(resolverContext)
-        }.right.map(_.asInstanceOf[T])
+        }
       }
       case javaResolver => resolveInternal(name, javaResolver) {
         _.resolveValue(request.context, request.metadata, name, ctag.runtimeClass, Array())
@@ -41,10 +41,10 @@ trait ResolverSyntax[R <: RequestValueResolver] {
   private[this] def resolveInternalWithScalaResolver[T](
     name:     String,
     resolver: ScalaRequestValueResolver
-  )(f: ScalaRequestValueResolver => Either[NoValuesResolved[T], T])(implicit ctag: ClassTag[T]) = {
-    val mayBeVerified = verifyMediaType[ScalaRequestValueResolver](resolver)
+  )(f: ScalaRequestValueResolver => Either[NoValuesResolved[T], T])(implicit ctag: ClassTag[T]): Either[Throwable, T] = {
+    val mayBeVerified: Either[Throwable, ScalaRequestValueResolver] = verifyMediaType[ScalaRequestValueResolver](resolver)
     mayBeVerified.right.flatMap { verifiedResolver =>
-      f(verifiedResolver).right.map {
+      f(verifiedResolver).right.flatMap {
         resolved => mappingToType(resolved)(ctag)
       }
     }
@@ -64,7 +64,7 @@ trait ResolverSyntax[R <: RequestValueResolver] {
     }
   }
 
-  private[this] def mappingToType[T](resolved: Any)(implicit ctag: ClassTag[T]) = {
+  private[this] def mappingToType[T](resolved: Any)(implicit ctag: ClassTag[T]): Either[ResolvedValueTypeMismatched[_], T] = {
     Option(request.converters.mapToType(classOf[TypeMapper], resolved, ctag.runtimeClass, Array())).map {
       case Some(mapped) => Right(mapped.asInstanceOf[T])
       case None => {
