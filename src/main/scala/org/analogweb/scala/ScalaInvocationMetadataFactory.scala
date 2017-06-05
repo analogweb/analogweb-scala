@@ -12,8 +12,8 @@ class ScalaInvocationMetadataFactory(val routeDef: Option[Routes]) extends Invoc
   }
 
   override def createInvocationMetadatas(properties: ApplicationProperties, instances: ContainerAdaptor): Collection[InvocationMetadata] = {
-    routeDef.map { route =>
-      route.routes.mapRoute { d =>
+    routeDef.map { routes =>
+      routes.routes.map { d =>
         val metadata: InvocationMetadata = new DefaultScalaInvocationMetadata(d.getClass(), s"${d.method}(${d.rawPath})", Array.empty, d)
         metadata
       }.asJava
@@ -26,7 +26,7 @@ class ScalaInvocationMetadataFactory(val routeDef: Option[Routes]) extends Invoc
     collectClasses(properties).flatMap {
       case c if (containsInvocationClass(c)) => {
         obtainInstance(c, instances).map { instance =>
-          instance.routes.mapRoute { route =>
+          instance.routes.map { route =>
             new DefaultScalaInvocationMetadata(c, s"${route.method}(${route.rawPath})", Array.empty, route)
           }
         }.getOrElse(Seq.empty[InvocationMetadata])

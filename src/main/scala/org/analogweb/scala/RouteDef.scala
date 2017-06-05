@@ -4,14 +4,8 @@ import scala.collection.mutable.ListBuffer
 import scala.language.implicitConversions
 import org.analogweb.Renderable
 
-case class RouteSeq(val routes: Seq[Route]) {
-  def ~(nextRoute: Route): RouteSeq = RouteSeq(routes :+ nextRoute)
-  def ~(nextRoutes: RouteSeq): RouteSeq = RouteSeq(routes ++ nextRoutes.routes)
-  def mapRoute[T](f: Route => T) = routes.map(f)
-}
-
 trait Routes {
-  def routes: RouteSeq
+  def routes: Seq[Route]
 }
 
 @deprecated("it will be removed in future version", "0.10.1")
@@ -26,7 +20,7 @@ trait RouteDef extends Routes {
   def post(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.post(path)(action)(arounds))
   def put(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.put(path)(action)(arounds))
   def trace(path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()) = register(analogweb.trace(path)(action)(arounds))
-  def scope(path: String)(routes: RouteSeq): Unit = routes.routes.map { r =>
+  def scope(path: String)(routes: Seq[Route]): Unit = routes.map { r =>
     unRegister(r)
     r.update(path)
   }.foreach(register)
@@ -43,11 +37,11 @@ trait RouteDef extends Routes {
 
   private[scala] val routeList = ListBuffer[Route]()
 
-  override def routes = RouteSeq(routeList.toSeq)
+  override def routes = routeList.toSeq
 
   implicit def toRouteSeq(route: Route) = {
     unRegister(route)
-    RouteSeq(Seq(route))
+    Seq(route)
   }
 }
 
