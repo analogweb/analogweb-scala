@@ -78,11 +78,11 @@ class AnalogwebSpecFoo extends LooseRouteDef {
   scope("/root") {
     get("/foo") { r =>
       "Foo"
-    } ~ post("/bar") { r =>
+    } ++ post("/bar") { r =>
       "Bar"
-    } ~ put("/bar") { r =>
+    } ++ put("/bar") { r =>
       "Bar"
-    } ~ delete("/bar") { r =>
+    } ++ delete("/bar") { r =>
       "Bar"
     }
   }
