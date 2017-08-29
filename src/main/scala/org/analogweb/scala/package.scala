@@ -7,6 +7,8 @@ package object analogweb
   import scala.language.implicitConversions
   import org.analogweb._, scala._
 
+  implicit val executionContext = Execution.Implicits.defaultContext
+
   def connect[T](path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()): Route = Route("CONNECT", path, arounds)(action)
   def delete[T](path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()): Route = Route("DELETE", path, arounds)(action)
   def get[T](path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()): Route = Route("GET", path, arounds)(action)
