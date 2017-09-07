@@ -4,9 +4,7 @@ import org.junit.runner.RunWith
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mock.Mockito
-import org.mockito.Matchers.{ eq => isEq }
-import org.analogweb._
-import org.analogweb.core._
+import org.analogweb._, core._
 
 case class B(val name: String)
 
@@ -38,7 +36,7 @@ class ResolversSpec extends Specification with Mockito {
   }
 
   "Resolve with PathVariableValueResolver" in new mocks {
-    resolver.resolveValue(isEq(rc), isEq(im), isEq("baa"), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
+    resolver.resolveValue(===(rc), ===(im), ===("baa"), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
     rvr.findRequestValueResolver(classOf[PathVariableValueResolver]) returns resolver
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
@@ -49,7 +47,7 @@ class ResolversSpec extends Specification with Mockito {
   }
 
   "Resolve with CookieValueResolver" in new mocks {
-    resolver.resolveValue(isEq(rc), isEq(im), isEq("baa"), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
+    resolver.resolveValue(===(rc), ===(im), ===("baa"), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
     rvr.findRequestValueResolver(classOf[CookieValueResolver]) returns resolver
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
@@ -60,7 +58,7 @@ class ResolversSpec extends Specification with Mockito {
   }
 
   "Resolve with RequestBodyValueResolver" in new mocks {
-    resolver.resolveValue(isEq(rc), isEq(im), isEq(""), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
+    resolver.resolveValue(===(rc), ===(im), ===(""), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
     rvr.findRequestValueResolver(classOf[RequestBodyValueResolver]) returns resolver
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
@@ -71,7 +69,7 @@ class ResolversSpec extends Specification with Mockito {
   }
 
   "Resolve with XmlValueResolver" in new mocks {
-    resolver.resolveValue(isEq(rc), isEq(im), isEq(""), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
+    resolver.resolveValue(===(rc), ===(im), ===(""), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
     rvr.findRequestValueResolver(classOf[XmlValueResolver]) returns resolver
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
@@ -82,7 +80,7 @@ class ResolversSpec extends Specification with Mockito {
   }
 
   "Resolve with MultipartParameterResolver" in new mocks {
-    resolver.resolveValue(isEq(rc), isEq(im), isEq("baa"), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
+    resolver.resolveValue(===(rc), ===(im), ===("baa"), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
     rvr.findRequestValueResolver(classOf[MultipartParameterResolver]) returns resolver
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>
@@ -93,7 +91,7 @@ class ResolversSpec extends Specification with Mockito {
   }
 
   "Resolve with RequestContextValueResolver" in new mocks {
-    resolver.resolveValue(isEq(rc), isEq(im), isEq(""), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
+    resolver.resolveValue(===(rc), ===(im), ===(""), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
     rvr.findRequestValueResolver(classOf[RequestContextValueResolver]) returns resolver
     class A extends Analogweb with Resolvers {
       get("/foo") { implicit r =>

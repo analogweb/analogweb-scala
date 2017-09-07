@@ -5,7 +5,6 @@ import org.junit.runner.RunWith
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mock.Mockito
-import org.mockito.Matchers.{ eq => isEq }
 import org.analogweb._
 import org.analogweb.core._
 
@@ -36,8 +35,8 @@ class RouteExtensionsSpec extends Specification with Mockito {
   }
 
   "Resolve with PathVariableValueResolver" in new mocks {
-    pathResolver.resolveValue(isEq(rc), isEq(im), isEq("baa"), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
-    parameterResolver.resolveValue(isEq(rc), isEq(im), isEq("baa"), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns null
+    pathResolver.resolveValue(===(rc), ===(im), ===("baa"), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
+    parameterResolver.resolveValue(===(rc), ===(im), ===("baa"), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns null
     rvr.findRequestValueResolver(classOf[ParameterValueResolver]) returns parameterResolver
     rvr.findRequestValueResolver(classOf[PathVariableValueResolver]) returns pathResolver
     class A extends Analogweb with Resolvers with RouteExtensions {

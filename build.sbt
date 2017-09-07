@@ -48,7 +48,7 @@ val allResolvers = Seq(
   "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 )
 val analogwebV = "0.10.1-SNAPSHOT"
-val specs2V = "3.9.2"
+val specs2V = "3.8.9"
 
 val allDependencies = Seq(
   "org.analogweb" % "analogweb-core" % analogwebV,
@@ -62,5 +62,6 @@ lazy val root = (project in file(".")).
   settings(
     name := "analogweb-scala",
     resolvers ++= allResolvers,
-    libraryDependencies ++= allDependencies
+    libraryDependencies ++= allDependencies,
+    fork in Test := true
   )
