@@ -6,19 +6,26 @@ import org.analogweb.core._
 
 trait Resolvers {
 
-  def parameter = classOf[ParameterValueResolver]
+  def parameter =
+    classOf[ParameterValueResolver]
 
-  def path = classOf[PathVariableValueResolver]
+  def path =
+    classOf[PathVariableValueResolver]
 
-  def cookie = classOf[CookieValueResolver]
+  def cookie =
+    classOf[CookieValueResolver]
 
-  def body = classOf[RequestBodyValueResolver]
+  def body =
+    classOf[RequestBodyValueResolver]
 
-  def xml = classOf[XmlValueResolver]
+  def xml =
+    classOf[XmlValueResolver]
 
-  def multipart = classOf[MultipartParameterResolver]
+  def multipart =
+    classOf[MultipartParameterResolver]
 
-  def context = classOf[RequestContextValueResolver]
+  def context =
+    classOf[RequestContextValueResolver]
 
 }
 
@@ -29,16 +36,21 @@ object NoResolverContext extends ResolverContext
 abstract class ScalaRequestValueResolver extends SpecificMediaTypeRequestValueResolver {
 
   def resolve[A](
-    request:      RequestContext,
-    metadata:     InvocationMetadata,
-    key:          String,
-    requiredType: Class[A]
+      request: RequestContext,
+      metadata: InvocationMetadata,
+      key: String,
+      requiredType: Class[A]
   )(implicit context: ResolverContext): Either[NoValuesResolved[A], A]
 
-  override final def resolveValue(request: RequestContext, metadata: InvocationMetadata, key: String, requiredType: Class[_], annoattions: Array[Annotation]): AnyRef = {
+  override final def resolveValue(request: RequestContext,
+                                  metadata: InvocationMetadata,
+                                  key: String,
+                                  requiredType: Class[_],
+                                  annoattions: Array[Annotation]): AnyRef = {
     resolve(request, metadata, key, requiredType)(NoResolverContext)
   }
 
-  override def supports(contentType: MediaType) = true
+  override def supports(contentType: MediaType) =
+    true
 
 }

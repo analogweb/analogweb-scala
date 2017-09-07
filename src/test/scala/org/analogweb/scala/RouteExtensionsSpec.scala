@@ -12,12 +12,18 @@ import org.analogweb.core._
 class RouteExtensionsSpec extends Specification with Mockito {
 
   trait mocks extends org.specs2.specification.Scope {
-    val rc = mock[RequestContext]
-    val rvr = mock[RequestValueResolvers]
-    val im = mock[ScalaInvocationMetadata]
-    val tc = mock[TypeMapperContext]
-    val parameterResolver = mock[RequestValueResolver]
-    val pathResolver = mock[RequestValueResolver]
+    val rc =
+      mock[RequestContext]
+    val rvr =
+      mock[RequestValueResolvers]
+    val im =
+      mock[ScalaInvocationMetadata]
+    val tc =
+      mock[TypeMapperContext]
+    val parameterResolver =
+      mock[RequestValueResolver]
+    val pathResolver =
+      mock[RequestValueResolver]
     val r = new Request(rc, rvr, im, tc)
   }
 
@@ -31,12 +37,22 @@ class RouteExtensionsSpec extends Specification with Mockito {
         param("baa")
       }
     }
-    new A().routeList(0).invoke(r) must_== "baz"
+    new A()
+      .routeList(0)
+      .invoke(r) must_== "baz"
   }
 
   "Resolve with PathVariableValueResolver" in new mocks {
-    pathResolver.resolveValue(===(rc), ===(im), ===("baa"), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns "baz"
-    parameterResolver.resolveValue(===(rc), ===(im), ===("baa"), any[Class[_]], any[Array[java.lang.annotation.Annotation]]) returns null
+    pathResolver.resolveValue(===(rc),
+                              ===(im),
+                              ===("baa"),
+                              any[Class[_]],
+                              any[Array[java.lang.annotation.Annotation]]) returns "baz"
+    parameterResolver.resolveValue(===(rc),
+                                   ===(im),
+                                   ===("baa"),
+                                   any[Class[_]],
+                                   any[Array[java.lang.annotation.Annotation]]) returns null
     rvr.findRequestValueResolver(classOf[ParameterValueResolver]) returns parameterResolver
     rvr.findRequestValueResolver(classOf[PathVariableValueResolver]) returns pathResolver
     class A extends Analogweb with Resolvers with RouteExtensions {
@@ -44,7 +60,9 @@ class RouteExtensionsSpec extends Specification with Mockito {
         param("baa")
       }
     }
-    new A().routeList(0).invoke(r) must_== "baz"
+    new A()
+      .routeList(0)
+      .invoke(r) must_== "baz"
   }
 
   "Not Resolved" in new mocks {
@@ -57,35 +75,48 @@ class RouteExtensionsSpec extends Specification with Mockito {
         param("baa")
       }
     }
-    new A().routeList(0).invoke(r) must_== ""
+    new A()
+      .routeList(0)
+      .invoke(r) must_== ""
   }
 
   "Passed With" in new mocks {
     class A extends Analogweb with Resolvers with RouteExtensions {
       get("/foo") { r =>
-        implicit val copied = r.copy(passedWith = Map("foo" -> "bar", "baz" -> true))
+        implicit val copied =
+          r.copy(passedWith = Map("foo" -> "bar", "baz" -> true))
         passedWith[String]("foo")
       }
     }
-    new A().routeList(0).invoke(r) must_== Some("bar")
+    new A()
+      .routeList(0)
+      .invoke(r) must_== Some("bar")
   }
 
   "Passed With Nothing" in new mocks {
     class A extends Analogweb with Resolvers with RouteExtensions {
       get("/foo") { r =>
-        implicit val copied = r.copy(passedWith = Map("foo" -> "bar", "baz" -> true))
+        implicit val copied =
+          r.copy(passedWith = Map("foo" -> "bar", "baz" -> true))
         passedWith[String]("bar")
       }
     }
-    new A().routeList(0).invoke(r) must_== None
+    new A()
+      .routeList(0)
+      .invoke(r) must_== None
   }
 
   "Converting Future to Renderable" in new mocks {
     class A extends StrictRouteDef with Resolvers with Responses with RouteExtensions {
       get("/foo") { r =>
-        Future.successful(Ok(asText("hoge"))).asRenderable
+        Future
+          .successful(Ok(asText("hoge")))
+          .asRenderable
       }
     }
-    new A().routeList(0).invoke(r).isInstanceOf[RenderableFuture] must beTrue
+    new A()
+      .routeList(0)
+      .invoke(r)
+      .isInstanceOf[RenderableFuture] must beTrue
   }
 }

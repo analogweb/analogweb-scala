@@ -10,11 +10,13 @@ import org.analogweb.core._
 @RunWith(classOf[JUnitRunner])
 class ScalaModulesConfigSpec extends Specification with Mockito {
 
-  val config = new ScalaModulesConfig
+  val config =
+    new ScalaModulesConfig
 
   "ScalaModulesConfig" should {
     "sertainly configure" in {
-      val mb = mock[ModulesBuilder]
+      val mb =
+        mock[ModulesBuilder]
       mb.addInvocationMetadataFactoriesClass(classOf[ScalaInvocationMetadataFactory]) returns mb
       mb.setInvocationFactoryClass(classOf[ScalaInvocationFactory]) returns mb
       mb.setRenderableResolverClass(classOf[ScalaRenderableResolver]) returns mb
@@ -22,10 +24,10 @@ class ScalaModulesConfigSpec extends Specification with Mockito {
       mb.ignore(classOf[BindAttributeArgumentPreparator]) returns mb
       mb.ignore(classOf[ConsumesMediaTypeVerifier]) returns mb
       mb.ignore(classOf[ScopedMapArgumentPreparator]) returns mb
-      val actual = config.prepare(mb)
+      val actual = config
+        .prepare(mb)
       actual === mb
     }
   }
 
 }
-

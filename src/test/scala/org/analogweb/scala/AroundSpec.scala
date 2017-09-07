@@ -11,36 +11,47 @@ import org.analogweb.scala.Responses._
 @RunWith(classOf[JUnitRunner])
 class AroundSpec extends Specification with Mockito {
 
-  val analogweb = new StubApplication
+  val analogweb =
+    new StubApplication
 
   "Around" should {
     "pass before rejection and append after" in {
       val route = analogweb.routeList(0)
-      val request = mock[Request]
-      val actual = route.invoke(request)
+      val request =
+        mock[Request]
+      val actual = route
+        .invoke(request)
       actual must_== Ok
       actual match {
-        case s: HttpStatus => s.getRenderable match {
-          case t: Text => t.toString must_== "FooBar"
-        }
+        case s: HttpStatus =>
+          s.getRenderable match {
+            case t: Text =>
+              t.toString must_== "FooBar"
+          }
       }
     }
     "rejected" in {
       val route = analogweb.routeList(1)
-      val request = mock[Request]
-      val actual = route.invoke(request)
+      val request =
+        mock[Request]
+      val actual = route
+        .invoke(request)
       actual must_== BadRequest
     }
     "pass before rejection and throwgh after" in {
       val route = analogweb.routeList(2)
-      val request = mock[Request]
-      val actual = route.invoke(request)
+      val request =
+        mock[Request]
+      val actual = route
+        .invoke(request)
       actual.toString must_== "Foo"
     }
     "combined arounds" in {
       val route = analogweb.routeList(3)
-      val request = mock[Request]
-      val actual = route.invoke(request)
+      val request =
+        mock[Request]
+      val actual = route
+        .invoke(request)
       actual must_== BadRequest
     }
   }
@@ -50,7 +61,8 @@ class StubApplication extends Analogweb {
   implicit val around1 = before { implicit r =>
     pass()
   } :+ after {
-    case s: String => Ok(asText(s + "Bar"))
+    case s: String =>
+      Ok(asText(s + "Bar"))
   }
   get("/foo") { r =>
     "Foo"
@@ -59,7 +71,8 @@ class StubApplication extends Analogweb {
   val around2 = before { implicit r =>
     reject(BadRequest)
   } :+ after {
-    case s: String => Ok(asText(s + "Bar"))
+    case s: String =>
+      Ok(asText(s + "Bar"))
   }
   post("/foo") { r =>
     "Foo"
@@ -68,7 +81,8 @@ class StubApplication extends Analogweb {
   val around3 = before { implicit r =>
     pass()
   } :+ after {
-    case i: Int => Ok(asText((i + 10).toString))
+    case i: Int =>
+      Ok(asText((i + 10).toString))
   }
   put("/foo") { r =>
     "Foo"
@@ -79,4 +93,3 @@ class StubApplication extends Analogweb {
     "Foo"
   }(around4)
 }
-

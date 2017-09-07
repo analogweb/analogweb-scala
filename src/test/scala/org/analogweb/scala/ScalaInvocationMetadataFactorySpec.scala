@@ -6,34 +6,56 @@ import org.junit.runner.RunWith
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mock.Mockito
-import org.analogweb.{ ContainerAdaptor, ApplicationProperties }
+import org.analogweb.{ContainerAdaptor, ApplicationProperties}
 
 @RunWith(classOf[JUnitRunner])
 class ScalaInvocationMetadataFactorySpec extends Specification with Mockito {
 
-  val factory = new ScalaInvocationMetadataFactory
+  val factory =
+    new ScalaInvocationMetadataFactory
 
   "ScalaInvocationMetadataFactory" should {
     "Create InvocationMetadata reflectively successful" in {
-      val ca = mock[ContainerAdaptor]
-      val ap = mock[ApplicationProperties]
+      val ca =
+        mock[ContainerAdaptor]
+      val ap =
+        mock[ApplicationProperties]
       ap.getComponentPackageNames() returns new ArrayList()
-      val collected = factory.createInvocationMetadatas(ap, ca).asScala.toSet
+      val collected = factory
+        .createInvocationMetadatas(ap, ca)
+        .asScala
+        .toSet
       val actual = collected
-        .find(x => x.asInstanceOf[ScalaInvocationMetadata].route.rawPath == "/imf/foo").head
-      actual.getMethodName() === "GET(/imf/foo)"
-      actual.getArgumentTypes().isEmpty must beTrue
-      actual.getInvocationClass() === classOf[Foo]
-      actual.getDefinedPath().getActualPath() === "/imf/foo"
-      actual.getDefinedPath().getRequestMethods().get(0) === "GET"
+        .find(x => x.asInstanceOf[ScalaInvocationMetadata].route.rawPath == "/imf/foo")
+        .head
+      actual
+        .getMethodName() === "GET(/imf/foo)"
+      actual
+        .getArgumentTypes()
+        .isEmpty must beTrue
+      actual
+        .getInvocationClass() === classOf[Foo]
+      actual
+        .getDefinedPath()
+        .getActualPath() === "/imf/foo"
+      actual
+        .getDefinedPath()
+        .getRequestMethods()
+        .get(0) === "GET"
     }
     "Create InvocationMetadata NOT work" in {
-      val ca = mock[ContainerAdaptor]
-      val ap = mock[ApplicationProperties]
+      val ca =
+        mock[ContainerAdaptor]
+      val ap =
+        mock[ApplicationProperties]
       ap.getComponentPackageNames() returns new ArrayList()
-      val collected = factory.createInvocationMetadatas(ap, ca).asScala.toSet
+      val collected = factory
+        .createInvocationMetadatas(ap, ca)
+        .asScala
+        .toSet
       val actual = collected
-        .find(x => x.asInstanceOf[ScalaInvocationMetadata].route.rawPath == "/baabaz").headOption
+        .find(x => x.asInstanceOf[ScalaInvocationMetadata].route.rawPath == "/baabaz")
+        .headOption
       actual === None
     }
     "Create InvocationMetadata from inner RouteDef" in {
@@ -42,10 +64,15 @@ class ScalaInvocationMetadataFactorySpec extends Specification with Mockito {
           "Hello"
         }
       }))
-      val ca = mock[ContainerAdaptor]
-      val ap = mock[ApplicationProperties]
+      val ca =
+        mock[ContainerAdaptor]
+      val ap =
+        mock[ApplicationProperties]
       ap.getComponentPackageNames() returns new ArrayList()
-      val collected = f.createInvocationMetadatas(ap, ca).asScala.toSet
+      val collected = f
+        .createInvocationMetadatas(ap, ca)
+        .asScala
+        .toSet
       collected.size === 1
     }
   }
@@ -63,4 +90,3 @@ class Baa {
     "Foo"
   }
 }
-
