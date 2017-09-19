@@ -32,7 +32,7 @@ lazy val baseSettings =
       Developer("y2k2mt", "y2k2mt", "y2_k2mt@gmail.com", url("https://github.com/y2k2mt"))
     ),
     startYear := Some(2014),
-    isSnapshot := false,
+    isSnapshot := version.value.trim.endsWith("SNAPSHOT"),
     scalacOptions ++= Seq(
       "-feature",
       "-deprecation",
