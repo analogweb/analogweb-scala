@@ -15,9 +15,6 @@ trait Responses {
   def asHtml(templatePath: String, context: Map[String, AnyRef]): Html =
     Html
       .as(templatePath, context.asJava)
-  def asXml(obj: AnyRef) =
-    org.analogweb.core.response.Xml
-      .as(obj)
   def asResource(stream: InputStream): Resource =
     asResource(stream, "").withoutContentDisposition
   def asResource(stream: InputStream, filename: String): Resource =

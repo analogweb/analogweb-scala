@@ -37,14 +37,8 @@ class ResponsesSpec extends Specification with Mockito {
       badRequest.getStatusCode === 400
       val notfound = NotFound
       notfound.getStatusCode === 404
-      val forbiddenAsXml = Forbidden(asXml("a"))
-      forbiddenAsXml.getStatusCode === 403
-      forbiddenAsXml.getRenderable.isInstanceOf[Xml] === true
       val forbidden = Forbidden
       forbidden.getStatusCode === 403
-      val internalServerErrorAsXml = InternalServerError(asXml("a"))
-      internalServerErrorAsXml.getStatusCode === 500
-      internalServerErrorAsXml.getRenderable.isInstanceOf[Xml] === true
       val internalServerError = InternalServerError
       internalServerError.getStatusCode === 500
       val notImplemented = Status(501)

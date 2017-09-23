@@ -28,10 +28,6 @@ trait RouteExtensions {
       implicit request: Request) =
     DefaultResolverSyntax(typeOfResolver, request)
 
-  implicit def asXmlResolverSyntax(typeOfResolver: Class[XmlValueResolver])(
-      implicit request: Request) =
-    DefaultResolverSyntax(typeOfResolver, request)
-
   implicit def asMultipartResolverSyntax(typeOfResolver: Class[MultipartParameterResolver])(
       implicit request: Request) =
     DefaultResolverSyntax(typeOfResolver, request)

@@ -97,23 +97,6 @@ class ResolversSpec extends Specification with Mockito {
       .invoke(r) must_== "baz"
   }
 
-  "Resolve with XmlValueResolver" in new mocks {
-    resolver.resolveValue(===(rc),
-                          ===(im),
-                          ===(""),
-                          any[Class[_]],
-                          any[Array[java.lang.annotation.Annotation]]) returns "baz"
-    rvr.findRequestValueResolver(classOf[XmlValueResolver]) returns resolver
-    class A extends Analogweb with Resolvers {
-      get("/foo") { implicit r =>
-        s"${xml.as[java.lang.String].right.toOption.getOrElse("a")}"
-      }
-    }
-    new A()
-      .routeList(0)
-      .invoke(r) must_== "baz"
-  }
-
   "Resolve with MultipartParameterResolver" in new mocks {
     resolver.resolveValue(===(rc),
                           ===(im),

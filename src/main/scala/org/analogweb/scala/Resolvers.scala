@@ -18,9 +18,6 @@ trait Resolvers {
   def body =
     classOf[RequestBodyValueResolver]
 
-  def xml =
-    classOf[XmlValueResolver]
-
   def multipart =
     classOf[MultipartParameterResolver]
 
