@@ -7,6 +7,7 @@ import scoverage._
 
 val analogwebV = "0.10.1-SNAPSHOT"
 val specs2V = "3.8.9"
+val circeV = "0.8.0"
 val json4sV = "3.5.3"
 
 val coreDependencies =
@@ -99,10 +100,11 @@ lazy val analogweb =
       initialCommands in console :=
       """
         |import analogweb._
+        |import analogweb.circe._
       """.stripMargin
     )
-    .aggregate(core,json4s)
-    .dependsOn(core)
+    .aggregate(core,json4s,circe)
+    .dependsOn(core,circe)
 
 lazy val core = project
   .settings(moduleName := "analogweb-scala")
@@ -115,6 +117,19 @@ lazy val json4s = project
     moduleName := "analogweb-json4s",
     libraryDependencies ++= coreDependencies ++ Seq (
       "org.json4s" %% "json4s-jackson" % json4sV
+    )
+  )
+  .dependsOn(core)
+
+lazy val circe = project
+  .settings(moduleName := "analogweb-circe")
+  .settings(allSettings)
+  .settings(
+    moduleName := "analogweb-circe",
+    libraryDependencies ++= coreDependencies ++ Seq (
+      "io.circe" %% "circe-core" % circeV,
+      "io.circe" %% "circe-jawn" % circeV,
+      "io.circe" %% "circe-generic" % circeV % "test"
     )
   )
   .dependsOn(core)
