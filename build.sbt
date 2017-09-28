@@ -5,13 +5,57 @@ import ReleaseStateTransformations._
 import xerial.sbt.Sonatype._
 import scoverage._
 
+val analogwebV = "0.10.1-SNAPSHOT"
+val specs2V = "3.8.9"
+val json4sV = "3.5.3"
+
+val coreDependencies =
+  Seq(
+    "org.analogweb" % "analogweb-core" % analogwebV,
+    "org.specs2"    %% "specs2-core"   % specs2V % "test",
+    "org.specs2"    %% "specs2-mock"   % specs2V % "test",
+    "org.specs2"    %% "specs2-junit"  % specs2V % "test"
+  )
+
 lazy val baseSettings =
   Seq(
     organization := "org.analogweb",
     crossScalaVersions := Seq("2.11.8", "2.12.1"),
     scalaVersion := crossScalaVersions.value.head,
-    licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
+    startYear := Some(2014),
+    isSnapshot := version.value.trim.endsWith("SNAPSHOT"),
     description := "Analogweb Framework is tiny, simple, and pluggable web framework.",
+    scalacOptions ++= Seq(
+      "-feature",
+      "-deprecation",
+      "-unchecked",
+      "-Xlint",
+      "-Xfuture",
+      "-Yrangepos",
+      "-language:existentials",
+      "-language:higherKinds",
+      "-language:implicitConversions",
+      "-Ydelambdafy:method",
+      "-Yno-adapted-args",
+      "-Ywarn-dead-code",
+      "-Ywarn-numeric-widen",
+      "-target:jvm-1.8"
+    ),
+    scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
+    scalacOptions in (Compile, console) += "-Yrepl-class-based",
+    resolvers ++= Seq(
+      Resolver.sonatypeRepo("releases"),
+      Resolver.sonatypeRepo("snapshots")
+    ),
+    libraryDependencies ++= coreDependencies
+  )
+
+
+lazy val publishSettings =
+  Seq(
+    licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
+    homepage := Some(url("http://analogweb.github.io/")),
+    publishArtifact in Test := false,
     publishMavenStyle := true,
     publishTo := {
       val nexus =
@@ -22,55 +66,55 @@ lazy val baseSettings =
       else
         Some("releases" at nexus + "service/local/staging/deploy/maven2")
     },
-    publishArtifact in Test := false,
     scmInfo := Some(
       ScmInfo(
-        url("https://github.com/analogweb/scala-plugin"),
-        "scm:git:git@github.com:analogweb/scala-plugin.git"
+        url("https://github.com/analogweb/analogweb-scala"),
+        "scm:git:git@github.com:analogweb/analogweb-scala.git"
       )),
     developers := List(
-      Developer("y2k2mt", "y2k2mt", "y2_k2mt@gmail.com", url("https://github.com/y2k2mt"))
-    ),
-    startYear := Some(2014),
-    isSnapshot := version.value.trim.endsWith("SNAPSHOT"),
-    scalacOptions ++= Seq(
-      "-feature",
-      "-deprecation",
-      "-unchecked",
-      "-Xlint",
-      "-Yrangepos",
-      "-language:existentials",
-      "-Ydelambdafy:method",
-      "-target:jvm-1.8"
+      Developer("y2k2mt", "y2k2mt", "y2.k2mt@gmail.com", url("https://github.com/y2k2mt"))
     ),
     releasePublishArtifactsAction := PgpKeys.publishSigned.value
   )
-val additionalSettings = ReleasePlugin.projectSettings ++ sonatypeSettings ++ ScoverageSbtPlugin.projectSettings
-val allResolvers = Seq(
-  Resolver.mavenLocal,
-  Resolver
-    .sonatypeRepo("snapshots"),
-  "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
-)
-val analogwebV =
-  "0.10.1-SNAPSHOT"
-val specs2V =
-  "3.8.9"
 
-val allDependencies =
-  Seq(
-    "org.analogweb" % "analogweb-core" % analogwebV,
-    "org.specs2"    %% "specs2-core"   % specs2V % "test",
-    "org.specs2"    %% "specs2-mock"   % specs2V % "test",
-    "org.specs2"    %% "specs2-junit"  % specs2V % "test"
-  )
-lazy val root =
-  (project in file("."))
-    .settings(baseSettings: _*)
-    .settings(additionalSettings: _*)
+lazy val allSettings = baseSettings ++ publishSettings ++ ReleasePlugin.projectSettings ++ sonatypeSettings ++ ScoverageSbtPlugin.projectSettings
+
+lazy val noPublish = Seq(
+  publish := {},
+  publishLocal := {},
+  publishArtifact := false
+)
+
+lazy val analogweb =
+  project.in(file("."))
+    .settings(allSettings: _*)
+    .settings(noPublish: _*)
     .settings(
-      name := "analogweb-scala",
-      resolvers ++= allResolvers,
-      libraryDependencies ++= allDependencies,
-      fork in Test := true
+      moduleName := "analogweb",
+      libraryDependencies ++= coreDependencies ++ Seq (
+        "org.analogweb" % "analogweb-netty" % analogwebV
+      )
     )
+    .settings(
+      initialCommands in console :=
+      """
+        |import analogweb._
+      """.stripMargin
+    )
+    .aggregate(core,json4s)
+    .dependsOn(core)
+
+lazy val core = project
+  .settings(moduleName := "analogweb-scala")
+  .settings(allSettings)
+
+lazy val json4s = project
+  .settings(moduleName := "analogweb-json4s")
+  .settings(allSettings)
+  .settings(
+    moduleName := "analogweb-json4s",
+    libraryDependencies ++= coreDependencies ++ Seq (
+      "org.json4s" %% "json4s-jackson" % json4sV
+    )
+  )
+  .dependsOn(core)
