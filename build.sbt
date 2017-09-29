@@ -48,9 +48,9 @@ lazy val baseSettings =
       Resolver.sonatypeRepo("releases"),
       Resolver.sonatypeRepo("snapshots")
     ),
+    fork in Test := true,
     libraryDependencies ++= coreDependencies
   )
-
 
 lazy val publishSettings =
   Seq(
