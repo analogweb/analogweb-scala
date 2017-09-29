@@ -42,7 +42,7 @@ class ScalaInvocationMetadataFactorySpec extends Specification with Mockito {
         .getDefinedPath()
         .getRequestMethods()
         .get(0) === "GET"
-    }
+    }.pendingUntilFixed("Deplicated")
     "Create InvocationMetadata NOT work" in {
       val ca =
         mock[ContainerAdaptor]
