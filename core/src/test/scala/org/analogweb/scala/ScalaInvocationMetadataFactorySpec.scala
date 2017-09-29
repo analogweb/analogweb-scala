@@ -15,34 +15,6 @@ class ScalaInvocationMetadataFactorySpec extends Specification with Mockito {
     new ScalaInvocationMetadataFactory
 
   "ScalaInvocationMetadataFactory" should {
-    "Create InvocationMetadata reflectively successful" in {
-      val ca =
-        mock[ContainerAdaptor]
-      val ap =
-        mock[ApplicationProperties]
-      ap.getComponentPackageNames() returns new ArrayList()
-      val collected = factory
-        .createInvocationMetadatas(ap, ca)
-        .asScala
-        .toSet
-      val actual = collected
-        .find(x => x.asInstanceOf[ScalaInvocationMetadata].route.rawPath == "/imf/foo")
-        .head
-      actual
-        .getMethodName() === "GET(/imf/foo)"
-      actual
-        .getArgumentTypes()
-        .isEmpty must beTrue
-      actual
-        .getInvocationClass() === classOf[Foo]
-      actual
-        .getDefinedPath()
-        .getActualPath() === "/imf/foo"
-      actual
-        .getDefinedPath()
-        .getRequestMethods()
-        .get(0) === "GET"
-    }.pendingUntilFixed("Deplicated")
     "Create InvocationMetadata NOT work" in {
       val ca =
         mock[ContainerAdaptor]
