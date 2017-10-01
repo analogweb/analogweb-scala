@@ -1,11 +1,11 @@
+import scala.language.implicitConversions
+import org.analogweb._, scala._
+
 package object analogweb
     extends org.analogweb.scala.Resolvers
     with org.analogweb.scala.Responses
     with org.analogweb.scala.RouteExtensions
     with org.analogweb.scala.ServerApplications {
-
-  import scala.language.implicitConversions
-  import org.analogweb._, scala._
 
   implicit val executionContext =
     Execution.Implicits.defaultContext
@@ -34,11 +34,13 @@ package object analogweb
 
   implicit def toRouteSeq(route: Route): Seq[Route] =
     Seq(route)
+
   implicit def toRoutes(route: Route): Routes =
     new Routes {
       val routes =
         Seq(route)
     }
+
   implicit def toRoutes(routeSeq: Seq[Route]): Routes =
     new Routes {
       val routes =

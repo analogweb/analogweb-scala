@@ -5,7 +5,15 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable.Map
 import org.analogweb._, core.DefaultReadableBuffer._, core.response._
 
-trait Responses {
+trait Responses 
+  extends ResponseEntities
+  with ResponseStatuses
+  with Success
+  with Redirection
+  with ClientError
+  with ServerError
+
+trait ResponseEntities {
   def asText(obj: String) =
     Text.`with`(obj)
   def asHtmlEntity(obj: String) =
@@ -22,6 +30,9 @@ trait Responses {
   def asResource(buffer: ReadableBuffer, filename: String = ""): Resource =
     Resource
       .as(buffer, filename)
+}
+
+trait ResponseStatuses {
   def Status(statusCode: Int) =
     HttpStatus
       .valueOf(statusCode)
@@ -37,9 +48,9 @@ trait Responses {
     Status(status
              .getStatusCode(),
            responseBody)
-  def RedirectTo(url: String) =
-    Redirect
-      .to(url)
+}
+
+trait Success {
   def Ok(responseBody: Renderable): HttpStatus =
     Ok.`with`(responseBody)
   def Ok: HttpStatus =
@@ -56,6 +67,12 @@ trait Responses {
     HttpStatus.ACCEPTED
   def NoContent: HttpStatus =
     HttpStatus.NO_CONTENT
+}
+
+trait Redirection {
+  def RedirectTo(url: String) =
+    Redirect
+      .to(url)
   def MovedPermanently: HttpStatus =
     HttpStatus.MOVED_PERMANENTLY
   def Found: HttpStatus =
@@ -64,6 +81,9 @@ trait Responses {
     HttpStatus.SEE_OTHER
   def NotModified: HttpStatus =
     HttpStatus.NOT_MODIFIED
+}
+
+trait ClientError {
   def BadRequest(obj: Renderable): HttpStatus =
     BadRequest.`with`(obj)
   def BadRequest: HttpStatus =
@@ -100,6 +120,9 @@ trait Responses {
     UnsupportedMediaType.`with`(obj)
   def UnsupportedMediaType: HttpStatus =
     HttpStatus.UNSUPPORTED_MEDIA_TYPE
+}
+
+trait ServerError {
   def InternalServerError(obj: Renderable): HttpStatus =
     InternalServerError.`with`(obj)
   def InternalServerError: HttpStatus =
@@ -113,6 +136,7 @@ trait Responses {
   def ServiceUnavailable: HttpStatus =
     HttpStatus.SERVICE_UNAVAILABLE
 }
+
 object Responses extends Responses
 
 class ScalaJsonObject(obj: AnyRef) extends Json(obj)

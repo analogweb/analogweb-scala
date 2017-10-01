@@ -17,7 +17,7 @@ class ResponsesSpec extends Specification with Mockito {
   }
 
   "Responses" should {
-    "Expected instance" in new mocks {
+    "Expected instance" in new mocks with Responses{
       val ok = Ok
       ok.getStatusCode === 200
       val redirect = RedirectTo("somewhere")
