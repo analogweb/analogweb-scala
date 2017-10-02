@@ -19,4 +19,3 @@ class ScalaModulesConfigSpec extends Specification with Mockito {
   }
 
 }
-

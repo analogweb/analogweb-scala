@@ -6,9 +6,9 @@ import xerial.sbt.Sonatype._
 import scoverage._
 
 val analogwebV = "0.10.1-SNAPSHOT"
-val specs2V = "3.8.9"
-val circeV = "0.8.0"
-val json4sV = "3.5.3"
+val specs2V    = "3.8.9"
+val circeV     = "0.8.0"
+val json4sV    = "3.5.3"
 
 val coreDependencies =
   Seq(
@@ -87,24 +87,25 @@ lazy val noPublish = Seq(
 )
 
 lazy val analogweb =
-  project.in(file("."))
+  project
+    .in(file("."))
     .settings(allSettings: _*)
     .settings(noPublish: _*)
     .settings(
       moduleName := "analogweb",
-      libraryDependencies ++= coreDependencies ++ Seq (
+      libraryDependencies ++= coreDependencies ++ Seq(
         "org.analogweb" % "analogweb-netty" % analogwebV
       )
     )
     .settings(
       initialCommands in console :=
-      """
+        """
         |import analogweb._
         |import analogweb.circe._
       """.stripMargin
     )
-    .aggregate(core,json4s,circe)
-    .dependsOn(core,circe)
+    .aggregate(core, json4s, circe)
+    .dependsOn(core, circe)
 
 lazy val core = project
   .settings(moduleName := "analogweb-scala")
@@ -115,7 +116,7 @@ lazy val json4s = project
   .settings(allSettings)
   .settings(
     moduleName := "analogweb-json4s",
-    libraryDependencies ++= coreDependencies ++ Seq (
+    libraryDependencies ++= coreDependencies ++ Seq(
       "org.json4s" %% "json4s-jackson" % json4sV
     )
   )
@@ -126,9 +127,9 @@ lazy val circe = project
   .settings(allSettings)
   .settings(
     moduleName := "analogweb-circe",
-    libraryDependencies ++= coreDependencies ++ Seq (
-      "io.circe" %% "circe-core" % circeV,
-      "io.circe" %% "circe-jawn" % circeV,
+    libraryDependencies ++= coreDependencies ++ Seq(
+      "io.circe" %% "circe-core"    % circeV,
+      "io.circe" %% "circe-jawn"    % circeV,
       "io.circe" %% "circe-generic" % circeV % "test"
     )
   )

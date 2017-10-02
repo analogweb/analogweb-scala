@@ -5,13 +5,13 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable.Map
 import org.analogweb._, core.DefaultReadableBuffer._, core.response._
 
-trait Responses 
-  extends ResponseEntities
-  with ResponseStatuses
-  with Success
-  with Redirection
-  with ClientErrors
-  with ServerErrors
+trait Responses
+    extends ResponseEntities
+    with ResponseStatuses
+    with Success
+    with Redirection
+    with ClientErrors
+    with ServerErrors
 
 trait ResponseEntities {
   def asText(obj: String) =
