@@ -10,8 +10,8 @@ trait Responses
   with ResponseStatuses
   with Success
   with Redirection
-  with ClientError
-  with ServerError
+  with ClientErrors
+  with ServerErrors
 
 trait ResponseEntities {
   def asText(obj: String) =
@@ -83,7 +83,7 @@ trait Redirection {
     HttpStatus.NOT_MODIFIED
 }
 
-trait ClientError {
+trait ClientErrors {
   def BadRequest(obj: Renderable): HttpStatus =
     BadRequest.`with`(obj)
   def BadRequest: HttpStatus =
@@ -122,7 +122,7 @@ trait ClientError {
     HttpStatus.UNSUPPORTED_MEDIA_TYPE
 }
 
-trait ServerError {
+trait ServerErrors {
   def InternalServerError(obj: Renderable): HttpStatus =
     InternalServerError.`with`(obj)
   def InternalServerError: HttpStatus =
