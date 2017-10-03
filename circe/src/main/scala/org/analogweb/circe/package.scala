@@ -19,7 +19,7 @@ package object circe {
     DefaultResolverSyntax(typeOfResolver, request, CirceResolverContext(decoder))
 
   // Serializing JSON responses.
-  def asJson[A](source: AnyRef)(implicit encoder: Encoder[A]) =
+  def asJson[A](source: A)(implicit encoder: Encoder[A]) =
     new ScalaJsonObject((source, encoder))
   def asJson(jsonText: String) = new ScalaJsonText(jsonText)
   def asJson(json: Json)       = new ScalaJsonObject(json)
