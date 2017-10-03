@@ -130,7 +130,7 @@ lazy val circe = project
     libraryDependencies ++= coreDependencies ++ Seq(
       "io.circe" %% "circe-core"    % circeV,
       "io.circe" %% "circe-jawn"    % circeV,
-      "io.circe" %% "circe-generic" % circeV % "test"
+      "io.circe" %% "circe-generic" % circeV
     )
   )
   .dependsOn(core)
