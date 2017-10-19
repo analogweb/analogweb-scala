@@ -63,34 +63,20 @@ class CirceJsonFormatter extends ResponseFormatter {
   override def formatAndWriteInto(request: RequestContext,
                                   response: ResponseContext,
                                   charset: String,
-                                  source: Any): ResponseEntity = {
-    new ResponseEntity() {
-
-      lazy val (contents, contentsLength) = {
-        source match {
-          case r: ReadableBuffer => (r, r.getLength.toInt)
-          case i: InputStream    => (readBuffer(i), i.available)
-          case _ => {
-            val bytes = toBytes
-            (readBuffer(bytes), bytes.length)
-          }
-        }
+                                  source: Any): ResponseEntity[_] = {
+    lazy val toBytes = {
+      val serialized: String = source match {
+        case (obj: Any, formats: Encoder[Any]) => formats(obj).noSpaces
+        case v: Json                           => v.noSpaces
+        case s: String                         => s
+        case _                                 => "{}"
       }
-
-      def toBytes = {
-        val serialized: String = source match {
-          case (obj: Any, formats: Encoder[Any]) => formats(obj).noSpaces
-          case v: Json                           => v.noSpaces
-          case s: String                         => s
-          case _                                 => "{}"
-        }
-        serialized.getBytes(charset)
-      }
-
-      override def writeInto(responseBody: WritableBuffer) = {
-        responseBody.from(contents)
-      }
-      override def getContentLength = contentsLength
+      serialized.getBytes(charset)
+    }
+    source match {
+      case r: ReadableBuffer => new ReadableBufferResponseEntity(r)
+      case i: InputStream    => new ReadableBufferResponseEntity(readBuffer(i))
+      case _                 => new DefaultResponseEntity(toBytes)
     }
   }
 }

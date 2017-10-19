@@ -97,8 +97,7 @@ class ScalaResponseHandlerSpec extends Specification with Mockito {
       DefaultWritableBuffer
         .writeBuffer(bytes)
     def commit(req: RequestContext, res: Response) =
-      res.getEntity
-        .writeInto(buffer)
+      buffer.writeBytes(res.getEntity.entity.asInstanceOf[Array[Byte]])
   }
 
 }

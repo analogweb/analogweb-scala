@@ -3,7 +3,6 @@ package org.analogweb.json4s
 import org.specs2.mutable.Specification
 import org.specs2.control.LazyParameter
 import org.specs2.mock.Mockito
-import org.mockito.Matchers.{eq => isEq}
 import org.json4s._, JsonDSL._
 import org.analogweb._, core._, core.DefaultReadableBuffer._, core.DefaultWritableBuffer._,
 core.response._, scala._, scala.Responses._
@@ -85,13 +84,12 @@ class ScalaJacksonJsonValueResolverSpec extends Specification with Mockito {
     "be render" in {
       val formatter = new Json4sJsonFormatter
 
-      val req    = mock[RequestContext]
-      val res    = mock[ResponseContext]
-      val c      = new ScalaJsonFormatterA("snowgooseyk")
-      val out    = new java.io.ByteArrayOutputStream()
-      val buffer = writeBuffer(out)
-      formatter.formatAndWriteInto(req, res, "UTF-8", c).writeInto(buffer)
-      new String(out.toByteArray()) === """{"id":"snowgooseyk"}"""
+      val req = mock[RequestContext]
+      val res = mock[ResponseContext]
+      val c   = new ScalaJsonFormatterA("snowgooseyk")
+      val bytes =
+        formatter.formatAndWriteInto(req, res, "UTF-8", c).entity().asInstanceOf[Array[Byte]]
+      new String(bytes) === """{"id":"snowgooseyk"}"""
     }
     "be render with JValue" in {
       val formatter = new Json4sJsonFormatter
@@ -101,8 +99,9 @@ class ScalaJacksonJsonValueResolverSpec extends Specification with Mockito {
       val c      = ("name" -> "snowgooseyk") ~ ("email" -> "snowgoose.yk@gmail.com")
       val out    = new java.io.ByteArrayOutputStream()
       val buffer = writeBuffer(out)
-      formatter.formatAndWriteInto(req, res, "UTF-8", c).writeInto(buffer)
-      new String(out.toByteArray()) === """{"name":"snowgooseyk","email":"snowgoose.yk@gmail.com"}"""
+      val bytes =
+        formatter.formatAndWriteInto(req, res, "UTF-8", c).entity().asInstanceOf[Array[Byte]]
+      new String(bytes) === """{"name":"snowgooseyk","email":"snowgoose.yk@gmail.com"}"""
     }
     "be render with Tuple" in {
       val formatter = new Json4sJsonFormatter
@@ -112,8 +111,9 @@ class ScalaJacksonJsonValueResolverSpec extends Specification with Mockito {
       val c      = ("id" -> "snowgooseyk")
       val out    = new java.io.ByteArrayOutputStream()
       val buffer = writeBuffer(out)
-      formatter.formatAndWriteInto(req, res, "UTF-8", c).writeInto(buffer)
-      new String(out.toByteArray()) === """{"id":"snowgooseyk"}"""
+      val bytes =
+        formatter.formatAndWriteInto(req, res, "UTF-8", c).entity().asInstanceOf[Array[Byte]]
+      new String(bytes) === """{"id":"snowgooseyk"}"""
     }
   }
 
