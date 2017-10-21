@@ -1,8 +1,8 @@
 package org.analogweb.scala
 
-import scala.util.{Try, Success, Failure}
+import scala.util.{Try, Success => USuccess, Failure}
 import org.analogweb._
-import org.analogweb.core.{DefaultResponseHandler, DefaultResponse}
+import org.analogweb.core.{DefaultResponseHandler, DefaultResponse, DefaultResponseEntity}
 import org.analogweb.scala.Execution.Implicits.defaultContext
 import org.analogweb.scala.utils.Implicits._
 
@@ -29,7 +29,7 @@ class ScalaResponseHandler extends DefaultResponseHandler {
           r.future
             .andThen { future =>
               future match {
-                case Success(s) =>
+                case USuccess(s) =>
                   Try(commit(s)).eventually(
                     response
                       .ensure())
@@ -45,7 +45,7 @@ class ScalaResponseHandler extends DefaultResponseHandler {
               }
             }
         }
-        new DefaultResponse {
+        new DefaultResponse(new DefaultResponseEntity("")) {
           override def commit(request: RequestContext, response: ResponseContext) = {
             futureResultHandler(request, response)
           }

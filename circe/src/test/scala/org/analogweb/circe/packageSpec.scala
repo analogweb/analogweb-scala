@@ -80,10 +80,11 @@ class CirceValueResolverSpec extends Specification with Mockito {
       val res     = mock[ResponseContext]
       val encoder = deriveEncoder[ScalaJsonFormatterA]
       val c       = ScalaJsonFormatterA("y2k2mt", "y2k2mt@xxx.com")
-      val out     = new java.io.ByteArrayOutputStream()
-      val buffer  = writeBuffer(out)
-      formatter.formatAndWriteInto(req, res, "UTF-8", (c, encoder)).writeInto(buffer)
-      new String(out.toByteArray()) === """{"id":"y2k2mt","email":"y2k2mt@xxx.com"}"""
+      val bytes = formatter
+        .formatAndWriteInto(req, res, "UTF-8", (c, encoder))
+        .entity()
+        .asInstanceOf[Array[Byte]]
+      new String(bytes) === """{"id":"y2k2mt","email":"y2k2mt@xxx.com"}"""
     }
     "be render with specific encoder" in {
       import io.circe.Encoder, io.circe.syntax._
@@ -96,10 +97,11 @@ class CirceValueResolverSpec extends Specification with Mockito {
       implicit val encodeBar: Encoder[ScalaJsonFormatterA] =
         Encoder.forProduct2("name", "my-mail")(b => (b.id, b.email))
 
-      val out    = new java.io.ByteArrayOutputStream()
-      val buffer = writeBuffer(out)
-      formatter.formatAndWriteInto(req, res, "UTF-8", (c, encodeBar)).writeInto(buffer)
-      new String(out.toByteArray()) === """{"name":"y2k2mt","my-mail":"y2.k2mt@xxx.com"}"""
+      val bytes = formatter
+        .formatAndWriteInto(req, res, "UTF-8", (c, encodeBar))
+        .entity()
+        .asInstanceOf[Array[Byte]]
+      new String(bytes) === """{"name":"y2k2mt","my-mail":"y2.k2mt@xxx.com"}"""
     }
     "be render with Json object" in {
       import io.circe._
@@ -112,10 +114,9 @@ class CirceValueResolverSpec extends Specification with Mockito {
         ("foo", Json.fromString(c.id)),
         ("bar", Json.fromString(c.email))
       )
-      val out    = new java.io.ByteArrayOutputStream()
-      val buffer = writeBuffer(out)
-      formatter.formatAndWriteInto(req, res, "UTF-8", js).writeInto(buffer)
-      new String(out.toByteArray()) === """{"foo":"y2k2mt","bar":"y2.k2mt@xxx.com"}"""
+      val bytes =
+        formatter.formatAndWriteInto(req, res, "UTF-8", js).entity().asInstanceOf[Array[Byte]]
+      new String(bytes) === """{"foo":"y2k2mt","bar":"y2.k2mt@xxx.com"}"""
     }
   }
 

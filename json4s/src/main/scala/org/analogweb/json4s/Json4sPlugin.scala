@@ -23,17 +23,10 @@ class Json4sJsonValueResolver extends ScalaRequestValueResolver {
       key: String,
       requiredType: Class[A]
   )(implicit context: ResolverContext): Either[NoValuesResolved[A], A] = {
-    println(requiredType)
-    val parsed: JValue = JsonMethods.parse(request.getRequestBody.asInputStream)
-    requiredType match {
-      case x if x == classOf[JObject] =>
-        parsed match {
-          case JObject => Right(parsed.asInstanceOf[A])
-          case _       => Left(NoValuesResolved(key, this, requiredType))
-        }
-      case y if y == classOf[JValue] => Right(parsed.asInstanceOf[A])
-      case x                         => Right(parsed.extract(context, Manifest.classType(requiredType)))
-    }
+    JsonMethods
+      .parseOpt(request.getRequestBody.asInputStream)
+      .map(parsed => Right(parsed.extract[A](context, Manifest.classType(requiredType))))
+      .getOrElse(Left(NoValuesResolved(key, this, requiredType)))
   }
 
   override def supports(contentType: MediaType) =
@@ -48,35 +41,23 @@ class Json4sJsonFormatter extends ResponseFormatter {
   override def formatAndWriteInto(request: RequestContext,
                                   response: ResponseContext,
                                   charset: String,
-                                  source: Any): ResponseEntity = {
-    new ResponseEntity() {
+                                  source: Any): ResponseEntity[_] = {
 
-      lazy val (contents, contentsLength) = {
-        source match {
-          case r: ReadableBuffer => (r, r.getLength.toInt)
-          case i: InputStream    => (readBuffer(i), i.available)
-          case _ => {
-            val bytes = toBytes
-            (readBuffer(bytes), bytes.length)
-          }
-        }
+    lazy val toBytes = {
+      val serialized = source match {
+        case (obj, formats: Formats) => Serialization.write(obj.asInstanceOf[AnyRef])(formats)
+        case (obj, _)                => Serialization.write(source.asInstanceOf[AnyRef])(defaultFormats)
+        case v: JValue               => JsonMethods.compact(JsonMethods.render(v))
+        case s: String               => s
+        case _                       => Serialization.write(source.asInstanceOf[AnyRef])(defaultFormats)
       }
+      serialized.getBytes(charset)
+    }
 
-      def toBytes = {
-        val serialized = source match {
-          case (obj, formats: Formats) => Serialization.write(obj.asInstanceOf[AnyRef])(formats)
-          case (obj, _)                => Serialization.write(source.asInstanceOf[AnyRef])(defaultFormats)
-          case v: JValue               => JsonMethods.compact(JsonMethods.render(v))
-          case s: String               => s
-          case _                       => Serialization.write(source.asInstanceOf[AnyRef])(defaultFormats)
-        }
-        serialized.getBytes(charset)
-      }
-
-      override def writeInto(responseBody: WritableBuffer) = {
-        responseBody.from(contents)
-      }
-      override def getContentLength = contentsLength
+    source match {
+      case r: ReadableBuffer => new ReadableBufferResponseEntity(r)
+      case i: InputStream    => new ReadableBufferResponseEntity(readBuffer(i))
+      case _                 => new DefaultResponseEntity(toBytes)
     }
   }
 }
