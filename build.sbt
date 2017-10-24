@@ -5,7 +5,7 @@ import ReleaseStateTransformations._
 import xerial.sbt.Sonatype._
 import scoverage._
 
-val analogwebV = "0.10.1-SNAPSHOT"
+val analogwebV = "0.10.1"
 val specs2V    = "3.8.9"
 val circeV     = "0.8.0"
 val json4sV    = "3.5.3"
