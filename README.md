@@ -12,9 +12,9 @@ Analogweb Framework Scala
 Create build.sbt
 
 ```scala
-scalaVersion := "2.12.1" 
+scalaVersion := "2.12.4" 
 libraryDependencies ++= Seq (
-  "org.analogweb" %% "analogweb-scala" % "0.10.1-SNAPSHOT"
+  "org.analogweb" %% "analogweb-scala" % "0.10.1"
 )
 ```
 
@@ -31,7 +31,7 @@ scala> import analogweb._
 import analogweb._
 
 scala> http("localhost",8000) {
-    |   get("ping") { r =>
+    |   get("ping") { _ =>
     |     "PONG"
     |   }
     | }.run
