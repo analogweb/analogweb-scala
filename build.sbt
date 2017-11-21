@@ -6,7 +6,7 @@ import xerial.sbt.Sonatype._
 import scoverage._
 
 val analogwebV = "0.10.1"
-val specs2V    = "3.8.9"
+val specs2V    = "4.0.0"
 val circeV     = "0.8.0"
 val json4sV    = "3.5.3"
 
@@ -44,6 +44,7 @@ lazy val baseSettings =
     ),
     scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
     scalacOptions in (Compile, console) += "-Yrepl-class-based",
+    scalacOptions in Test ++= Seq("-Yrangepos"),
     resolvers ++= Seq(
       Resolver.sonatypeRepo("releases"),
       Resolver.sonatypeRepo("snapshots")
