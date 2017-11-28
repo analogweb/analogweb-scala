@@ -12,29 +12,32 @@ trait RouteExtensions {
     f
   }
 
+  implicit def asResolverSyntax[T <: RequestValueResolver](resolver: T)(implicit request: Request) =
+    InstanceResolverSyntax(resolver, request)
+
   implicit def asParameterResolverSyntax(typeOfResolver: Class[ParameterValueResolver])(
       implicit request: Request) =
-    DefaultResolverSyntax(typeOfResolver, request)
+    ReflectiveResolverSyntax(typeOfResolver, request)
 
   implicit def asPathVariableResolverSyntax(typeOfResolver: Class[PathVariableValueResolver])(
       implicit request: Request) =
-    DefaultResolverSyntax(typeOfResolver, request)
+    ReflectiveResolverSyntax(typeOfResolver, request)
 
   implicit def asCookieResolverSyntax(typeOfResolver: Class[CookieValueResolver])(
       implicit request: Request) =
-    DefaultResolverSyntax(typeOfResolver, request)
+    ReflectiveResolverSyntax(typeOfResolver, request)
 
   implicit def asBodyResolverSyntax(typeOfResolver: Class[RequestBodyValueResolver])(
       implicit request: Request) =
-    DefaultResolverSyntax(typeOfResolver, request)
+    ReflectiveResolverSyntax(typeOfResolver, request)
 
   implicit def asMultipartResolverSyntax(typeOfResolver: Class[MultipartParameterResolver])(
       implicit request: Request) =
-    DefaultResolverSyntax(typeOfResolver, request)
+    ReflectiveResolverSyntax(typeOfResolver, request)
 
   implicit def asContextResolverSyntax(typeOfResolver: Class[RequestContextValueResolver])(
       implicit request: Request) =
-    DefaultResolverSyntax(typeOfResolver, request)
+    ReflectiveResolverSyntax(typeOfResolver, request)
 
   implicit def asRequestObjectMapping[T](mapping: Request => T)(implicit request: Request) =
     mapping(request)

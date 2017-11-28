@@ -8,11 +8,11 @@ import org.analogweb.core.{SpecificMediaTypeRequestValueResolver, UnsupportedMed
 
 trait ResolverSyntax[R <: RequestValueResolver] {
 
-  def resolverType: Class[R]
-
   def request: Request
 
-  def resolverContext: ResolverContext
+  def resolverContext: ResolverContext = NoResolverContext
+
+  def requestValueResolver: Option[RequestValueResolver]
 
   def asOption[T](implicit ctag: ClassTag[T]): Option[T] =
     asOption("")(ctag)
@@ -24,9 +24,7 @@ trait ResolverSyntax[R <: RequestValueResolver] {
     as("")(ctag)
 
   def as[T](name: String)(implicit ctag: ClassTag[T]): Either[Throwable, T] = {
-    Option(
-      request.resolvers
-        .findRequestValueResolver(resolverType))
+    requestValueResolver
       .map {
         case scalaResolver: ScalaRequestValueResolver => {
           resolveInternalWithScalaResolver[T](name, scalaResolver) {
@@ -50,18 +48,8 @@ trait ResolverSyntax[R <: RequestValueResolver] {
   private[this] def resolveInternalWithScalaResolver[T](
       name: String,
       resolver: ScalaRequestValueResolver
-  )(f: ScalaRequestValueResolver => Either[NoValuesResolved[T], T])(
-      implicit ctag: ClassTag[T]): Either[Throwable, T] = {
-    val mayBeVerified: Either[Throwable, ScalaRequestValueResolver] =
-      verifyMediaType[ScalaRequestValueResolver](resolver)
-    mayBeVerified.right
-      .flatMap { verifiedResolver =>
-        f(verifiedResolver).right
-          .flatMap { resolved =>
-            mappingToType(resolved)(ctag)
-          }
-      }
-  }
+  )(f: ScalaRequestValueResolver => Either[NoValuesResolved[T], T]): Either[Throwable, T] =
+    verifyMediaType[ScalaRequestValueResolver](resolver).right.flatMap(f)
 
   private[this] def resolveInternal[T, RV <: RequestValueResolver](
       name: String,
@@ -140,8 +128,21 @@ trait ResolverSyntax[R <: RequestValueResolver] {
 
 }
 
-case class DefaultResolverSyntax[T <: RequestValueResolver](
-    override val resolverType: Class[T],
+case class ReflectiveResolverSyntax[T <: RequestValueResolver](
+    val resolverType: Class[T],
     override val request: Request,
     override val resolverContext: ResolverContext = NoResolverContext
-) extends ResolverSyntax[T]
+) extends ResolverSyntax[T] {
+  override lazy val requestValueResolver: Option[RequestValueResolver] =
+    Option(
+      request.resolvers
+        .findRequestValueResolver(resolverType))
+}
+
+case class InstanceResolverSyntax[T <: RequestValueResolver](
+    val resolver: T,
+    override val request: Request
+) extends ResolverSyntax[T] {
+  override val requestValueResolver: Option[RequestValueResolver] =
+    Some(resolver)
+}

@@ -15,9 +15,9 @@ package object json4s {
   implicit def asJson4sResolverSyntax[T <: RequestValueResolver](
       typeOfResolver: Class[T]
   )(implicit request: Request, formats: Formats = DefaultFormats) =
-    DefaultResolverSyntax(typeOfResolver,
-                          request,
-                          org.analogweb.json4s.Json4sResolverContext(formats))
+    ReflectiveResolverSyntax(typeOfResolver,
+                             request,
+                             org.analogweb.json4s.Json4sResolverContext(formats))
 
   // Serializing JSON responses.
   def asJson(source: AnyRef)(implicit formats: Formats = Serialization.formats(NoTypeHints)) =

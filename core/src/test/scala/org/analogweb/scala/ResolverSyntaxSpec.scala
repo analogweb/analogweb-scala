@@ -117,7 +117,7 @@ class ResolverSyntaxSpec extends Specification with Mockito {
     "Returns avairable scope" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
       val actual =
-        DefaultResolverSyntax(mockResolver, request)
+        ReflectiveResolverSyntax(mockResolver, request)
       actual
         .as[String]("foo")
         .right
@@ -132,7 +132,7 @@ class ResolverSyntaxSpec extends Specification with Mockito {
                    classOf[String],
                    Array()) returns "One"
       val actual =
-        DefaultResolverSyntax(numberResolver, request)
+        ReflectiveResolverSyntax(numberResolver, request)
       actual
         .asOption[String]("foo") must beSome(===("One"))
     }
@@ -144,35 +144,35 @@ class ResolverSyntaxSpec extends Specification with Mockito {
                    classOf[String],
                    Array()) returns null
       val actual =
-        DefaultResolverSyntax(numberResolver, request)
+        ReflectiveResolverSyntax(numberResolver, request)
       actual
         .asOption[String]("foo") must beNone
     }
     "Returns not avairable scope of" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
       val actual =
-        DefaultResolverSyntax(mockResolver, request)
+        ReflectiveResolverSyntax(mockResolver, request)
       actual
         .asOption[String]("bar") must beNone
     }
     "Returns avairable scope via get" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
       val actual =
-        DefaultResolverSyntax(mockResolver, request)
+        ReflectiveResolverSyntax(mockResolver, request)
       actual
         .asOption[String]("foo") must_== Some("That's it")
     }
     "Returns not avairable scope via get" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
       val actual =
-        DefaultResolverSyntax(mockResolver, request)
+        ReflectiveResolverSyntax(mockResolver, request)
       actual
         .asOption[String]("bar") must beNone
     }
     "Returns not avairable scope" in new mocks {
       rvr.findRequestValueResolver(mockResolver) returns new MockRequestValueResolver()
       val actual =
-        DefaultResolverSyntax(optionResolver, request)
+        ReflectiveResolverSyntax(optionResolver, request)
       actual
         .as[String]("foo")
         .right
@@ -181,14 +181,14 @@ class ResolverSyntaxSpec extends Specification with Mockito {
     "Returns option value via get" in new mocks {
       rvr.findRequestValueResolver(optionResolver) returns new OptionRequestValueResolver()
       val actual =
-        DefaultResolverSyntax(optionResolver, request)
+        ReflectiveResolverSyntax(optionResolver, request)
       actual
         .asOption[String]("foo") must_== Some("That's it")
     }
     "Returns none value via get" in new mocks {
       rvr.findRequestValueResolver(optionResolver) returns new OptionRequestValueResolver()
       val actual =
-        DefaultResolverSyntax(optionResolver, request)
+        ReflectiveResolverSyntax(optionResolver, request)
       actual
         .asOption[String]("bar") must_== None
     }
@@ -196,7 +196,7 @@ class ResolverSyntaxSpec extends Specification with Mockito {
       rvr.findRequestValueResolver(specificResolver) returns new SpecificRequestValueResolver()
       rc.getContentType() returns MediaTypes.TEXT_PLAIN_TYPE
       val actual =
-        DefaultResolverSyntax(specificResolver, request)
+        ReflectiveResolverSyntax(specificResolver, request)
       actual
         .as[String]("foo")
         .right
@@ -206,7 +206,7 @@ class ResolverSyntaxSpec extends Specification with Mockito {
       rvr.findRequestValueResolver(specificResolver) returns new SpecificRequestValueResolver()
       rc.getContentType() returns MediaTypes.APPLICATION_JSON_TYPE
       val actual =
-        DefaultResolverSyntax(specificResolver, request)
+        ReflectiveResolverSyntax(specificResolver, request)
       actual
         .as[String]("foo")
         .right
@@ -215,7 +215,7 @@ class ResolverSyntaxSpec extends Specification with Mockito {
     "Returns scala specific resolver" in new mocks {
       rvr.findRequestValueResolver(scalaResolver) returns new ScalaBooRequestValueResolver()
       val actual =
-        DefaultResolverSyntax(scalaResolver, request)
+        ReflectiveResolverSyntax(scalaResolver, request)
       actual
         .as[String]("foo")
         .right
@@ -227,7 +227,7 @@ class ResolverSyntaxSpec extends Specification with Mockito {
         new ScalaBooRequestValueResolver()
       rvr.findRequestValueResolver(scalaResolver) returns resolverInstance
       val actual =
-        DefaultResolverSyntax(scalaResolver, request)
+        ReflectiveResolverSyntax(scalaResolver, request)
       val actualLeft = actual
         .as[Int]
         .left
