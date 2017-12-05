@@ -6,7 +6,7 @@ import xerial.sbt.Sonatype._
 import scoverage._
 
 val analogwebV = "0.10.1"
-val specs2V    = "4.0.0"
+val specs2V    = "4.0.2"
 val circeV     = "0.8.0"
 val json4sV    = "3.5.3"
 
