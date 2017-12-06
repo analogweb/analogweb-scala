@@ -95,7 +95,7 @@ class ResolverSyntaxSpec extends Specification with Mockito {
   val specificResolver =
     classOf[SpecificRequestValueResolver]
   val scalaResolver =
-    classOf[ScalaBooRequestValueResolver]
+    new ScalaBooRequestValueResolver()
 
   trait mocks extends org.specs2.specification.Scope {
     val rc =
@@ -213,9 +213,8 @@ class ResolverSyntaxSpec extends Specification with Mockito {
         .toOption must beNone
     }
     "Returns scala specific resolver" in new mocks {
-      rvr.findRequestValueResolver(scalaResolver) returns new ScalaBooRequestValueResolver()
       val actual =
-        ReflectiveResolverSyntax(scalaResolver, request)
+        InstanceResolverSyntax(scalaResolver, request)
       actual
         .as[String]("foo")
         .right
@@ -225,16 +224,14 @@ class ResolverSyntaxSpec extends Specification with Mockito {
     "Returns scala specific resolver not value resolved" in new mocks {
       val resolverInstance =
         new ScalaBooRequestValueResolver()
-      rvr.findRequestValueResolver(scalaResolver) returns resolverInstance
       val actual =
-        ReflectiveResolverSyntax(scalaResolver, request)
+        InstanceResolverSyntax(scalaResolver, request)
       val actualLeft = actual
         .as[Int]
         .left
         .get
         .asInstanceOf[NoValuesResolved[_]]
       actualLeft.key must_== ""
-      actualLeft.resolver must_== resolverInstance
       actualLeft.requiredType must_== classOf[Int]
     }
   }

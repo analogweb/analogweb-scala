@@ -141,7 +141,8 @@ case class ReflectiveResolverSyntax[T <: RequestValueResolver](
 
 case class InstanceResolverSyntax[T <: RequestValueResolver](
     val resolver: T,
-    override val request: Request
+    override val request: Request,
+    override val resolverContext: ResolverContext = NoResolverContext
 ) extends ResolverSyntax[T] {
   override val requestValueResolver: Option[RequestValueResolver] =
     Some(resolver)
