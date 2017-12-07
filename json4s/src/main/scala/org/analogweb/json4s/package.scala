@@ -5,19 +5,18 @@ import java.io.{File, InputStream, OutputStream, FileInputStream, ByteArrayInput
 import reflect.ClassTag
 import language.implicitConversions
 import org.analogweb._, util._, core._, core.DefaultReadableBuffer._, scala._
+import org.analogweb.json4s._
 import org.json4s._, jackson.{JsonMethods, Serialization}
 
 package object json4s {
 
   // Resolving JSON requests.
-  val json = classOf[org.analogweb.json4s.Json4sJsonValueResolver]
+  val json = new Json4sJsonValueResolver()
 
-  implicit def asJson4sResolverSyntax[T <: RequestValueResolver](
-      typeOfResolver: Class[T]
+  implicit def asJson4sResolverSyntax(
+      resolver: Json4sJsonValueResolver
   )(implicit request: Request, formats: Formats = DefaultFormats) =
-    DefaultResolverSyntax(typeOfResolver,
-                          request,
-                          org.analogweb.json4s.Json4sResolverContext(formats))
+    InstanceResolverSyntax(resolver, request, org.analogweb.json4s.Json4sResolverContext(formats))
 
   // Serializing JSON responses.
   def asJson(source: AnyRef)(implicit formats: Formats = Serialization.formats(NoTypeHints)) =

@@ -11,12 +11,12 @@ import org.analogweb.circe._
 package object circe {
 
   // Resolving JSON requests.
-  val json = classOf[CirceJsonValueResolver]
+  val json = new CirceJsonValueResolver()
 
   implicit def asCirceJsonValueResolverSyntax[A](
-      typeOfResolver: Class[CirceJsonValueResolver]
+      resolver: CirceJsonValueResolver
   )(implicit request: Request, decoder: Decoder[A]) =
-    DefaultResolverSyntax(typeOfResolver, request, CirceResolverContext(decoder))
+    InstanceResolverSyntax(resolver, request, CirceResolverContext(decoder))
 
   // Serializing JSON responses.
   def asJson[A](source: A)(implicit encoder: Encoder[A]) =
