@@ -31,11 +31,13 @@ class ScalaInvocationMetadataFactorySpec extends Specification with Mockito {
       actual === None
     }
     "Create InvocationMetadata from inner RouteDef" in {
-      val f = new ScalaInvocationMetadataFactory(Some(new LooseRouteDef {
-        get("/foo/bar") { r =>
-          "Hello"
-        }
-      }))
+      import analogweb._
+      val f = new ScalaInvocationMetadataFactory(
+        Some(
+          get("/foo/bar") { _ =>
+            "Hello"
+          }
+        ))
       val ca =
         mock[ContainerAdaptor]
       val ap =
@@ -51,7 +53,8 @@ class ScalaInvocationMetadataFactorySpec extends Specification with Mockito {
 
 }
 
-class Foo extends Analogweb {
+class Foo {
+  import analogweb._
   get("/imf/foo") { r =>
     "Foo"
   }

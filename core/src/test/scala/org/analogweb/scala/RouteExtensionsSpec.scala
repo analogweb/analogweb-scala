@@ -32,13 +32,13 @@ class RouteExtensionsSpec extends Specification with Mockito {
     parameterResolver.resolveValue(rc, im, "baa", classOf[String], Array()) returns "baz"
     rvr.findRequestValueResolver(classOf[ParameterValueResolver]) returns parameterResolver
     rvr.findRequestValueResolver(classOf[PathVariableValueResolver]) returns pathResolver
-    class A extends Analogweb with Resolvers with RouteExtensions {
-      get("/foo") { implicit r =>
+    class A extends Resolvers with RouteExtensions {
+      import analogweb._
+      val route = get("/foo") { implicit r =>
         param("baa")
       }
     }
-    new A()
-      .routeList(0)
+    new A().route
       .invoke(r) must_== "baz"
   }
 
@@ -55,13 +55,13 @@ class RouteExtensionsSpec extends Specification with Mockito {
                                    any[Array[java.lang.annotation.Annotation]]) returns null
     rvr.findRequestValueResolver(classOf[ParameterValueResolver]) returns parameterResolver
     rvr.findRequestValueResolver(classOf[PathVariableValueResolver]) returns pathResolver
-    class A extends Analogweb with Resolvers with RouteExtensions {
-      get("/foo") { implicit r =>
+    class A extends Resolvers with RouteExtensions {
+      import analogweb._
+      val route = get("/foo") { implicit r =>
         param("baa")
       }
     }
-    new A()
-      .routeList(0)
+    new A().route
       .invoke(r) must_== "baz"
   }
 
@@ -70,52 +70,52 @@ class RouteExtensionsSpec extends Specification with Mockito {
     parameterResolver.resolveValue(rc, im, "baa", classOf[String], Array()) returns null
     rvr.findRequestValueResolver(classOf[ParameterValueResolver]) returns parameterResolver
     rvr.findRequestValueResolver(classOf[PathVariableValueResolver]) returns pathResolver
-    class A extends Analogweb with Resolvers with RouteExtensions {
-      get("/foo") { implicit r =>
+    class A extends Resolvers with RouteExtensions {
+      import analogweb._
+      val route = get("/foo") { implicit r =>
         param("baa")
       }
     }
-    new A()
-      .routeList(0)
+    new A().route
       .invoke(r) must_== ""
   }
 
   "Passed With" in new mocks {
-    class A extends Analogweb with Resolvers with RouteExtensions {
-      get("/foo") { r =>
+    class A extends Resolvers with RouteExtensions {
+      import analogweb._
+      val route = get("/foo") { r =>
         implicit val copied =
           r.copy(passedWith = Map("foo" -> "bar", "baz" -> true))
         passedWith[String]("foo")
       }
     }
-    new A()
-      .routeList(0)
+    new A().route
       .invoke(r) must_== Some("bar")
   }
 
   "Passed With Nothing" in new mocks {
-    class A extends Analogweb with Resolvers with RouteExtensions {
-      get("/foo") { r =>
+    class A extends Resolvers with RouteExtensions {
+      import analogweb._
+      val route = get("/foo") { r =>
         implicit val copied =
           r.copy(passedWith = Map("foo" -> "bar", "baz" -> true))
         passedWith[String]("bar")
       }
     }
-    new A()
-      .routeList(0)
+    new A().route
       .invoke(r) must_== None
   }
 
   "Converting Future to Renderable" in new mocks {
-    class A extends StrictRouteDef with Resolvers with Responses with RouteExtensions {
-      get("/foo") { r =>
+    class A extends Resolvers with Responses with RouteExtensions {
+      import analogweb._
+      val route = get[RenderableFuture]("/foo") { r =>
         Future
           .successful(Ok(asText("hoge")))
           .asRenderable
       }
     }
-    new A()
-      .routeList(0)
+    new A().route
       .invoke(r)
       .isInstanceOf[RenderableFuture] must beTrue
   }

@@ -36,13 +36,13 @@ class ResolversSpec extends Specification with Mockito {
     qp.getValues("baa") returns java.util.Arrays
       .asList("baz")
     rvr.findRequestValueResolver(classOf[ParameterValueResolver]) returns new ParameterValueResolver()
-    class A extends Analogweb with Resolvers {
-      get("/foo") { implicit r =>
+    class A extends Resolvers {
+      import analogweb._
+      val route = get("/foo") { implicit r =>
         s"${parameter.asOption[String]("baa").getOrElse("a")}"
       }
     }
-    new A()
-      .routeList(0)
+    new A().route
       .invoke(r) must_== "baz"
   }
 
@@ -53,13 +53,13 @@ class ResolversSpec extends Specification with Mockito {
                           any[Class[_]],
                           any[Array[java.lang.annotation.Annotation]]) returns "baz"
     rvr.findRequestValueResolver(classOf[PathVariableValueResolver]) returns resolver
-    class A extends Analogweb with Resolvers {
-      get("/foo") { implicit r =>
+    class A extends Resolvers {
+      import analogweb._
+      val route = get("/foo") { implicit r =>
         s"${path.asOption[String]("baa").getOrElse("a")}"
       }
     }
-    new A()
-      .routeList(0)
+    new A().route
       .invoke(r) must_== "baz"
   }
 
@@ -70,13 +70,13 @@ class ResolversSpec extends Specification with Mockito {
                           any[Class[_]],
                           any[Array[java.lang.annotation.Annotation]]) returns "baz"
     rvr.findRequestValueResolver(classOf[CookieValueResolver]) returns resolver
-    class A extends Analogweb with Resolvers {
-      get("/foo") { implicit r =>
+    class A extends Resolvers {
+      import analogweb._
+      val route = get("/foo") { implicit r =>
         s"${cookie.asOption[String]("baa").getOrElse("a")}"
       }
     }
-    new A()
-      .routeList(0)
+    new A().route
       .invoke(r) must_== "baz"
   }
 
@@ -87,13 +87,13 @@ class ResolversSpec extends Specification with Mockito {
                           any[Class[_]],
                           any[Array[java.lang.annotation.Annotation]]) returns "baz"
     rvr.findRequestValueResolver(classOf[RequestBodyValueResolver]) returns resolver
-    class A extends Analogweb with Resolvers {
-      get("/foo") { implicit r =>
+    class A extends Resolvers {
+      import analogweb._
+      val route = get("/foo") { implicit r =>
         s"${body.as[java.lang.String].right.toOption.getOrElse("a")}"
       }
     }
-    new A()
-      .routeList(0)
+    new A().route
       .invoke(r) must_== "baz"
   }
 
@@ -104,13 +104,13 @@ class ResolversSpec extends Specification with Mockito {
                           any[Class[_]],
                           any[Array[java.lang.annotation.Annotation]]) returns "baz"
     rvr.findRequestValueResolver(classOf[MultipartParameterResolver]) returns resolver
-    class A extends Analogweb with Resolvers {
-      get("/foo") { implicit r =>
+    class A extends Resolvers {
+      import analogweb._
+      val route = get("/foo") { implicit r =>
         s"${multipart.asOption[String]("baa").getOrElse("a")}"
       }
     }
-    new A()
-      .routeList(0)
+    new A().route
       .invoke(r) must_== "baz"
   }
 
@@ -121,27 +121,27 @@ class ResolversSpec extends Specification with Mockito {
                           any[Class[_]],
                           any[Array[java.lang.annotation.Annotation]]) returns "baz"
     rvr.findRequestValueResolver(classOf[RequestContextValueResolver]) returns resolver
-    class A extends Analogweb with Resolvers {
-      get("/foo") { implicit r =>
+    class A extends Resolvers {
+      import analogweb._
+      val route = get("/foo") { implicit r =>
         s"${context.as[String].right.toOption.getOrElse("a")}"
       }
     }
-    new A()
-      .routeList(0)
+    new A().route
       .invoke(r) must_== "baz"
   }
 
   "Resolve with MappingRequestValueResolver" in new mocks {
-    class A extends Analogweb with Resolvers {
+    class A extends Resolvers {
+      import analogweb._
       val m: Request => B = { r =>
         B(name = "foo")
       }
-      get("/foo") { implicit r =>
+      val route = get("/foo") { implicit r =>
         s"${m.name}"
       }
     }
-    new A()
-      .routeList(0)
+    new A().route
       .invoke(r) must_== "foo"
   }
 
