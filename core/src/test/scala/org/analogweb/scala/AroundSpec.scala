@@ -57,14 +57,16 @@ class AroundSpec extends Specification with Mockito {
   }
 }
 
-class StubApplication extends Analogweb {
+class StubApplication {
+  import analogweb._
+
   implicit val around1 = before { implicit r =>
     pass()
   } :+ after {
     case s: String =>
       Ok(asText(s + "Bar"))
   }
-  get("/foo") { r =>
+  val route1 = get("/foo") { r =>
     "Foo"
   }
 
@@ -74,7 +76,7 @@ class StubApplication extends Analogweb {
     case s: String =>
       Ok(asText(s + "Bar"))
   }
-  post("/foo") { r =>
+  val route2 = post("/foo") { r =>
     "Foo"
   }(around2)
 
@@ -84,12 +86,14 @@ class StubApplication extends Analogweb {
     case i: Int =>
       Ok(asText((i + 10).toString))
   }
-  put("/foo") { r =>
+  val route3 = put("/foo") { r =>
     "Foo"
   }(around3)
 
   val around4 = around2 ++ around3
-  delete("/foo") { r =>
+  val route4 = delete("/foo") { r =>
     "Foo"
   }(around4)
+
+  val routeList = route1 ++ route2 ++ route3 ++ route4
 }

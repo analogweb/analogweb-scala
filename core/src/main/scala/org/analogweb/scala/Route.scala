@@ -16,6 +16,10 @@ trait Route {
 
 }
 
+trait Routes {
+  def routes: Seq[Route]
+}
+
 class RequestInvocation(override val method: String,
                         override val rawPath: String,
                         val arounds: Arounds)(val invocation: Request => Any)

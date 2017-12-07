@@ -56,34 +56,36 @@ class RouteDefSpec extends Specification {
 
 }
 
-class AnalogwebSpecFoo extends LooseRouteDef {
-  get("/foo") { r =>
-    "Foo"
-  }
-  post("/foo") { r =>
-    "Foo"
-  }
-  put("/baa") { r =>
-    "Baa"
-  }
-  delete("/baz") { r =>
-    "Baz"
-  }
-  head("/baz") { r =>
-    ""
-  }
-  options("/baz") { r =>
-    ""
-  }
-  scope("/root") {
+class AnalogwebSpecFoo {
+  import analogweb._
+  val routeList =
     get("/foo") { r =>
       "Foo"
-    } ++ post("/bar") { r =>
-      "Bar"
-    } ++ put("/bar") { r =>
-      "Bar"
-    } ++ delete("/bar") { r =>
-      "Bar"
-    }
-  }
+    } ++
+      post("/foo") { r =>
+        "Foo"
+      } ++
+      put("/baa") { r =>
+        "Baa"
+      } ++
+      delete("/baz") { r =>
+        "Baz"
+      } ++
+      head("/baz") { r =>
+        ""
+      } ++
+      options("/baz") { r =>
+        ""
+      } ++
+      scope("/root") {
+        get("/foo") { r =>
+          "Foo"
+        } ++ post("/bar") { r =>
+          "Bar"
+        } ++ put("/bar") { r =>
+          "Bar"
+        } ++ delete("/bar") { r =>
+          "Bar"
+        }
+      }
 }
