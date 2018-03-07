@@ -6,23 +6,17 @@ import org.analogweb.core._
 
 trait Resolvers {
 
-  def parameter =
-    classOf[ParameterValueResolver]
+  lazy val parameter = new ParameterValueResolver
 
-  def path =
-    classOf[PathVariableValueResolver]
+  lazy val path = new PathVariableValueResolver
 
-  def cookie =
-    classOf[CookieValueResolver]
+  lazy val cookie = new CookieValueResolver
 
-  def body =
-    classOf[RequestBodyValueResolver]
+  lazy val body = new RequestBodyValueResolver
 
-  def multipart =
-    classOf[MultipartParameterResolver]
+  lazy val multipart = new MultipartParameterResolver
 
-  def context =
-    classOf[RequestContextValueResolver]
+  lazy val context = new RequestContextValueResolver
 
 }
 

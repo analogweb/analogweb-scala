@@ -128,17 +128,6 @@ trait ResolverSyntax[R <: RequestValueResolver] {
 
 }
 
-case class ReflectiveResolverSyntax[T <: RequestValueResolver](
-    val resolverType: Class[T],
-    override val request: Request,
-    override val resolverContext: ResolverContext = NoResolverContext
-) extends ResolverSyntax[T] {
-  override lazy val requestValueResolver: Option[RequestValueResolver] =
-    Option(
-      request.resolvers
-        .findRequestValueResolver(resolverType))
-}
-
 case class InstanceResolverSyntax[T <: RequestValueResolver](
     val resolver: T,
     override val request: Request,

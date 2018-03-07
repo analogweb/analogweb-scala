@@ -1,5 +1,6 @@
 package org.analogweb.scala
 
+import java.net.URI
 import org.junit.runner.RunWith
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
@@ -35,7 +36,6 @@ class ResolversSpec extends Specification with Mockito {
       .emptyList()
     qp.getValues("baa") returns java.util.Arrays
       .asList("baz")
-    rvr.findRequestValueResolver(classOf[ParameterValueResolver]) returns new ParameterValueResolver()
     class A extends Resolvers {
       import analogweb._
       val route = get("/foo") { implicit r =>
@@ -47,16 +47,14 @@ class ResolversSpec extends Specification with Mockito {
   }
 
   "Resolve with PathVariableValueResolver" in new mocks {
-    resolver.resolveValue(===(rc),
-                          ===(im),
-                          ===("baa"),
-                          any[Class[_]],
-                          any[Array[java.lang.annotation.Annotation]]) returns "baz"
-    rvr.findRequestValueResolver(classOf[PathVariableValueResolver]) returns resolver
+    val dp = new DefaultRequestPath(URI.create("/"),URI.create("foo/baz"),"GET")
+    val rpd = RequestPathDefinition.define("/","foo/{bar}")
+    im.getDefinedPath() returns rpd
+    rc.getRequestPath() returns dp
     class A extends Resolvers {
       import analogweb._
-      val route = get("/foo") { implicit r =>
-        s"${path.asOption[String]("baa").getOrElse("a")}"
+      val route = get("/foo/{bar}") { implicit r =>
+        s"${path.asOption[String]("bar").getOrElse("a")}"
       }
     }
     new A().route
@@ -64,16 +62,15 @@ class ResolversSpec extends Specification with Mockito {
   }
 
   "Resolve with CookieValueResolver" in new mocks {
-    resolver.resolveValue(===(rc),
-                          ===(im),
-                          ===("baa"),
-                          any[Class[_]],
-                          any[Array[java.lang.annotation.Annotation]]) returns "baz"
-    rvr.findRequestValueResolver(classOf[CookieValueResolver]) returns resolver
+    val cks = mock[Cookies]
+    val ck = mock[Cookies.Cookie]
+    ck.getValue returns "baz"
+    rc.getCookies returns cks
+    cks.getCookie("bar") returns ck
     class A extends Resolvers {
       import analogweb._
       val route = get("/foo") { implicit r =>
-        s"${cookie.asOption[String]("baa").getOrElse("a")}"
+        s"${cookie.asOption[String]("bar").getOrElse("a")}"
       }
     }
     new A().route
@@ -81,50 +78,11 @@ class ResolversSpec extends Specification with Mockito {
   }
 
   "Resolve with RequestBodyValueResolver" in new mocks {
-    resolver.resolveValue(===(rc),
-                          ===(im),
-                          ===(""),
-                          any[Class[_]],
-                          any[Array[java.lang.annotation.Annotation]]) returns "baz"
-    rvr.findRequestValueResolver(classOf[RequestBodyValueResolver]) returns resolver
+    rc.getRequestBody() returns DefaultReadableBuffer.readBuffer("baz".getBytes())
     class A extends Resolvers {
       import analogweb._
       val route = get("/foo") { implicit r =>
         s"${body.as[java.lang.String].right.toOption.getOrElse("a")}"
-      }
-    }
-    new A().route
-      .invoke(r) must_== "baz"
-  }
-
-  "Resolve with MultipartParameterResolver" in new mocks {
-    resolver.resolveValue(===(rc),
-                          ===(im),
-                          ===("baa"),
-                          any[Class[_]],
-                          any[Array[java.lang.annotation.Annotation]]) returns "baz"
-    rvr.findRequestValueResolver(classOf[MultipartParameterResolver]) returns resolver
-    class A extends Resolvers {
-      import analogweb._
-      val route = get("/foo") { implicit r =>
-        s"${multipart.asOption[String]("baa").getOrElse("a")}"
-      }
-    }
-    new A().route
-      .invoke(r) must_== "baz"
-  }
-
-  "Resolve with RequestContextValueResolver" in new mocks {
-    resolver.resolveValue(===(rc),
-                          ===(im),
-                          ===(""),
-                          any[Class[_]],
-                          any[Array[java.lang.annotation.Annotation]]) returns "baz"
-    rvr.findRequestValueResolver(classOf[RequestContextValueResolver]) returns resolver
-    class A extends Resolvers {
-      import analogweb._
-      val route = get("/foo") { implicit r =>
-        s"${context.as[String].right.toOption.getOrElse("a")}"
       }
     }
     new A().route
