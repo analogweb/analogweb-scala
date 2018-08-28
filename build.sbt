@@ -6,9 +6,9 @@ import xerial.sbt.Sonatype._
 import scoverage._
 
 val analogwebV = "0.10.1"
-val specs2V    = "4.0.2"
-val circeV     = "0.8.0"
-val json4sV    = "3.5.3"
+val specs2V    = "4.3.4"
+val circeV     = "0.9.3"
+val json4sV    = "3.6.0"
 
 val coreDependencies =
   Seq(
@@ -21,7 +21,7 @@ val coreDependencies =
 lazy val baseSettings =
   Seq(
     organization := "org.analogweb",
-    crossScalaVersions := Seq("2.11.8", "2.12.1"),
+    crossScalaVersions := Seq("2.11.12", "2.12.4"),
     scalaVersion := crossScalaVersions.value.head,
     startYear := Some(2014),
     isSnapshot := version.value.trim.endsWith("SNAPSHOT"),
@@ -39,8 +39,7 @@ lazy val baseSettings =
       "-Ydelambdafy:method",
       "-Yno-adapted-args",
       "-Ywarn-dead-code",
-      "-Ywarn-numeric-widen",
-      "-target:jvm-1.8"
+      "-Ywarn-numeric-widen"
     ),
     scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
     scalacOptions in (Compile, console) += "-Yrepl-class-based",
