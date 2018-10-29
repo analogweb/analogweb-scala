@@ -6,6 +6,7 @@ Analogweb Framework Scala
 [![Codacy Badge](https://api.codacy.com/project/badge/bf94abcf981242debe9df3dbcd8d1764)](https://www.codacy.com/app/snowgoose-yk/analogweb-scala)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.analogweb/analogweb-scala_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.analogweb/analogweb-scala_2.11)
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fanalogweb%2Fanalogweb-scala.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fanalogweb%2Fanalogweb-scala?ref=badge_shield)
 
 ## Quick Start
 
@@ -45,3 +46,7 @@ and you will get them.
 $ curl localhost:8000/ping
 PONG
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fanalogweb%2Fanalogweb-scala.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fanalogweb%2Fanalogweb-scala?ref=badge_large)
