@@ -6,7 +6,6 @@ import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mock.Mockito
 import org.analogweb.core.response._
-import org.analogweb.scala.Responses._
 
 @RunWith(classOf[JUnitRunner])
 class ResponsesSpec extends Specification with Mockito {

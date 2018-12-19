@@ -1,6 +1,5 @@
 package org.analogweb.scala
 
-import scala.language.existentials
 import scala.util.{Left, Right, Either}
 import scala.reflect.ClassTag
 import org.analogweb.{RequestValueResolver, TypeMapper}

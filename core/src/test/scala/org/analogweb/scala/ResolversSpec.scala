@@ -47,8 +47,8 @@ class ResolversSpec extends Specification with Mockito {
   }
 
   "Resolve with PathVariableValueResolver" in new mocks {
-    val dp = new DefaultRequestPath(URI.create("/"),URI.create("foo/baz"),"GET")
-    val rpd = RequestPathDefinition.define("/","foo/{bar}")
+    val dp  = new DefaultRequestPath(URI.create("/"), URI.create("foo/baz"), "GET")
+    val rpd = RequestPathDefinition.define("/", "foo/{bar}")
     im.getDefinedPath() returns rpd
     rc.getRequestPath() returns dp
     class A extends Resolvers {
@@ -63,7 +63,7 @@ class ResolversSpec extends Specification with Mockito {
 
   "Resolve with CookieValueResolver" in new mocks {
     val cks = mock[Cookies]
-    val ck = mock[Cookies.Cookie]
+    val ck  = mock[Cookies.Cookie]
     ck.getValue returns "baz"
     rc.getCookies returns cks
     cks.getCookie("bar") returns ck

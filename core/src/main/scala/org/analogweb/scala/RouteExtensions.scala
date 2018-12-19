@@ -3,7 +3,7 @@ package org.analogweb.scala
 import scala.language.implicitConversions
 import scala.concurrent.Future
 import scala.util.Try
-import org.analogweb._, core._
+import org.analogweb.{RequestValueResolver, Renderable}
 
 trait RouteExtensions {
   self: Resolvers =>

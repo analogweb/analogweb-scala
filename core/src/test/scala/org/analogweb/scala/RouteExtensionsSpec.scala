@@ -54,8 +54,8 @@ class RouteExtensionsSpec extends Specification with Mockito {
     rc.getMatrixParameters() returns mp
     mp.getValues("bar") returns java.util.Collections.emptyList()
     rc.getRequestMethod() returns "GET"
-    val dp = new DefaultRequestPath(URI.create("/"),URI.create("foo/baz"),"GET")
-    val rpd = RequestPathDefinition.define("/","foo/{bar}")
+    val dp  = new DefaultRequestPath(URI.create("/"), URI.create("foo/baz"), "GET")
+    val rpd = RequestPathDefinition.define("/", "foo/{bar}")
     im.getDefinedPath() returns rpd
     rc.getRequestPath() returns dp
     class A extends Resolvers with RouteExtensions {
@@ -72,13 +72,13 @@ class RouteExtensionsSpec extends Specification with Mockito {
     val qp = mock[Parameters]
     rc.getQueryParameters returns qp
     qp.getValues("bar") returns java.util.Collections
-     .emptyList()
+      .emptyList()
     val mp = mock[MatrixParameters]
     rc.getMatrixParameters returns mp
     mp.getValues("bar") returns java.util.Collections.emptyList()
     rc.getRequestMethod() returns "GET"
-    val dp = new DefaultRequestPath(URI.create("/"),URI.create("foo"),"GET")
-    val rpd = RequestPathDefinition.define("/","foo")
+    val dp  = new DefaultRequestPath(URI.create("/"), URI.create("foo"), "GET")
+    val rpd = RequestPathDefinition.define("/", "foo")
     im.getDefinedPath() returns rpd
     rc.getRequestPath() returns dp
     class A extends Resolvers with RouteExtensions {

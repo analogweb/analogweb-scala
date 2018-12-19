@@ -1,13 +1,10 @@
 package org.analogweb.circe
 
-import java.lang.annotation.Annotation
 import java.nio.charset.Charset
-import java.io.{File, InputStream, OutputStream, FileInputStream, ByteArrayInputStream}
+import java.io.InputStream
 import scala.util.{Right, Left}
-import scala.reflect.ClassTag
-import scala.language.implicitConversions
 import org.analogweb._, core._, core.DefaultReadableBuffer._, util._, util.logging._, scala._
-import io.circe.{jawn, Decoder, Encoder, Errors, Json, Printer}
+import io.circe.{jawn, Decoder, Encoder, Json}
 
 case class CirceResolverContext[A](val decoder: Decoder[A]) extends ResolverContext
 

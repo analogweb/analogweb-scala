@@ -2,7 +2,7 @@ package org.analogweb.json4s
 
 import org.specs2.mutable._
 import org.specs2.mock.Mockito
-import org.analogweb._, core._, scala._
+import org.analogweb._, scala._
 
 class ScalaModulesConfigSpec extends Specification with Mockito {
 
