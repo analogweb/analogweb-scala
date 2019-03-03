@@ -46,6 +46,24 @@ class ResolversSpec extends Specification with Mockito {
       .invoke(r) must_== "baz"
   }
 
+  "Resolve with MultipartParameterResolver" in new mocks {
+    rc.getContentType() returns MediaTypes.MULTIPART_FORM_DATA_TYPE
+    rc.getRequestBody() returns DefaultReadableBuffer.readBuffer("bar=baz".getBytes())
+    rc.getQueryParameters returns qp
+    qp.getValues("foo") returns java.util.Collections
+      .emptyList()
+    qp.getValues("baa") returns java.util.Arrays
+      .asList("baz")
+    class A extends Resolvers {
+      import analogweb._
+      val route = get("/foo") { implicit r =>
+        s"${multipart.asOption[String]("baa").getOrElse("a")}"
+      }
+    }
+    new A().route
+      .invoke(r) must_== "baz"
+  }
+
   "Resolve with PathVariableValueResolver" in new mocks {
     val dp  = new DefaultRequestPath(URI.create("/"), URI.create("foo/baz"), "GET")
     val rpd = RequestPathDefinition.define("/", "foo/{bar}")
@@ -59,6 +77,21 @@ class ResolversSpec extends Specification with Mockito {
     }
     new A().route
       .invoke(r) must_== "baz"
+  }
+
+  "Resolve with RequestContextValueResolver" in new mocks {
+    val dp  = new DefaultRequestPath(URI.create("/"), URI.create("foo/baz"), "GET")
+    val rpd = RequestPathDefinition.define("/", "foo/{bar}")
+    im.getDefinedPath() returns rpd
+    rc.getRequestPath() returns dp
+    class A extends Resolvers {
+      import analogweb._
+      val route = get("/foo/{bar}") { implicit r =>
+        context.as[RequestPath].right.get
+      }
+    }
+    new A().route
+      .invoke(r) must_== dp
   }
 
   "Resolve with CookieValueResolver" in new mocks {
