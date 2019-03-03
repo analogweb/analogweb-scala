@@ -63,6 +63,24 @@ class ResolversSpec extends Specification with Mockito {
       .invoke(r) must_== "baz"
   }
 
+  "Resolve with PathVariableValueResolver returns null" in new mocks {
+    resolver.resolveValue(===(rc),
+                          ===(im),
+                          ===("baa"),
+                          any[Class[_]],
+                          any[Array[java.lang.annotation.Annotation]]) returns null
+    rvr.findRequestValueResolver(classOf[PathVariableValueResolver]) returns resolver
+    class A extends Resolvers {
+      import analogweb._
+      val route = get("/foo") { implicit r =>
+        println(path.as[String]("baa"))
+        s"${path.asOption[String]("baa").getOrElse("a")}"
+      }
+    }
+    new A().route
+      .invoke(r) must_== "a"
+  }
+
   "Resolve with CookieValueResolver" in new mocks {
     resolver.resolveValue(===(rc),
                           ===(im),
@@ -95,6 +113,33 @@ class ResolversSpec extends Specification with Mockito {
     }
     new A().route
       .invoke(r) must_== "baz"
+  }
+
+  "Resolve with RequestBodyValueResolver throws Exception" in new mocks {
+    resolver.resolveValue(
+      ===(rc),
+      ===(im),
+      ===(""),
+      any[Class[_]],
+      any[Array[java.lang.annotation.Annotation]]) throws new org.analogweb.core.UnresolvableValueException(
+      resolver,
+      classOf[Integer],
+      "")
+    rvr.findRequestValueResolver(classOf[RequestBodyValueResolver]) returns resolver
+    class A extends Resolvers {
+      import analogweb._
+      val route = get("/foo") { implicit r =>
+        val actual = body.as[java.lang.Integer]
+        println(actual)
+        val actualLeft = actual.left.get
+          .asInstanceOf[NoValuesResolved[_]]
+        actualLeft.key must_== ""
+        actualLeft.requiredType must_== classOf[Integer]
+        s"${actual.right.toOption.getOrElse("ERROR!")}"
+      }
+    }
+    new A().route
+      .invoke(r) must_== "ERROR!"
   }
 
   "Resolve with MultipartParameterResolver" in new mocks {

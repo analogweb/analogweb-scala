@@ -1,7 +1,7 @@
 package org.analogweb.scala
 
 import scala.language.existentials
-import scala.util.{Left, Right, Either}
+import scala.util.{Try, Left, Right, Either}
 import scala.reflect.ClassTag
 import org.analogweb.{RequestValueResolver, TypeMapper}
 import org.analogweb.core.{SpecificMediaTypeRequestValueResolver, UnsupportedMediaTypeException}
@@ -58,7 +58,7 @@ trait ResolverSyntax[R <: RequestValueResolver] {
     val mayBeVerified: Either[Throwable, RV] = verifyMediaType[RV](resolver)
     mayBeVerified.right
       .flatMap { verifiedResolver =>
-        Option(f(verifiedResolver))
+        Try(f(verifiedResolver))
           .map {
             case Some(resolved) =>
               mappingToType(resolved)(ctag)
