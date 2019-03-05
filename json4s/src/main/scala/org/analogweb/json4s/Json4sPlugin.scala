@@ -1,8 +1,6 @@
 package org.analogweb.json4s
 
-import java.lang.annotation.Annotation
-import java.io.{File, InputStream, OutputStream, FileInputStream, ByteArrayInputStream}
-import scala.reflect.ClassTag
+import java.io.InputStream
 import scala.language.implicitConversions
 import scala.util._
 import org.analogweb._, util._, util.logging._, core._, core.DefaultReadableBuffer._, scala._

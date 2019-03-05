@@ -3,11 +3,9 @@ package org.analogweb.circe
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
-import org.specs2.control.LazyParameter
 import org.specs2.mock.Mockito
 import org.specs2.specification.Scope
-import org.analogweb._, core._, core.DefaultReadableBuffer._, core.DefaultWritableBuffer._,
-core.response._, scala._, scala.Responses._
+import org.analogweb._, core.DefaultReadableBuffer._, core.response._, scala._
 
 case class Person(val name: String)
 
@@ -73,7 +71,7 @@ class CirceValueResolverSpec extends Specification with Mockito {
 
   "ScalaJsonFormatter" should {
     "be render" in {
-      import io.circe._, io.circe.generic.semiauto._
+      import io.circe.generic.semiauto._
       val formatter = new CirceJsonFormatter
 
       val req     = mock[RequestContext]
@@ -87,7 +85,7 @@ class CirceValueResolverSpec extends Specification with Mockito {
       new String(bytes) === """{"id":"y2k2mt","email":"y2k2mt@xxx.com"}"""
     }
     "be render with specific encoder" in {
-      import io.circe.Encoder, io.circe.syntax._
+      import io.circe.Encoder
       val formatter = new CirceJsonFormatter
 
       val req = mock[RequestContext]

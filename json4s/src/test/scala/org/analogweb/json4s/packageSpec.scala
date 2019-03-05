@@ -1,11 +1,9 @@
 package org.analogweb.json4s
 
 import org.specs2.mutable.Specification
-import org.specs2.control.LazyParameter
 import org.specs2.mock.Mockito
 import org.json4s._, JsonDSL._
-import org.analogweb._, core._, core.DefaultReadableBuffer._, core.DefaultWritableBuffer._,
-core.response._, scala._, scala.Responses._
+import org.analogweb._, core.DefaultReadableBuffer._, core.response._, scala._, scala.Responses._
 
 case class Person(val name: String)
 
@@ -94,11 +92,9 @@ class ScalaJacksonJsonValueResolverSpec extends Specification with Mockito {
     "be render with JValue" in {
       val formatter = new Json4sJsonFormatter
 
-      val req    = mock[RequestContext]
-      val res    = mock[ResponseContext]
-      val c      = ("name" -> "snowgooseyk") ~ ("email" -> "snowgoose.yk@gmail.com")
-      val out    = new java.io.ByteArrayOutputStream()
-      val buffer = writeBuffer(out)
+      val req = mock[RequestContext]
+      val res = mock[ResponseContext]
+      val c   = ("name" -> "snowgooseyk") ~ ("email" -> "snowgoose.yk@gmail.com")
       val bytes =
         formatter.formatAndWriteInto(req, res, "UTF-8", c).entity().asInstanceOf[Array[Byte]]
       new String(bytes) === """{"name":"snowgooseyk","email":"snowgoose.yk@gmail.com"}"""
@@ -106,11 +102,9 @@ class ScalaJacksonJsonValueResolverSpec extends Specification with Mockito {
     "be render with Tuple" in {
       val formatter = new Json4sJsonFormatter
 
-      val req    = mock[RequestContext]
-      val res    = mock[ResponseContext]
-      val c      = ("id" -> "snowgooseyk")
-      val out    = new java.io.ByteArrayOutputStream()
-      val buffer = writeBuffer(out)
+      val req = mock[RequestContext]
+      val res = mock[ResponseContext]
+      val c   = ("id" -> "snowgooseyk")
       val bytes =
         formatter.formatAndWriteInto(req, res, "UTF-8", c).entity().asInstanceOf[Array[Byte]]
       new String(bytes) === """{"id":"snowgooseyk"}"""

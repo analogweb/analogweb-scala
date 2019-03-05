@@ -1,11 +1,8 @@
 package analogweb
 
-import java.lang.annotation.Annotation
-import java.io.{File, InputStream, OutputStream, FileInputStream, ByteArrayInputStream}
-import reflect.ClassTag
 import language.implicitConversions
-import io.circe.{jawn, Decoder, Encoder, Errors, Json, Printer}
-import org.analogweb.scala._
+import io.circe.{Decoder, Encoder, Json}
+import org.analogweb.scala.{Request, InstanceResolverSyntax, ScalaJsonObject, ScalaJsonText}
 import org.analogweb.circe._
 
 package object circe {

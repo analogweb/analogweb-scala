@@ -1,5 +1,6 @@
 package org.analogweb.scala
 
+import java.net.URI
 import scala.concurrent.Future
 import org.junit.runner.RunWith
 import org.specs2.mutable._
@@ -28,10 +29,12 @@ class RouteExtensionsSpec extends Specification with Mockito {
   }
 
   "Resolve with ParameterValueResolver" in new mocks {
-    pathResolver.resolveValue(rc, im, "baa", classOf[String], Array()) returns null
-    parameterResolver.resolveValue(rc, im, "baa", classOf[String], Array()) returns "baz"
-    rvr.findRequestValueResolver(classOf[ParameterValueResolver]) returns parameterResolver
-    rvr.findRequestValueResolver(classOf[PathVariableValueResolver]) returns pathResolver
+    val qp = mock[Parameters]
+    rc.getQueryParameters returns qp
+    qp.getValues("foo") returns java.util.Collections
+      .emptyList()
+    qp.getValues("baa") returns java.util.Arrays
+      .asList("baz")
     class A extends Resolvers with RouteExtensions {
       import analogweb._
       val route = get("/foo") { implicit r =>
@@ -43,22 +46,22 @@ class RouteExtensionsSpec extends Specification with Mockito {
   }
 
   "Resolve with PathVariableValueResolver" in new mocks {
-    pathResolver.resolveValue(===(rc),
-                              ===(im),
-                              ===("baa"),
-                              any[Class[_]],
-                              any[Array[java.lang.annotation.Annotation]]) returns "baz"
-    parameterResolver.resolveValue(===(rc),
-                                   ===(im),
-                                   ===("baa"),
-                                   any[Class[_]],
-                                   any[Array[java.lang.annotation.Annotation]]) returns null
-    rvr.findRequestValueResolver(classOf[ParameterValueResolver]) returns parameterResolver
-    rvr.findRequestValueResolver(classOf[PathVariableValueResolver]) returns pathResolver
+    val qp = mock[Parameters]
+    rc.getQueryParameters returns qp
+    qp.getValues("bar") returns java.util.Collections
+      .emptyList()
+    val mp = mock[MatrixParameters]
+    rc.getMatrixParameters() returns mp
+    mp.getValues("bar") returns java.util.Collections.emptyList()
+    rc.getRequestMethod() returns "GET"
+    val dp  = new DefaultRequestPath(URI.create("/"), URI.create("foo/baz"), "GET")
+    val rpd = RequestPathDefinition.define("/", "foo/{bar}")
+    im.getDefinedPath() returns rpd
+    rc.getRequestPath() returns dp
     class A extends Resolvers with RouteExtensions {
       import analogweb._
-      val route = get("/foo") { implicit r =>
-        param("baa")
+      val route = get("/foo/{bar}") { implicit r =>
+        param("bar")
       }
     }
     new A().route
@@ -66,14 +69,22 @@ class RouteExtensionsSpec extends Specification with Mockito {
   }
 
   "Not Resolved" in new mocks {
-    pathResolver.resolveValue(rc, im, "baa", classOf[String], Array()) returns null
-    parameterResolver.resolveValue(rc, im, "baa", classOf[String], Array()) returns null
-    rvr.findRequestValueResolver(classOf[ParameterValueResolver]) returns parameterResolver
-    rvr.findRequestValueResolver(classOf[PathVariableValueResolver]) returns pathResolver
+    val qp = mock[Parameters]
+    rc.getQueryParameters returns qp
+    qp.getValues("bar") returns java.util.Collections
+      .emptyList()
+    val mp = mock[MatrixParameters]
+    rc.getMatrixParameters returns mp
+    mp.getValues("bar") returns java.util.Collections.emptyList()
+    rc.getRequestMethod() returns "GET"
+    val dp  = new DefaultRequestPath(URI.create("/"), URI.create("foo"), "GET")
+    val rpd = RequestPathDefinition.define("/", "foo")
+    im.getDefinedPath() returns rpd
+    rc.getRequestPath() returns dp
     class A extends Resolvers with RouteExtensions {
       import analogweb._
       val route = get("/foo") { implicit r =>
-        param("baa")
+        param("bar")
       }
     }
     new A().route

@@ -3,7 +3,7 @@ package org.analogweb.scala
 import scala.language.implicitConversions
 import scala.concurrent.Future
 import scala.util.Try
-import org.analogweb._, core._
+import org.analogweb.{RequestValueResolver, Renderable}
 
 trait RouteExtensions {
   self: Resolvers =>
@@ -14,30 +14,6 @@ trait RouteExtensions {
 
   implicit def asResolverSyntax[T <: RequestValueResolver](resolver: T)(implicit request: Request) =
     InstanceResolverSyntax(resolver, request)
-
-  implicit def asParameterResolverSyntax(typeOfResolver: Class[ParameterValueResolver])(
-      implicit request: Request) =
-    ReflectiveResolverSyntax(typeOfResolver, request)
-
-  implicit def asPathVariableResolverSyntax(typeOfResolver: Class[PathVariableValueResolver])(
-      implicit request: Request) =
-    ReflectiveResolverSyntax(typeOfResolver, request)
-
-  implicit def asCookieResolverSyntax(typeOfResolver: Class[CookieValueResolver])(
-      implicit request: Request) =
-    ReflectiveResolverSyntax(typeOfResolver, request)
-
-  implicit def asBodyResolverSyntax(typeOfResolver: Class[RequestBodyValueResolver])(
-      implicit request: Request) =
-    ReflectiveResolverSyntax(typeOfResolver, request)
-
-  implicit def asMultipartResolverSyntax(typeOfResolver: Class[MultipartParameterResolver])(
-      implicit request: Request) =
-    ReflectiveResolverSyntax(typeOfResolver, request)
-
-  implicit def asContextResolverSyntax(typeOfResolver: Class[RequestContextValueResolver])(
-      implicit request: Request) =
-    ReflectiveResolverSyntax(typeOfResolver, request)
 
   implicit def asRequestObjectMapping[T](mapping: Request => T)(implicit request: Request) =
     mapping(request)
