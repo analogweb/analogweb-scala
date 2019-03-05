@@ -5,10 +5,10 @@ import ReleaseStateTransformations._
 import xerial.sbt.Sonatype._
 import scoverage._
 
-val analogwebV = "0.10.1"
-val specs2V    = "4.3.4"
-val circeV     = "0.9.3"
-val json4sV    = "3.6.0"
+val analogwebV = "0.11.0"
+val specs2V    = "4.4.1"
+val circeV     = "0.11.1"
+val json4sV    = "3.6.5"
 
 val coreDependencies =
   Seq(
