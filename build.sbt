@@ -6,9 +6,9 @@ import xerial.sbt.Sonatype._
 import scoverage._
 
 val analogwebV = "0.11.0"
-val specs2V    = "4.4.1"
-val circeV     = "0.11.1"
-val json4sV    = "3.6.5"
+val specs2V    = "4.5.1"
+val circeV     = "0.12.0-M3"
+val json4sV    = "3.6.6"
 
 val coreDependencies =
   Seq(
@@ -21,13 +21,12 @@ val coreDependencies =
 lazy val baseSettings =
   Seq(
     organization := "org.analogweb",
-    crossScalaVersions := Seq("2.11.12", "2.12.4"),
+    crossScalaVersions := Seq("2.11.12", "2.12.4", "2.13.0"),
     scalaVersion := crossScalaVersions.value.head,
     startYear := Some(2014),
     isSnapshot := version.value.trim.endsWith("SNAPSHOT"),
     description := "Analogweb Framework is tiny, simple, and pluggable web framework.",
     scalacOptions ++= Seq(
-      "-feature",
       "-deprecation",
       "-unchecked",
       "-Xlint",
@@ -37,7 +36,6 @@ lazy val baseSettings =
       "-language:higherKinds",
       "-language:implicitConversions",
       "-Ydelambdafy:method",
-      "-Yno-adapted-args",
       "-Ywarn-dead-code",
       "-Ywarn-numeric-widen"
     ),
