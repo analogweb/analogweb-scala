@@ -32,9 +32,7 @@ scala> import analogweb._
 import analogweb._
 
 scala> http("localhost",8000) {
-    |   get("ping") { _ =>
-    |     "PONG"
-    |   }
+    |   get("/ping") { "PONG" }
     | }.run
 ...
 INFO: An Analogweb application has been booted. (Erapsed time: 412ms)
