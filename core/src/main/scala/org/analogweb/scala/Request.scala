@@ -22,6 +22,7 @@ case class Request(
     context.getQueryParameters
       .getValues(name)
       .asScala
+      .toSeq
 
   def header(name: String, defaultValue: String = ""): String =
     headerOption(name)
@@ -34,6 +35,7 @@ case class Request(
     context.getRequestHeaders
       .getValues(name)
       .asScala
+      .toSeq
 
   def contentType: MediaType =
     context
