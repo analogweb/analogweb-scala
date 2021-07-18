@@ -12,7 +12,8 @@ trait RouteExtensions {
     f
   }
 
-  implicit def asResolverSyntax[T <: RequestValueResolver](resolver: T)(implicit request: Request): InstanceResolverSyntax[T] =
+  implicit def asResolverSyntax[T <: RequestValueResolver](resolver: T)(
+      implicit request: Request): InstanceResolverSyntax[T] =
     InstanceResolverSyntax(resolver, request)
 
   implicit def asRequestObjectMapping[T](mapping: Request => T)(implicit request: Request): T =
