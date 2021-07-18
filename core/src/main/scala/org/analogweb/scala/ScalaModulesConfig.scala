@@ -32,7 +32,7 @@ class ScalaModulesConfig(
     responseHandler: Option[ScalaResponseHandler] = None
 ) extends PluginModulesConfig {
 
-  def this() {
+  def this() = {
     this(None, None, None, None)
   }
 

@@ -8,17 +8,17 @@ import org.analogweb.{RequestValueResolver, Renderable}
 trait RouteExtensions {
   self: Resolvers =>
 
-  implicit def response(f: => Any) = { implicit r: Request =>
+  implicit def response(f: => Any): Any = { implicit r: Request =>
     f
   }
 
-  implicit def asResolverSyntax[T <: RequestValueResolver](resolver: T)(implicit request: Request) =
+  implicit def asResolverSyntax[T <: RequestValueResolver](resolver: T)(implicit request: Request): InstanceResolverSyntax[T] =
     InstanceResolverSyntax(resolver, request)
 
-  implicit def asRequestObjectMapping[T](mapping: Request => T)(implicit request: Request) =
+  implicit def asRequestObjectMapping[T](mapping: Request => T)(implicit request: Request): T =
     mapping(request)
 
-  implicit def toArounds(around: Around) =
+  implicit def toArounds(around: Around): Arounds =
     Arounds(Seq(around))
 
   implicit class FutureExtensions(future: Future[Renderable]) {

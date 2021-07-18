@@ -54,7 +54,7 @@ class RequestInvocation(override val method: String,
 
 object Route {
 
-  def apply(method: String, path: String, arounds: Arounds)(invocation: Request => Any) =
+  def apply[T](method: String, path: String, arounds: Arounds)(invocation: Request => T) =
     new RequestInvocation(method, path, arounds)(invocation)
 
 }
