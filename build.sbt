@@ -6,22 +6,22 @@ import xerial.sbt.Sonatype._
 import scoverage._
 
 val analogwebV = "0.11.0"
-val specs2V    = "4.7.1"
-val circeV     = "0.12.2"
-val json4sV    = "3.6.7"
+val specs2V    = "4.12.3"
+val circeV     = "0.14.1"
+val json4sV    = "4.0.1"
 
 val coreDependencies =
   Seq(
     "org.analogweb" % "analogweb-core" % analogwebV,
-    "org.specs2"    %% "specs2-core"   % specs2V % "test",
-    "org.specs2"    %% "specs2-mock"   % specs2V % "test",
-    "org.specs2"    %% "specs2-junit"  % specs2V % "test"
+    "org.specs2"    %% "specs2-core"   % specs2V % "test" cross CrossVersion.for3Use2_13,
+    "org.specs2"    %% "specs2-mock"   % specs2V % "test" cross CrossVersion.for3Use2_13,
+    "org.specs2"    %% "specs2-junit"  % specs2V % "test" cross CrossVersion.for3Use2_13
   )
 
 lazy val baseSettings =
   Seq(
     organization := "org.analogweb",
-    crossScalaVersions := Seq("2.12.10", "2.13.1"),
+    crossScalaVersions := Seq("2.12.14", "2.13.6","3.0.1"),
     scalaVersion := crossScalaVersions.value.head,
     startYear := Some(2014),
     isSnapshot := version.value.trim.endsWith("SNAPSHOT"),
@@ -115,7 +115,7 @@ lazy val json4s = project
   .settings(
     moduleName := "analogweb-json4s",
     libraryDependencies ++= coreDependencies ++ Seq(
-      "org.json4s" %% "json4s-jackson" % json4sV
+      "org.json4s" %% "json4s-jackson" % json4sV cross CrossVersion.for3Use2_13
     )
   )
   .dependsOn(core)
