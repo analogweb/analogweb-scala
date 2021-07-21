@@ -30,18 +30,13 @@ lazy val baseSettings =
       "-deprecation",
       "-unchecked",
       "-feature",
-      "-Xlint",
-      "-Yrangepos",
       "-language:existentials",
       "-language:higherKinds",
-      "-language:implicitConversions",
-      "-Ydelambdafy:method",
-      "-Ywarn-dead-code",
-      "-Ywarn-numeric-widen"
+      "-language:implicitConversions"
     ),
     scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
     scalacOptions in (Compile, console) += "-Yrepl-class-based",
-    scalacOptions in Test ++= Seq("-Yrangepos"),
+//    scalacOptions in Test ++= Seq("-Yrangepos"),
     resolvers ++= Seq(
       Resolver.sonatypeRepo("releases"),
       Resolver.sonatypeRepo("snapshots")
