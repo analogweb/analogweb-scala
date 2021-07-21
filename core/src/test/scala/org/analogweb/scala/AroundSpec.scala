@@ -60,7 +60,7 @@ class AroundSpec extends Specification with Mockito {
 class StubApplication {
   import analogweb._
 
-  implicit val around1 = before { implicit r =>
+  implicit val around1: Arounds = before { implicit r =>
     pass()
   } :+ after {
     case s: String =>
