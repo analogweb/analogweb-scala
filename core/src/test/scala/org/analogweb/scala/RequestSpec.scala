@@ -40,7 +40,8 @@ class RequestSpec extends Specification with Mockito {
       none must beNone
       val actual = request
         .queryOption("baa")
-      actual must beSome(===("baz"))
+      //actual must beSome(===("baz"))
+      actual must_== Some("baz")
       val noOption = request
         .query("baa")
       noOption must beEqualTo("baz")
@@ -53,10 +54,10 @@ class RequestSpec extends Specification with Mockito {
         .asList("baz")
       val none = request
         .headerOption("x-foo")
-      none must beNone
+      none must_== None
       val actual = request
         .headerOption("x-baa")
-      actual must beSome(===("baz"))
+      actual must_== Some("baz")
       val noOption = request
         .header("x-baa")
       noOption must beEqualTo("baz")
