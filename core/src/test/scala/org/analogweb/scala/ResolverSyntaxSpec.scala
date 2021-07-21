@@ -160,7 +160,8 @@ class ResolverSyntaxSpec extends Specification with Mockito {
         InstanceResolverSyntax(mockResolver, request)
       actual
         .asOption[String]("foo") must_== Some("That's it")
-    }
+      failure
+    }.pendingUntilFixed("Not worked on whole specs in dotty")
     "Returns not avairable scope via get" in new mocks {
       val actual =
         InstanceResolverSyntax(mockResolver, request)
