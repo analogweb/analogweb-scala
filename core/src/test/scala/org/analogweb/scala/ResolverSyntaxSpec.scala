@@ -133,8 +133,8 @@ class ResolverSyntaxSpec extends Specification with Mockito {
         InstanceResolverSyntax(numberResolver, request)
       actual
         .asOption[String]("foo") must_== Some("One")
-        //NOTE: Not worked in dotty
-        //.asOption[String]("foo") must beSome(===("One"))
+      //NOTE: Not worked in dotty
+      //.asOption[String]("foo") must beSome(===("One"))
       failure
     }.pendingUntilFixed("Not worked on whole specs in dotty")
     "Returns avairable scope and not avairable converters" in new mocks {
@@ -190,7 +190,7 @@ class ResolverSyntaxSpec extends Specification with Mockito {
         InstanceResolverSyntax(optionResolver, request)
       actual
         .asOption[String]("bar") must_== None
-        //.asOption[String]("bar") must beNone
+      //.asOption[String]("bar") must beNone
       failure
     }.pendingUntilFixed("Not worked on whole specs in dotty")
     "Supports content types" in new mocks {
@@ -203,7 +203,7 @@ class ResolverSyntaxSpec extends Specification with Mockito {
         //NOTE: Not worked in dotty
         //.toOption must beSome(===("That's it"))
         .toOption must_== Some("That's it")
-        failure
+      failure
     }.pendingUntilFixed("Not worked on whole specs in dotty")
     "Not supports content types" in new mocks {
       rc.getContentType() returns MediaTypes.APPLICATION_JSON_TYPE
