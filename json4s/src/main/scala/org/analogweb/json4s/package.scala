@@ -12,7 +12,8 @@ package object json4s {
 
   implicit def asJson4sResolverSyntax(
       resolver: Json4sJsonValueResolver
-  )(implicit request: Request, formats: Formats = DefaultFormats) =
+  )(implicit request: Request,
+    formats: Formats = DefaultFormats): InstanceResolverSyntax[Json4sJsonValueResolver] =
     InstanceResolverSyntax(resolver, request, org.analogweb.json4s.Json4sResolverContext(formats))
 
   // Serializing JSON responses.

@@ -61,7 +61,7 @@ class Foo {
 }
 
 class Baa {
-  def baabaz = { r: Request =>
+  val baabaz = { (r: Request) =>
     "Foo"
   }
 }

@@ -1,4 +1,5 @@
 import scala.language.implicitConversions
+import scala.concurrent.ExecutionContext
 import org.analogweb._, scala._
 
 package object analogweb
@@ -7,7 +8,7 @@ package object analogweb
     with org.analogweb.scala.RouteExtensions
     with org.analogweb.scala.ServerApplications {
 
-  implicit val executionContext =
+  implicit val executionContext: ExecutionContext =
     Execution.Implicits.defaultContext
 
   def connect[T](path: String)(action: Request => T)(implicit arounds: Arounds = Arounds()): Route =

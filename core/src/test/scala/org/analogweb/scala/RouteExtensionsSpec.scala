@@ -95,8 +95,8 @@ class RouteExtensionsSpec extends Specification with Mockito {
     class A extends Resolvers with RouteExtensions {
       import analogweb._
       val route = get("/foo") { r =>
-        implicit val copied =
-          r.copy(passedWith = Map("foo" -> "bar", "baz" -> true))
+        implicit val copied: Request =
+          r.copy(passedWith = Map(("foo" -> "bar"), ("baz" -> true)))
         passedWith[String]("foo")
       }
     }
@@ -108,8 +108,8 @@ class RouteExtensionsSpec extends Specification with Mockito {
     class A extends Resolvers with RouteExtensions {
       import analogweb._
       val route = get("/foo") { r =>
-        implicit val copied =
-          r.copy(passedWith = Map("foo" -> "bar", "baz" -> true))
+        implicit val copied: Request =
+          r.copy(passedWith = Map(("foo" -> "bar"), ("baz" -> true)))
         passedWith[String]("bar")
       }
     }
@@ -123,7 +123,7 @@ class RouteExtensionsSpec extends Specification with Mockito {
       val route = get[RenderableFuture]("/foo") { r =>
         Future
           .successful(Ok(asText("hoge")))
-          .asRenderable
+          .asRenderable()
       }
     }
     new A().route

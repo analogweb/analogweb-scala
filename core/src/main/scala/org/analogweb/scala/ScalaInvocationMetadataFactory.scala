@@ -8,7 +8,7 @@ import org.analogweb._, util._
 class ScalaInvocationMetadataFactory(val routeDef: Option[Routes])
     extends InvocationMetadataFactory {
 
-  def this() {
+  def this() = {
     this(None)
   }
 
