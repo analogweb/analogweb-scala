@@ -45,7 +45,8 @@ class CirceValueResolverSpec extends Specification with Mockito {
     import analogweb._, circe._, io.circe._
     val aRoute = get("/foo") { implicit r =>
       val maybeName = for {
-        js   <- json.as[Json].right
+        //FIXME: Cannot resolve InstanceResolverSyntax automatically on dotty
+        js   <- asCirceJsonValueResolverSyntax[Json](json).as[Json].right
         name <- js.hcursor.get[String]("name").right
       } yield name
       maybeName.fold(l => "left", r => r)

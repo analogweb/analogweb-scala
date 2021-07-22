@@ -14,7 +14,7 @@ package object circe {
       resolver: CirceJsonValueResolver
   )(implicit request: Request,
     decoder: Decoder[A]): InstanceResolverSyntax[CirceJsonValueResolver] =
-    InstanceResolverSyntax(resolver, request, CirceResolverContext(decoder))
+    InstanceResolverSyntax(resolver, request, CirceResolverContext[A](decoder))
 
   // Serializing JSON responses.
   def asJson[A](source: A)(implicit encoder: Encoder[A]) =
