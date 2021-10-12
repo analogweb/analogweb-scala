@@ -21,7 +21,7 @@ val coreDependencies =
 lazy val baseSettings =
   Seq(
     organization := "org.analogweb",
-    crossScalaVersions := Seq("2.12.14", "2.13.6", "3.0.1"),
+    crossScalaVersions := Seq("2.12.14", "2.13.6", "3.0.2"),
     scalaVersion := crossScalaVersions.value.head,
     startYear := Some(2014),
     isSnapshot := version.value.trim.endsWith("SNAPSHOT"),
@@ -36,7 +36,6 @@ lazy val baseSettings =
     ),
     scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
     scalacOptions in (Compile, console) += "-Yrepl-class-based",
-//    scalacOptions in Test ++= Seq("-Yrangepos"),
     resolvers ++= Seq(
       Resolver.sonatypeRepo("releases"),
       Resolver.sonatypeRepo("snapshots")
