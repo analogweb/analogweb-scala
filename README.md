@@ -13,9 +13,9 @@ Analogweb Framework Scala
 Create build.sbt
 
 ```scala
-scalaVersion := "2.13.1"
+scalaVersion := "3.1.1"
 libraryDependencies ++= Seq (
-  "org.analogweb" %% "analogweb-scala" % "0.12.0"
+  "org.analogweb" %% "analogweb-scala" % "0.13.0"
 )
 ```
 
