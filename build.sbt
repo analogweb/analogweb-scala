@@ -21,7 +21,7 @@ val coreDependencies =
 lazy val baseSettings =
   Seq(
     organization := "org.analogweb",
-    crossScalaVersions := Seq("2.12.14", "2.13.6", "3.0.2"),
+    crossScalaVersions := Seq("2.12.16", "2.13.8", "3.1.3"),
     scalaVersion := crossScalaVersions.value.head,
     startYear := Some(2014),
     isSnapshot := version.value.trim.endsWith("SNAPSHOT"),
