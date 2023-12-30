@@ -5,10 +5,10 @@ import ReleaseStateTransformations._
 import xerial.sbt.Sonatype._
 import scoverage._
 
-val analogwebV = "0.11.0"
-val specs2V    = "4.13.1"
-val circeV     = "0.14.1"
-val json4sV    = "4.0.1"
+val analogwebV = "0.12.0"
+val specs2V    = "4.20.3"
+val circeV     = "0.14.6"
+val json4sV    = "4.0.7"
 
 val coreDependencies =
   Seq(
@@ -21,7 +21,7 @@ val coreDependencies =
 lazy val baseSettings =
   Seq(
     organization := "org.analogweb",
-    crossScalaVersions := Seq("2.12.14", "2.13.6", "3.0.2"),
+    crossScalaVersions := Seq("2.12.18", "2.13.12", "3.3.1"),
     scalaVersion := crossScalaVersions.value.head,
     startYear := Some(2014),
     isSnapshot := version.value.trim.endsWith("SNAPSHOT"),
